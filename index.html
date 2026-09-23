@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SK PSC - അഡ്മിൻ കൺട്രോൾ പാനൽ & റിപ്പോർട്ട്</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Noto+Sans+Malayalam:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- html2pdf Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <!-- PWA Meta tags -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#020617">
+
+  <style>
+    body { font-family: 'Noto Sans Malayalam', 'Manrope', sans-serif; }
+    .custom-scroll::-webkit-scrollbar { width: 5px; height: 5px; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+
+    /* PDF പ്രിന്റ് കണ്ടെയ്‌നർ */
+    .pdf-container {
+      background: #ffffff;
+      color: #0f172a;
+      width: 100%;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between">
+
+  <!-- Admin PIN Lock Modal -->
+  <div id="pinLockModal" class="fixed inset-0 bg-slate-950 z-50 flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 p-6 sm:p-8 rounded-3xl max-w-sm w-full text-center space-y-4 shadow-2xl">
+      <div class="w-14 h-14 bg-emerald-500/20 text-emerald-400 rounded-2xl flex items-center justify-center text-2xl mx-auto font-black border border-emerald-500/30">🔐</div>
+      <h3 class="text-lg font-bold text-white">അഡ്മിൻ പ്രവേശനം</h3>
+      <p class="text-xs text-slate-400">സുരക്ഷിതമായി കൺട്രോൾ പാനൽ തുറക്കാൻ അഡ്മിൻ പിൻ നൽകുക.</p>
+      <input type="password" id="adminPinInput" maxlength="6" placeholder="PIN നൽകുക" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-center text-white tracking-widest text-lg focus:outline-none focus:border-emerald-500 font-mono">
+      <button onclick="verifyPin()" class="w-full py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-xl text-sm transition shadow-lg">തുറക്കുക ›</button>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="bg-slate-900/95 border-b border-slate-800 px-4 sm:px-8 py-3.5 sticky top-0 z-40 backdrop-blur">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center font-black text-slate-950 text-lg shadow-lg">SK</div>
+        <div>
+          <h1 class="font-bold text-base text-white flex items-center space-x-2">
+            <span>SK PSC അഡ്മിൻ കൺട്രോൾ പാനൽ</span>
+            <span class="text-[10px] bg-rose-500/20 text-rose-400 border border-rose-500/30 px-2 py-0.5 rounded font-mono font-bold">MASTER</span>
+          </h1>
+          <p class="text-[11px] text-slate-400">റാങ്ക് ലിസ്റ്റും വിദ്യാർത്ഥി പെർഫോമൻസ് മാനേജ്‌മെന്റും</p>
+        </div>
+      </div>
+      <button onclick="location.reload()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-xl border border-slate-700 transition flex items-center space-x-1 shadow">
+        <span>🔄</span>
+        <span>Refresh</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 space-y-6">
+
+    <!-- Overview Stats Cards -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+      <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow">
+        <span class="text-[11px] text-slate-400 block font-semibold">ആകെ വിദ്യാർത്ഥികൾ</span>
+        <span id="statTotalStudents" class="text-2xl font-black text-white font-mono">...</span>
+      </div>
+      <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow">
+        <span class="text-[11px] text-slate-400 block font-semibold">ആകെ അറ്റംപ്റ്റുകൾ</span>
+        <span id="statTotalAttempts" class="text-2xl font-black text-emerald-400 font-mono">...</span>
+      </div>
+      <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow">
+        <span class="text-[11px] text-slate-400 block font-semibold">ലഭ്യമായ പരീക്ഷകൾ</span>
+        <span id="statAvailableExams" class="text-2xl font-black text-cyan-400 font-mono">...</span>
+      </div>
+      <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow">
+        <span class="text-[11px] text-slate-400 block font-semibold">ക്ലൗഡ് കണക്ഷൻ</span>
+        <span class="text-xs text-emerald-400 font-bold bg-emerald-950/80 px-2.5 py-1 rounded-md inline-block mt-1 border border-emerald-500/30">● Connected Live</span>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="flex items-center space-x-2 border-b border-slate-800 pb-2 text-xs">
+      <button onclick="switchTab('examWise')" id="tabBtnExam" class="px-4 py-2 rounded-xl font-bold bg-emerald-500 text-slate-950 transition flex items-center space-x-1.5 shadow">
+        <span>🏆</span>
+        <span>പരീക്ഷാ റാങ്ക് ലിസ്റ്റ് (Exam Rank List)</span>
+      </button>
+      <button onclick="switchTab('studentWise')" id="tabBtnStudent" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800">
+        <span>👤</span>
+        <span>വിദ്യാർത്ഥിയുടെ റിപ്പോർട്ട് (Student Search)</span>
+      </button>
+      <button onclick="switchTab('summaryWise')" id="tabBtnSummary" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800">
+        <span>📊</span>
+        <span>മുഴുവൻ സമ്മറി (All Candidates)</span>
+      </button>
+    </div>
+
+    <!-- 1. EXAM-WISE RANK LIST SECTION -->
+    <div id="sectionExamWise" class="bg-slate-900 border border-emerald-500/30 rounded-3xl p-5 sm:p-7 space-y-5 shadow-2xl">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+        <div>
+          <h3 class="text-base sm:text-lg font-black text-white flex items-center space-x-2">
+            <span>🏆</span>
+            <span>പരീക്ഷാഫലവും റാങ്ക് ലിസ്റ്റും (First Attempt Only)</span>
+          </h3>
+          <p class="text-xs text-slate-400">ഓരോ കുട്ടിയുടെയും ആദ്യത്തെ അറ്റംപ്റ്റ് മാത്രം പരിഗണിച്ചുള്ള ഔദ്യോഗിക റാങ്ക് ലിസ്റ്റ്.</p>
+        </div>
+        <div class="flex items-center space-x-2">
+          <select id="examDropdownSelect" onchange="fetchSelectedExamDetails()" class="bg-slate-950 border border-slate-800 text-xs sm:text-sm text-emerald-400 font-bold rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-emerald-500 max-w-xs cursor-pointer">
+            <option value="">പരീക്ഷ തിരഞ്ഞെടുക്കുക...</option>
+          </select>
+          <button onclick="downloadExamRankListPDF()" id="downloadRankPdfBtn" class="hidden px-4 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 text-slate-950 font-black rounded-xl text-xs transition shadow flex items-center space-x-1.5 whitespace-nowrap">
+            <span>📥</span>
+            <span>ഡൗൺലോഡ് റാങ്ക് ലിസ്റ്റ് PDF</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="examOverviewBox" class="hidden grid grid-cols-3 gap-3">
+        <div class="bg-slate-950 p-3 rounded-2xl border border-slate-800 text-center">
+          <span class="text-[10px] text-slate-400 block font-semibold">ആകെ പങ്കെടുത്തവർ</span>
+          <span id="examPartCount" class="text-xl font-black text-white font-mono">0</span>
+        </div>
+        <div class="bg-slate-950 p-3 rounded-2xl border border-slate-800 text-center">
+          <span class="text-[10px] text-slate-400 block font-semibold">ഉയർന്ന സ്കോർ (Highest)</span>
+          <span id="examHighestScore" class="text-xl font-black text-emerald-400 font-mono">0.00</span>
+        </div>
+        <div class="bg-slate-950 p-3 rounded-2xl border border-slate-800 text-center">
+          <span class="text-[10px] text-slate-400 block font-semibold">ശരാശരി സ്കോർ</span>
+          <span id="examAverageScore" class="text-xl font-black text-cyan-400 font-mono">0.00</span>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto custom-scroll border border-slate-800 rounded-2xl">
+        <table class="w-full text-left text-xs text-slate-300">
+          <thead class="bg-slate-950 text-slate-400 uppercase text-[10px] border-b border-slate-800">
+            <tr>
+              <th class="p-3 text-center">റാങ്ക്</th>
+              <th class="p-3">പേര്</th>
+              <th class="p-3">മൊബൈൽ</th>
+              <th class="p-3 text-center">സ്കോർ</th>
+              <th class="p-3 text-center">ശരി</th>
+              <th class="p-3 text-center">തെറ്റ്</th>
+              <th class="p-3 text-right">സമയം</th>
+            </tr>
+          </thead>
+          <tbody id="examRankTableBody" class="divide-y divide-slate-800/60 bg-slate-900/60">
+            <tr>
+              <td colspan="7" class="p-6 text-center text-slate-500">മുകളിൽ നിന്നും ഒരു പരീക്ഷ തിരഞ്ഞെടുക്കുക.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 2. STUDENT-WISE REPORT SECTION -->
+    <div id="sectionStudentWise" class="hidden bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-7 space-y-5 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center space-x-2">
+          <span class="text-xl">🔍</span>
+          <h3 class="text-sm sm:text-base font-bold text-white">വിദ്യാർത്ഥിയുടെ സമ്പൂർണ്ണ പരീക്ഷാ ഹിസ്റ്ററി തിരയുക</h3>
+        </div>
+        <span class="text-[10px] text-slate-500">10 അക്ക മൊബൈൽ നമ്പർ നൽകുക</span>
+      </div>
+      
+      <div class="flex flex-col sm:flex-row gap-2.5">
+        <div class="flex-1 flex items-center bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 focus-within:border-emerald-500 transition">
+          <span class="text-slate-400 text-xs mr-2 font-mono select-none">🇮🇳 +91</span>
+          <input type="tel" id="studentSearchPhone" maxlength="10" placeholder="മൊബൈൽ നമ്പർ നൽകുക (ഉദാ: 9207084990)" class="w-full bg-transparent text-white text-xs sm:text-sm focus:outline-none font-mono tracking-wider">
+        </div>
+        <button onclick="searchStudentDetails()" class="px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 text-slate-950 font-black rounded-xl text-xs sm:text-sm transition flex items-center justify-center space-x-2 shadow-lg">
+          <span>സമ്പൂർണ്ണ റിപ്പോർട്ട് കാണുക</span>
+          <span>›</span>
+        </button>
+      </div>
+
+      <div id="searchResultArea" class="hidden pt-4 border-t border-slate-800 space-y-4">
+        <div class="bg-slate-950 p-4 sm:p-5 rounded-2xl border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-inner">
+          <div>
+            <span class="text-[10px] text-emerald-400 uppercase font-black tracking-wider bg-emerald-950/70 px-2 py-0.5 rounded border border-emerald-500/30">CANDIDATE DOSSIER</span>
+            <h4 class="text-lg sm:text-xl font-black text-white mt-1" id="resStudentName">...</h4>
+            <p class="text-xs text-slate-400 font-mono mt-0.5" id="resStudentPhone">...</p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-4 sm:gap-6">
+            <div class="bg-slate-900 px-3.5 py-2 rounded-xl border border-slate-800 text-center">
+              <span class="text-[10px] text-slate-400 block font-semibold">ആകെ പരീക്ഷകൾ</span>
+              <span id="resTotalTests" class="text-lg font-black text-emerald-400 font-mono">0</span>
+            </div>
+            <div class="bg-slate-900 px-3.5 py-2 rounded-xl border border-slate-800 text-center">
+              <span class="text-[10px] text-slate-400 block font-semibold">ശരാശരി സ്കോർ</span>
+              <span id="resAvgScore" class="text-lg font-black text-cyan-400 font-mono">0.00</span>
+            </div>
+            <button onclick="downloadStudentPDF()" class="px-4 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 font-black rounded-xl text-xs transition shadow flex items-center space-x-1.5 whitespace-nowrap">
+              <span>📥</span>
+              <span>ഡൗൺലോഡ് PDF റിപ്പോർട്ട്</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <div class="overflow-x-auto custom-scroll border border-slate-800 rounded-2xl">
+            <table class="w-full text-left text-xs text-slate-300">
+              <thead class="bg-slate-950 text-slate-400 uppercase text-[10px] border-b border-slate-800">
+                <tr>
+                  <th class="p-3">#</th>
+                  <th class="p-3">പരീക്ഷയുടെ പേര്</th>
+                  <th class="p-3 text-center">സ്കോർ</th>
+                  <th class="p-3 text-center">ശരി</th>
+                  <th class="p-3 text-center">തെറ്റ്</th>
+                  <th class="p-3 text-right">എഴുതിയ തീയതി</th>
+                </tr>
+              </thead>
+              <tbody id="studentHistoryTableBody" class="divide-y divide-slate-800/60 bg-slate-900/60"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. ALL CANDIDATES SUMMARY TABLE -->
+    <div id="sectionSummaryWise" class="hidden bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 space-y-4 shadow-xl">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+        <div class="flex items-center space-x-2">
+          <span class="text-base">📊</span>
+          <h3 class="text-sm sm:text-base font-bold text-white">മുഴുവൻ പരീക്ഷാർത്ഥികളുടെയും സമ്മറി ലിസ്റ്റ്</h3>
+        </div>
+        <input type="text" id="quickFilterInput" oninput="filterSummaryTable()" placeholder="പേരോ നമ്പറോ ടൈപ്പ് ചെയ്യുക..." class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+      </div>
+
+      <div class="overflow-x-auto custom-scroll">
+        <table class="w-full text-left text-xs text-slate-300">
+          <thead class="bg-slate-950 text-slate-400 uppercase text-[10px] border-b border-slate-800">
+            <tr>
+              <th class="p-3">പേര്</th>
+              <th class="p-3">മൊബൈൽ</th>
+              <th class="p-3 text-center">ആകെ പരീക്ഷകൾ</th>
+              <th class="p-3 text-center">ശരാശരി മാർക്ക്</th>
+              <th class="p-3">അവസാന പരീക്ഷ</th>
+              <th class="p-3 text-center">ആക്ഷൻ</th>
+            </tr>
+          </thead>
+          <tbody id="summaryTableBody" class="divide-y divide-slate-800/60">
+            <tr>
+              <td colspan="6" class="p-4 text-center text-slate-500">ഡാറ്റകൾ ലോഡ് ചെയ്യുന്നു...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- 🌟 ഒളിപ്പിച്ച വെച്ച ഔദ്യോഗിക PDF റിപ്പോർട്ട് കാർഡുകൾ (ലോഗോ വീതി കൂട്ടി ക്രമീകരിച്ചത്) -->
+  <div class="hidden">
+    
+    <!-- 1. ഇൻഡിവിജ്വൽ സ്റ്റുഡന്റ് PDF -->
+    <div id="printableStudentReportCard" class="pdf-container p-8 max-w-3xl mx-auto border border-slate-300 font-sans">
+      
+      <!-- 🌟 Report Header: ലോഗോ കൂടുതൽ വീതിയിൽ നടുവിൽ സെറ്റ് ചെയ്തു -->
+      <div class="border-b-2 border-emerald-600 pb-3 flex items-center justify-between gap-2">
+        <div class="w-4/12 text-left">
+          <h2 class="text-3xl font-black text-emerald-800 tracking-tight leading-none">SK PSC</h2>
+          <p class="text-[11px] text-slate-600 mt-1 font-medium">Special Notes & Guidance by Subhash Kumar</p>
+          <span class="inline-block mt-2 bg-emerald-100 text-emerald-900 text-[10px] font-bold px-2.5 py-0.5 rounded border border-emerald-300">CANDIDATE DOSSIER</span>
+        </div>
+        
+        <!-- 🌟 വീതി കൂടിയ ലോഗോ (w-40 h-20) -->
+        <div class="w-4/12 flex items-center justify-center">
+          <img src="https://lh3.googleusercontent.com/d/1BCHlkHFIaxwhUfLzIRtCkncAztfC3U44" class="w-40 h-20 object-contain drop-shadow-sm rounded-xl" alt="SK PSC Logo">
+        </div>
+
+        <div class="w-4/12 text-right text-xs text-slate-500 font-mono">
+          <p id="pdfStudentReportDate" class="text-slate-600 font-semibold">Date: --/--/----</p>
+          <p class="text-emerald-700 font-black tracking-wider text-xs mt-1">VERIFIED REPORT</p>
+        </div>
+      </div>
+
+      <!-- Candidate Information Grid -->
+      <div class="my-4 p-4 bg-slate-50 rounded-xl border border-slate-200 grid grid-cols-4 gap-3 text-xs">
+        <div>
+          <p class="text-slate-500 font-semibold uppercase text-[10px]">Student Name</p>
+          <p class="text-sm font-bold text-slate-900 mt-0.5" id="pdfStudentName">-</p>
+        </div>
+        <div>
+          <p class="text-slate-500 font-semibold uppercase text-[10px]">Mobile Number</p>
+          <p class="text-sm font-bold text-slate-900 mt-0.5 font-mono" id="pdfStudentPhone">-</p>
+        </div>
+        <div class="text-center">
+          <p class="text-slate-500 font-semibold uppercase text-[10px]">Total Exams</p>
+          <p class="text-sm font-black text-emerald-700 mt-0.5 font-mono" id="pdfStudentTotalTests">0</p>
+        </div>
+        <div class="text-center">
+          <p class="text-slate-500 font-semibold uppercase text-[10px]">Average Score</p>
+          <p class="text-sm font-black text-teal-700 mt-0.5 font-mono" id="pdfStudentAvgScore">0.00</p>
+        </div>
+      </div>
+
+      <!-- പെർഫോമൻസ് ഫീഡ്‌ബാക്ക് ബോക്സ് -->
+      <div id="pdfFeedbackCard" class="my-3 p-3 rounded-xl border flex items-start space-x-3 bg-emerald-50/80 border-emerald-200 text-xs">
+        <span class="text-lg shrink-0 mt-0.5" id="pdfFeedbackEmoji">🎯</span>
+        <div>
+          <span class="font-bold text-emerald-950 uppercase tracking-wide text-[10px] block" id="pdfFeedbackCategory">PERFORMANCE ASSESSMENT</span>
+          <p class="text-slate-700 mt-0.5 leading-relaxed" id="pdfFeedbackText">നിങ്ങളുടെ സ്കോർ വിശകലനം ചെയ്തു മെസ്സേജ് ഇവിടെ വരും.</p>
+        </div>
+      </div>
+
+      <!-- Exam History Table -->
+      <div class="my-3">
+        <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2">Detailed Exam Performance History:</h4>
+        <table class="w-full text-left text-xs border border-slate-200">
+          <thead class="bg-slate-100 text-slate-700 text-[11px] border-b border-slate-200">
+            <tr>
+              <th class="p-2 border-r border-slate-200 text-center">#</th>
+              <th class="p-2 border-r border-slate-200">Exam Title</th>
+              <th class="p-2 border-r border-slate-200 text-center">Score</th>
+              <th class="p-2 border-r border-slate-200 text-center">Correct</th>
+              <th class="p-2 border-r border-slate-200 text-center">Wrong</th>
+              <th class="p-2 text-center">Date</th>
+            </tr>
+          </thead>
+          <tbody id="pdfStudentTableBody" class="divide-y divide-slate-200 text-[11px]"></tbody>
+        </table>
+      </div>
+
+      <!-- Report Footer -->
+      <div class="mt-6 pt-4 border-t border-slate-200 flex items-center justify-between text-[11px] text-slate-500">
+        <div>
+          <p class="font-bold text-emerald-800">SK PSC Model Exam Portal</p>
+          <p class="text-[10px]">നിങ്ങളുടെ ലക്ഷ്യത്തിലേക്കുള്ള വിജയവഴിയിൽ!</p>
+        </div>
+        <div class="text-right">
+          <p class="font-bold text-slate-700">Subhash Kumar</p>
+          <p class="text-[10px]">Authorized Signature / Verified</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. എക്സാം റാങ്ക് ലിസ്റ്റ് PDF -->
+    <div id="printableRankListCard" class="pdf-container p-8 max-w-3xl mx-auto border border-slate-300 font-sans">
+      
+      <!-- 🌟 Report Header: ലോഗോ കൂടുതൽ വീതിയിൽ നടുവിൽ സെറ്റ് ചെയ്തു -->
+      <div class="border-b-2 border-emerald-600 pb-3 flex items-center justify-between gap-2">
+        <div class="w-4/12 text-left">
+          <h2 class="text-3xl font-black text-emerald-800 tracking-tight leading-none">SK PSC</h2>
+          <p class="text-[11px] text-slate-600 mt-1 font-medium">Special Notes & Guidance by Subhash Kumar</p>
+          <span class="inline-block mt-2 bg-emerald-100 text-emerald-900 text-[10px] font-bold px-2.5 py-0.5 rounded border border-emerald-300">OFFICIAL MODEL EXAM RANK LIST</span>
+        </div>
+        
+        <!-- 🌟 വീതി കൂടിയ ലോഗോ (w-40 h-20) -->
+        <div class="w-4/12 flex items-center justify-center">
+          <img src="https://lh3.googleusercontent.com/d/1BCHlkHFIaxwhUfLzIRtCkncAztfC3U44" class="w-40 h-20 object-contain drop-shadow-sm rounded-xl" alt="SK PSC Logo">
+        </div>
+
+        <div class="w-4/12 text-right text-xs text-slate-500 font-mono">
+          <p id="pdfRankExamDate" class="text-slate-600 font-semibold">Date: --/--/----</p>
+          <p class="text-emerald-700 font-black tracking-wider text-xs mt-1">FINAL PUBLISHED</p>
+        </div>
+      </div>
+
+      <div class="my-4 p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between text-xs">
+        <div>
+          <span class="text-[10px] text-slate-500 uppercase block font-semibold">Exam Title</span>
+          <h4 class="text-sm font-black text-slate-900 mt-0.5" id="pdfRankExamTitle">-</h4>
+        </div>
+        <div class="flex items-center space-x-4">
+          <span class="font-mono">പങ്കെടുത്തവർ: <strong id="pdfRankPartCount" class="text-emerald-700 font-bold">0</strong></span>
+          <span class="font-mono">ടോപ്പ് സ്കോർ: <strong id="pdfRankTopScore" class="text-emerald-700 font-bold">0.00</strong></span>
+        </div>
+      </div>
+
+      <div class="my-4">
+        <table class="w-full text-left text-xs border border-slate-200">
+          <thead class="bg-slate-100 text-slate-700 text-[11px] border-b border-slate-200">
+            <tr>
+              <th class="p-2.5 border-r border-slate-200 text-center">Rank</th>
+              <th class="p-2.5 border-r border-slate-200">Candidate Name</th>
+              <th class="p-2.5 border-r border-slate-200 text-center font-mono">Phone</th>
+              <th class="p-2.5 border-r border-slate-200 text-center">Score</th>
+              <th class="p-2.5 border-r border-slate-200 text-center">Right</th>
+              <th class="p-2.5 text-center">Wrong</th>
+            </tr>
+          </thead>
+          <tbody id="pdfRankTableBody" class="divide-y divide-slate-200 text-[11px]"></tbody>
+        </table>
+      </div>
+
+      <div class="mt-8 pt-4 border-t border-slate-200 flex items-center justify-between text-[11px] text-slate-500">
+        <div>
+          <p class="font-bold text-emerald-800">SK PSC Model Exam Portal</p>
+          <p class="text-[10px]">പരീക്ഷാഫലം ഔദ്യോഗികമായി പ്രസിദ്ധീകരിച്ചു (First Attempts)</p>
+        </div>
+        <div class="text-right">
+          <p class="font-bold text-slate-700">Subhash Kumar</p>
+          <p class="text-[10px]">Authorized Signature / Verified</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const GLOBAL_SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwKBTm6Hj11YhzZLCEMBupKa3XAuq7Ns4M5iyU4vzwxaXfppLGWIR9ZWJeWlvGBjRaG/exec";
+    const ADMIN_SECRET_PIN = "1234";
+
+    let allCandidatesCache = [];
+    let currentStudentData = null;
+    let currentSelectedExamData = null;
+
+    function verifyPin() {
+      const entered = document.getElementById('adminPinInput').value.trim();
+      if (entered === ADMIN_SECRET_PIN) {
+        document.getElementById('pinLockModal').classList.add('hidden');
+        loadDashboardData();
+        loadExamDropdownList();
+      } else {
+        alert("തെറ്റായ PIN നമ്പർ! ദയവായി വീണ്ടും ശ്രമിക്കുക.");
+        document.getElementById('adminPinInput').value = "";
+      }
+    }
+
+    function switchTab(tab) {
+      document.getElementById('sectionExamWise').classList.add('hidden');
+      document.getElementById('sectionStudentWise').classList.add('hidden');
+      document.getElementById('sectionSummaryWise').classList.add('hidden');
+
+      const btnE = document.getElementById('tabBtnExam');
+      const btnS = document.getElementById('tabBtnStudent');
+      const btnSm = document.getElementById('tabBtnSummary');
+
+      const activeClass = "px-4 py-2 rounded-xl font-bold bg-emerald-500 text-slate-950 transition flex items-center space-x-1.5 shadow";
+      const inactiveClass = "px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800";
+
+      btnE.className = inactiveClass;
+      btnS.className = inactiveClass;
+      btnSm.className = inactiveClass;
+
+      if (tab === 'examWise') {
+        document.getElementById('sectionExamWise').classList.remove('hidden');
+        btnE.className = activeClass;
+      } else if (tab === 'studentWise') {
+        document.getElementById('sectionStudentWise').classList.remove('hidden');
+        btnS.className = activeClass;
+      } else if (tab === 'summaryWise') {
+        document.getElementById('sectionSummaryWise').classList.remove('hidden');
+        btnSm.className = activeClass;
+      }
+    }
+
+    function loadDashboardData() {
+      fetch(`${GLOBAL_SHEET_WEBAPP_URL}?action=admin_get_overview`)
+        .then(res => res.json())
+        .then(data => {
+          allCandidatesCache = data.candidates || [];
+          document.getElementById('statTotalStudents').innerText = data.totalCandidates || 0;
+
+          let totalAttempts = 0;
+          let sumScore = 0;
+
+          allCandidatesCache.forEach(c => {
+            totalAttempts += c.totalExams;
+            sumScore += (c.avgScore * c.totalExams);
+          });
+
+          document.getElementById('statTotalAttempts').innerText = totalAttempts;
+          renderSummaryTable(allCandidatesCache);
+        });
+    }
+
+    function loadExamDropdownList() {
+      fetch(`${GLOBAL_SHEET_WEBAPP_URL}?action=admin_get_exam_list`)
+        .then(res => res.json())
+        .then(data => {
+          const select = document.getElementById('examDropdownSelect');
+          const exams = data.exams || [];
+          document.getElementById('statAvailableExams').innerText = exams.length;
+          
+          select.innerHTML = '<option value="">പരീക്ഷ തിരഞ്ഞെടുക്കുക...</option>';
+          exams.forEach(ex => {
+            const opt = document.createElement('option');
+            opt.value = ex;
+            opt.innerText = ex.replace(/_/g, " ");
+            select.appendChild(opt);
+          });
+        });
+    }
+
+    function fetchSelectedExamDetails() {
+      const sheetName = document.getElementById('examDropdownSelect').value;
+      const tbody = document.getElementById('examRankTableBody');
+      const overview = document.getElementById('examOverviewBox');
+      const downloadBtn = document.getElementById('downloadRankPdfBtn');
+
+      if (!sheetName) {
+        overview.classList.add('hidden');
+        downloadBtn.classList.add('hidden');
+        tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-500">മുകളിൽ നിന്നും ഒരു പരീക്ഷ തിരഞ്ഞെടുക്കുക.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-500">റാങ്ക് ലിസ്റ്റ് ശേഖരിക്കുന്നു...</td></tr>';
+
+      fetch(`${GLOBAL_SHEET_WEBAPP_URL}?action=admin_get_exam_details&sheet=${encodeURIComponent(sheetName)}`)
+        .then(res => res.json())
+        .then(data => {
+          currentSelectedExamData = data;
+          overview.classList.remove('hidden');
+          downloadBtn.classList.remove('hidden');
+
+          document.getElementById('examPartCount').innerText = data.totalParticipants || 0;
+          document.getElementById('examHighestScore').innerText = data.highestScore || 0;
+          document.getElementById('examAverageScore').innerText = data.averageScore || "0.00";
+
+          const ranks = data.rankList || [];
+          tbody.innerHTML = '';
+
+          if (ranks.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-500">ഈ പരീക്ഷയിൽ ഇതുവരെ ആരും പങ്കെടുത്തിട്ടില്ല.</td></tr>';
+            return;
+          }
+
+          ranks.forEach((r, idx) => {
+            const tr = document.createElement('tr');
+            let rankBadge = `<span class="font-mono font-bold text-slate-400">${idx + 1}</span>`;
+            let rowBg = "";
+            if (idx === 0) {
+              rankBadge = `<span class="bg-amber-400 text-slate-950 font-black px-2.5 py-0.5 rounded-full text-[11px] shadow">🥇 1st</span>`;
+              rowBg = "bg-amber-950/20";
+            } else if (idx === 1) {
+              rankBadge = `<span class="bg-slate-200 text-slate-950 font-black px-2.5 py-0.5 rounded-full text-[11px] shadow">🥈 2nd</span>`;
+              rowBg = "bg-slate-800/30";
+            } else if (idx === 2) {
+              rankBadge = `<span class="bg-amber-700 text-white font-black px-2.5 py-0.5 rounded-full text-[11px] shadow">🥉 3rd</span>`;
+              rowBg = "bg-amber-900/15";
+            }
+
+            tr.className = `${rowBg} hover:bg-slate-800/40 transition`;
+            tr.innerHTML = `
+              <td class="p-3 text-center">${rankBadge}</td>
+              <td class="p-3 font-bold text-white">${r.name || 'വിദ്യാർത്ഥി'}</td>
+              <td class="p-3 font-mono text-slate-400">${r.phone}</td>
+              <td class="p-3 text-center font-mono font-bold text-emerald-400 text-sm">${r.score}</td>
+              <td class="p-3 text-center font-mono text-teal-300">${r.correct}</td>
+              <td class="p-3 text-center font-mono text-rose-400">${r.wrong}</td>
+              <td class="p-3 text-right font-mono text-slate-500 text-[11px]">${r.date || '-'}</td>
+            `;
+            tbody.appendChild(tr);
+          });
+        });
+    }
+
+    function downloadExamRankListPDF() {
+      if (!currentSelectedExamData || !currentSelectedExamData.rankList) {
+        alert("റാങ്ക് ലിസ്റ്റ് ഡാറ്റ ലഭ്യമല്ല.");
+        return;
+      }
+
+      document.getElementById('pdfRankExamTitle').innerText = currentSelectedExamData.examTitle;
+      document.getElementById('pdfRankPartCount').innerText = currentSelectedExamData.totalParticipants;
+      document.getElementById('pdfRankTopScore').innerText = currentSelectedExamData.highestScore;
+      document.getElementById('pdfRankExamDate').innerText = `Date: ${new Date().toLocaleDateString('en-GB')}`;
+
+      const pdfTbody = document.getElementById('pdfRankTableBody');
+      pdfTbody.innerHTML = '';
+
+      currentSelectedExamData.rankList.forEach((r, idx) => {
+        const row = document.createElement('tr');
+        let rankCol = `<span class="font-bold font-mono">${idx + 1}</span>`;
+        let rowStyle = "";
+        
+        if (idx === 0) {
+          rankCol = `<span style="background:#fef08a; color:#854d0e; font-weight:800; padding:2px 8px; border-radius:12px; border:1px solid #facc15;">🥇 1st Rank</span>`;
+          rowStyle = "background-color: #fefce8;";
+        } else if (idx === 1) {
+          rankCol = `<span style="background:#f1f5f9; color:#334155; font-weight:800; padding:2px 8px; border-radius:12px; border:1px solid #cbd5e1;">🥈 2nd Rank</span>`;
+          rowStyle = "background-color: #f8fafc;";
+        } else if (idx === 2) {
+          rankCol = `<span style="background:#ffedd5; color:#9a3412; font-weight:800; padding:2px 8px; border-radius:12px; border:1px solid #fdba74;">🥉 3rd Rank</span>`;
+          rowStyle = "background-color: #fff7ed;";
+        }
+
+        row.setAttribute("style", rowStyle);
+        row.innerHTML = `
+          <td class="p-2 border-r border-slate-200 text-center">${rankCol}</td>
+          <td class="p-2 border-r border-slate-200 font-bold text-slate-900">${r.name || 'വിദ്യാർത്ഥി'}</td>
+          <td class="p-2 border-r border-slate-200 text-center font-mono text-slate-600">${r.phone}</td>
+          <td class="p-2 border-r border-slate-200 text-center font-mono font-bold text-emerald-800">${r.score}</td>
+          <td class="p-2 border-r border-slate-200 text-center font-mono text-emerald-700 font-semibold">${r.correct}</td>
+          <td class="p-2 text-center font-mono text-rose-700 font-semibold">${r.wrong}</td>
+        `;
+        pdfTbody.appendChild(row);
+      });
+
+      const element = document.getElementById('printableRankListCard');
+      const opt = {
+        margin: 8,
+        filename: `${currentSelectedExamData.examTitle}_Official_RankList.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      html2pdf().set(opt).from(element).save();
+    }
+
+    function searchStudentDetails() {
+      const rawPhone = document.getElementById('studentSearchPhone').value.trim();
+      const digits = rawPhone.replace(/\D/g, '');
+      const phone = digits.length >= 10 ? digits.slice(-10) : digits;
+
+      if (phone.length !== 10) {
+        alert("ദയവായി ശരിയായ 10 അക്ക മൊബൈൽ നമ്പർ നൽകുക.");
+        return;
+      }
+
+      const area = document.getElementById('searchResultArea');
+      const tableBody = document.getElementById('studentHistoryTableBody');
+      tableBody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-slate-500">വിവരങ്ങൾ ശേഖരിക്കുന്നു...</td></tr>';
+      area.classList.remove('hidden');
+
+      fetch(`${GLOBAL_SHEET_WEBAPP_URL}?phone=${phone}`)
+        .then(res => res.json())
+        .then(data => {
+          const matchedSummary = allCandidatesCache.find(c => c.phone.replace(/\D/g, '').slice(-10) === phone);
+          const name = data.officialName || data.name || (matchedSummary ? matchedSummary.name : "വിദ്യാർത്ഥി");
+          const hist = data.history || [];
+
+          currentStudentData = { name: name, phone: phone, history: hist };
+
+          document.getElementById('resStudentName').innerText = name;
+          document.getElementById('resStudentPhone').innerText = `+91 ${phone}`;
+          document.getElementById('resTotalTests').innerText = hist.length;
+
+          let totScore = 0;
+          hist.forEach(h => totScore += parseFloat(h.score || 0));
+          const avgScore = hist.length > 0 ? (totScore / hist.length).toFixed(2) : "0.00";
+          document.getElementById('resAvgScore').innerText = avgScore;
+          currentStudentData.avgScore = avgScore;
+
+          tableBody.innerHTML = '';
+          if (hist.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-slate-500">പരീക്ഷകൾ ഒന്നും എഴുതിയിട്ടില്ല.</td></tr>';
+            return;
+          }
+
+          hist.slice().reverse().forEach((item, index) => {
+            const tr = document.createElement('tr');
+            tr.className = "hover:bg-slate-800/30 transition";
+            tr.innerHTML = `
+              <td class="p-3 font-mono text-slate-500">${index + 1}</td>
+              <td class="p-3 font-bold text-white">${item.title}</td>
+              <td class="p-3 text-center font-mono font-bold text-emerald-400">${item.score}</td>
+              <td class="p-3 text-center font-mono text-teal-300 font-semibold">${item.correct}</td>
+              <td class="p-3 text-center font-mono text-rose-400 font-semibold">${item.wrong}</td>
+              <td class="p-3 text-right font-mono text-slate-400 text-[11px]">${item.date || '-'}</td>
+            `;
+            tableBody.appendChild(tr);
+          });
+        });
+    }
+
+    function downloadStudentPDF() {
+      if (!currentStudentData || !currentStudentData.history) return;
+
+      document.getElementById('pdfStudentName').innerText = currentStudentData.name;
+      document.getElementById('pdfStudentPhone').innerText = `+91 ${currentStudentData.phone}`;
+      document.getElementById('pdfStudentTotalTests').innerText = currentStudentData.history.length;
+      document.getElementById('pdfStudentAvgScore').innerText = `${currentStudentData.avgScore} Marks`;
+      document.getElementById('pdfStudentReportDate').innerText = `Date: ${new Date().toLocaleDateString('en-GB')}`;
+
+      // പെർഫോമൻസ് അനാലിസിസും പേഴ്സണലൈസ്ഡ് മെസ്സേജും
+      const avg = parseFloat(currentStudentData.avgScore || 0);
+      const tests = currentStudentData.history.length;
+
+      let emoji = "🎯";
+      let category = "PERFORMANCE ASSESSMENT";
+      let message = "";
+      let cardBgClass = "bg-emerald-50/80 border-emerald-200";
+
+      if (tests >= 5 && avg >= 18) {
+        emoji = "🏆";
+        category = "EXCELLENT PERFORMANCE (RANK LEADER)";
+        message = "അത്യുജ്ജ്വല പ്രകടനം! നിങ്ങൾ ലക്ഷ്യത്തിലേക്ക് വളരെ അടുത്താണ്. മോഡൽ പരീക്ഷകളിൽ കാത്തുസൂക്ഷിക്കുന്ന ഇതേ ഏകാഗ്രതയും കൃത്യതയും ഫൈനൽ പരീക്ഷയിലും ആവർത്തിക്കുക.";
+        cardBgClass = "bg-amber-50/90 border-amber-300";
+      } else if (avg >= 12) {
+        emoji = "📈";
+        category = "CONSISTENT PERFORMANCE (GOOD PROGRESS)";
+        message = "മികച്ച മുന്നേറ്റം! നെഗറ്റീവ് മാർക്കുകൾ ഒഴിവാക്കി സംശയമുള്ള ചോദ്യങ്ങൾ വീണ്ടും പഠിക്കുക. സ്ഥിരമായ പരിശീലനത്തിലൂടെ ആദ്യ റാങ്കുകളിലേക്ക് ഉയർന്നുവരാൻ സാധിക്കും.";
+        cardBgClass = "bg-emerald-50/90 border-emerald-300";
+      } else {
+        emoji = "💡";
+        category = "NEEDS IMPROVEMENT & PRACTICE";
+        message = "തുടർച്ചയായ പരിശീലനമാണ് വിജയത്തിന്റെ രഹസ്യം! മുൻ പരീക്ഷകളിലെ തെറ്റുകൾ പ്രത്യേകം നോട്ട് ചെയ്തു വെച്ച് ആവർത്തിച്ചു പരിശീലിക്കുക. കൂടുതൽ പരീക്ഷകളിൽ പങ്കെടുക്കുക.";
+        cardBgClass = "bg-blue-50/90 border-blue-200";
+      }
+
+      document.getElementById('pdfFeedbackEmoji').innerText = emoji;
+      document.getElementById('pdfFeedbackCategory').innerText = category;
+      document.getElementById('pdfFeedbackText').innerText = message;
+      document.getElementById('pdfFeedbackCard').className = `my-3 p-3 rounded-xl border flex items-start space-x-3 text-xs ${cardBgClass}`;
+
+      const pdfTbody = document.getElementById('pdfStudentTableBody');
+      pdfTbody.innerHTML = '';
+
+      currentStudentData.history.slice().reverse().forEach((h, idx) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="p-2 border-r border-slate-200 text-center font-mono">${idx + 1}</td>
+          <td class="p-2 border-r border-slate-200 font-bold text-slate-900">${h.title}</td>
+          <td class="p-2 border-r border-slate-200 text-center font-mono font-bold text-emerald-700">${h.score}</td>
+          <td class="p-2 border-r border-slate-200 text-center font-mono text-emerald-600">${h.correct}</td>
+          <td class="p-2 border-r border-slate-200 text-center font-mono text-rose-600">${h.wrong}</td>
+          <td class="p-2 text-center text-slate-500 font-mono">${h.date || '-'}</td>
+        `;
+        pdfTbody.appendChild(row);
+      });
+
+      const element = document.getElementById('printableStudentReportCard');
+      const opt = {
+        margin: 8,
+        filename: `${currentStudentData.name}_${currentStudentData.phone}_SK_PSC.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      html2pdf().set(opt).from(element).save();
+    }
+
+    function renderSummaryTable(list) {
+      const tbody = document.getElementById('summaryTableBody');
+      tbody.innerHTML = "";
+
+      list.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-800/40 transition";
+        tr.innerHTML = `
+          <td class="p-3 font-bold text-white">${item.name || 'വിദ്യാർത്ഥി'}</td>
+          <td class="p-3 font-mono text-slate-400">${item.phone}</td>
+          <td class="p-3 text-center font-bold text-emerald-400 font-mono">${item.totalExams}</td>
+          <td class="p-3 text-center font-bold text-cyan-400 font-mono">${item.avgScore}</td>
+          <td class="p-3 text-slate-300 truncate max-w-[160px]">${item.lastExam || '-'}</td>
+          <td class="p-3 text-center">
+            <button onclick="quickSelectStudent('${item.phone}')" class="px-3 py-1 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-lg border border-emerald-500/30 transition shadow-sm">
+              ഹിസ്റ്ററി
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function quickSelectStudent(phone) {
+      switchTab('studentWise');
+      document.getElementById('studentSearchPhone').value = phone;
+      searchStudentDetails();
+    }
+
+    function filterSummaryTable() {
+      const q = document.getElementById('quickFilterInput').value.trim().toLowerCase();
+      const filtered = allCandidatesCache.filter(c => c.name.toLowerCase().includes(q) || c.phone.includes(q));
+      renderSummaryTable(filtered);
+    }
+  </script>
+</body>
+</html>
