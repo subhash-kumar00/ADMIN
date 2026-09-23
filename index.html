@@ -30,6 +30,19 @@
       color: #0f172a;
       width: 100%;
     }
+
+    /* 🌟 ടേബിൾ അടുത്ത പേജിലേക്ക് ചാടാതിരിക്കാനും വരികൾ മുറിയാതിരിക്കാനും */
+    table {
+      page-break-inside: auto !important;
+      border-collapse: collapse;
+    }
+    tr {
+      page-break-inside: avoid !important;
+      page-break-after: auto !important;
+    }
+    thead {
+      display: table-header-group;
+    }
   </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between">
@@ -111,7 +124,7 @@
             <span>🏆</span>
             <span>പരീക്ഷാഫലവും റാങ്ക് ലിസ്റ്റും (First Attempt Only)</span>
           </h3>
-          <p class="text-xs text-slate-400">ഓരോ കുട്ടിയുടെയും ആദ്യത്തെ അറ്റംപ്റ്റ് മാത്രം പരിഗണിച്ചുള്ള ഔദ്യോഗിക റാങ്ക് ലിസ്റ്റ്.</p>
+          <p class="text-xs text-slate-400">വിദ്യാർത്ഥികളുടെ സ്വകാര്യത ഉറപ്പാക്കി നമ്പർ മാസ്ക് ചെയ്ത ഔദ്യോഗിക റാങ്ക് ലിസ്റ്റ്.</p>
         </div>
         <div class="flex items-center space-x-2">
           <select id="examDropdownSelect" onchange="fetchSelectedExamDetails()" class="bg-slate-950 border border-slate-800 text-xs sm:text-sm text-emerald-400 font-bold rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-emerald-500 max-w-xs cursor-pointer">
@@ -145,7 +158,7 @@
             <tr>
               <th class="p-3 text-center">റാങ്ക്</th>
               <th class="p-3">പേര്</th>
-              <th class="p-3">മൊബൈൽ</th>
+              <th class="p-3">മൊബൈൽ (Protected)</th>
               <th class="p-3 text-center">സ്കോർ</th>
               <th class="p-3 text-center">ശരി</th>
               <th class="p-3 text-center">തെറ്റ്</th>
@@ -259,72 +272,71 @@
 
   </main>
 
-  <!-- 🌟 ഒളിപ്പിച്ച വെച്ച ഔദ്യോഗിക PDF റിപ്പോർട്ട് കാർഡുകൾ (ലോഗോ വീതി കൂട്ടി ക്രമീകരിച്ചത്) -->
+  <!-- 🌟 ഒളിപ്പിച്ച വെച്ച ഔദ്യോഗിക PDF റിപ്പോർട്ട് കാർഡുകൾ -->
   <div class="hidden">
     
     <!-- 1. ഇൻഡിവിജ്വൽ സ്റ്റുഡന്റ് PDF -->
-    <div id="printableStudentReportCard" class="pdf-container p-8 max-w-3xl mx-auto border border-slate-300 font-sans">
+    <div id="printableStudentReportCard" class="pdf-container p-6 max-w-3xl mx-auto border border-slate-300 font-sans">
       
-      <!-- 🌟 Report Header: ലോഗോ കൂടുതൽ വീതിയിൽ നടുവിൽ സെറ്റ് ചെയ്തു -->
-      <div class="border-b-2 border-emerald-600 pb-3 flex items-center justify-between gap-2">
+      <!-- Report Header -->
+      <div class="border-b-2 border-emerald-600 pb-2 flex items-center justify-between gap-2">
         <div class="w-4/12 text-left">
-          <h2 class="text-3xl font-black text-emerald-800 tracking-tight leading-none">SK PSC</h2>
-          <p class="text-[11px] text-slate-600 mt-1 font-medium">Special Notes & Guidance by Subhash Kumar</p>
-          <span class="inline-block mt-2 bg-emerald-100 text-emerald-900 text-[10px] font-bold px-2.5 py-0.5 rounded border border-emerald-300">CANDIDATE DOSSIER</span>
+          <h2 class="text-2xl font-black text-emerald-800 tracking-tight leading-none">SK PSC</h2>
+          <p class="text-[10px] text-slate-600 mt-1 font-medium">Special Notes & Guidance by Subhash Kumar</p>
+          <span class="inline-block mt-1 bg-emerald-100 text-emerald-900 text-[9px] font-bold px-2 py-0.5 rounded border border-emerald-300">CANDIDATE DOSSIER</span>
         </div>
         
-        <!-- 🌟 വീതി കൂടിയ ലോഗോ (w-40 h-20) -->
         <div class="w-4/12 flex items-center justify-center">
-          <img src="https://lh3.googleusercontent.com/d/1BCHlkHFIaxwhUfLzIRtCkncAztfC3U44" class="w-40 h-20 object-contain drop-shadow-sm rounded-xl" alt="SK PSC Logo">
+          <img src="https://lh3.googleusercontent.com/d/1BCHlkHFIaxwhUfLzIRtCkncAztfC3U44" class="w-36 h-16 object-contain drop-shadow-sm rounded-lg" alt="SK PSC Logo">
         </div>
 
         <div class="w-4/12 text-right text-xs text-slate-500 font-mono">
-          <p id="pdfStudentReportDate" class="text-slate-600 font-semibold">Date: --/--/----</p>
-          <p class="text-emerald-700 font-black tracking-wider text-xs mt-1">VERIFIED REPORT</p>
+          <p id="pdfStudentReportDate" class="text-slate-600 font-semibold text-[11px]">Date: --/--/----</p>
+          <p class="text-emerald-700 font-black tracking-wider text-[11px] mt-0.5">VERIFIED REPORT</p>
         </div>
       </div>
 
       <!-- Candidate Information Grid -->
-      <div class="my-4 p-4 bg-slate-50 rounded-xl border border-slate-200 grid grid-cols-4 gap-3 text-xs">
+      <div class="my-3 p-3 bg-slate-50 rounded-xl border border-slate-200 grid grid-cols-4 gap-2 text-xs">
         <div>
-          <p class="text-slate-500 font-semibold uppercase text-[10px]">Student Name</p>
-          <p class="text-sm font-bold text-slate-900 mt-0.5" id="pdfStudentName">-</p>
+          <p class="text-slate-500 font-semibold uppercase text-[9px]">Student Name</p>
+          <p class="text-xs font-bold text-slate-900 mt-0.5" id="pdfStudentName">-</p>
         </div>
         <div>
-          <p class="text-slate-500 font-semibold uppercase text-[10px]">Mobile Number</p>
-          <p class="text-sm font-bold text-slate-900 mt-0.5 font-mono" id="pdfStudentPhone">-</p>
+          <p class="text-slate-500 font-semibold uppercase text-[9px]">Mobile Number</p>
+          <p class="text-xs font-bold text-slate-900 mt-0.5 font-mono" id="pdfStudentPhone">-</p>
         </div>
         <div class="text-center">
-          <p class="text-slate-500 font-semibold uppercase text-[10px]">Total Exams</p>
-          <p class="text-sm font-black text-emerald-700 mt-0.5 font-mono" id="pdfStudentTotalTests">0</p>
+          <p class="text-slate-500 font-semibold uppercase text-[9px]">Total Exams</p>
+          <p class="text-xs font-black text-emerald-700 mt-0.5 font-mono" id="pdfStudentTotalTests">0</p>
         </div>
         <div class="text-center">
-          <p class="text-slate-500 font-semibold uppercase text-[10px]">Average Score</p>
-          <p class="text-sm font-black text-teal-700 mt-0.5 font-mono" id="pdfStudentAvgScore">0.00</p>
+          <p class="text-slate-500 font-semibold uppercase text-[9px]">Average Score</p>
+          <p class="text-xs font-black text-teal-700 mt-0.5 font-mono" id="pdfStudentAvgScore">0.00</p>
         </div>
       </div>
 
       <!-- പെർഫോമൻസ് ഫീഡ്‌ബാക്ക് ബോക്സ് -->
-      <div id="pdfFeedbackCard" class="my-3 p-3 rounded-xl border flex items-start space-x-3 bg-emerald-50/80 border-emerald-200 text-xs">
-        <span class="text-lg shrink-0 mt-0.5" id="pdfFeedbackEmoji">🎯</span>
+      <div id="pdfFeedbackCard" class="my-2 p-2.5 rounded-xl border flex items-start space-x-2.5 bg-emerald-50/80 border-emerald-200 text-[11px]">
+        <span class="text-base shrink-0 mt-0.5" id="pdfFeedbackEmoji">🎯</span>
         <div>
-          <span class="font-bold text-emerald-950 uppercase tracking-wide text-[10px] block" id="pdfFeedbackCategory">PERFORMANCE ASSESSMENT</span>
-          <p class="text-slate-700 mt-0.5 leading-relaxed" id="pdfFeedbackText">നിങ്ങളുടെ സ്കോർ വിശകലനം ചെയ്തു മെസ്സേജ് ഇവിടെ വരും.</p>
+          <span class="font-bold text-emerald-950 uppercase tracking-wide text-[9px] block" id="pdfFeedbackCategory">PERFORMANCE ASSESSMENT</span>
+          <p class="text-slate-700 mt-0.5 leading-tight" id="pdfFeedbackText">നിങ്ങളുടെ സ്കോർ വിശകലനം ചെയ്തു മെസ്സേജ് ഇവിടെ വരും.</p>
         </div>
       </div>
 
       <!-- Exam History Table -->
-      <div class="my-3">
-        <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2">Detailed Exam Performance History:</h4>
-        <table class="w-full text-left text-xs border border-slate-200">
-          <thead class="bg-slate-100 text-slate-700 text-[11px] border-b border-slate-200">
+      <div class="my-2">
+        <h4 class="text-[10px] font-bold text-slate-800 uppercase tracking-wider mb-1.5">Detailed Exam Performance History:</h4>
+        <table class="w-full text-left text-[11px] border border-slate-200">
+          <thead class="bg-slate-100 text-slate-700 text-[10px] border-b border-slate-200">
             <tr>
-              <th class="p-2 border-r border-slate-200 text-center">#</th>
-              <th class="p-2 border-r border-slate-200">Exam Title</th>
-              <th class="p-2 border-r border-slate-200 text-center">Score</th>
-              <th class="p-2 border-r border-slate-200 text-center">Correct</th>
-              <th class="p-2 border-r border-slate-200 text-center">Wrong</th>
-              <th class="p-2 text-center">Date</th>
+              <th class="py-1.5 px-2 border-r border-slate-200 text-center">#</th>
+              <th class="py-1.5 px-2 border-r border-slate-200">Exam Title</th>
+              <th class="py-1.5 px-2 border-r border-slate-200 text-center">Score</th>
+              <th class="py-1.5 px-2 border-r border-slate-200 text-center">Correct</th>
+              <th class="py-1.5 px-2 border-r border-slate-200 text-center">Wrong</th>
+              <th class="py-1.5 px-2 text-center">Date</th>
             </tr>
           </thead>
           <tbody id="pdfStudentTableBody" class="divide-y divide-slate-200 text-[11px]"></tbody>
@@ -332,75 +344,75 @@
       </div>
 
       <!-- Report Footer -->
-      <div class="mt-6 pt-4 border-t border-slate-200 flex items-center justify-between text-[11px] text-slate-500">
+      <div class="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between text-[10px] text-slate-500">
         <div>
           <p class="font-bold text-emerald-800">SK PSC Model Exam Portal</p>
-          <p class="text-[10px]">നിങ്ങളുടെ ലക്ഷ്യത്തിലേക്കുള്ള വിജയവഴിയിൽ!</p>
+          <p class="text-[9px]">നിങ്ങളുടെ ലക്ഷ്യത്തിലേക്കുള്ള വിജയവഴിയിൽ!</p>
         </div>
         <div class="text-right">
           <p class="font-bold text-slate-700">Subhash Kumar</p>
-          <p class="text-[10px]">Authorized Signature / Verified</p>
+          <p class="text-[9px]">Authorized Signature / Verified</p>
         </div>
       </div>
     </div>
 
     <!-- 2. എക്സാം റാങ്ക് ലിസ്റ്റ് PDF -->
-    <div id="printableRankListCard" class="pdf-container p-8 max-w-3xl mx-auto border border-slate-300 font-sans">
+    <div id="printableRankListCard" class="pdf-container p-6 max-w-3xl mx-auto border border-slate-300 font-sans">
       
-      <!-- 🌟 Report Header: ലോഗോ കൂടുതൽ വീതിയിൽ നടുവിൽ സെറ്റ് ചെയ്തു -->
-      <div class="border-b-2 border-emerald-600 pb-3 flex items-center justify-between gap-2">
+      <!-- Report Header -->
+      <div class="border-b-2 border-emerald-600 pb-2 flex items-center justify-between gap-2">
         <div class="w-4/12 text-left">
-          <h2 class="text-3xl font-black text-emerald-800 tracking-tight leading-none">SK PSC</h2>
-          <p class="text-[11px] text-slate-600 mt-1 font-medium">Special Notes & Guidance by Subhash Kumar</p>
-          <span class="inline-block mt-2 bg-emerald-100 text-emerald-900 text-[10px] font-bold px-2.5 py-0.5 rounded border border-emerald-300">OFFICIAL MODEL EXAM RANK LIST</span>
+          <h2 class="text-2xl font-black text-emerald-800 tracking-tight leading-none">SK PSC</h2>
+          <p class="text-[10px] text-slate-600 mt-1 font-medium">Special Notes & Guidance by Subhash Kumar</p>
+          <span class="inline-block mt-1 bg-emerald-100 text-emerald-900 text-[9px] font-bold px-2 py-0.5 rounded border border-emerald-300">OFFICIAL MODEL EXAM RANK LIST</span>
         </div>
         
-        <!-- 🌟 വീതി കൂടിയ ലോഗോ (w-40 h-20) -->
         <div class="w-4/12 flex items-center justify-center">
-          <img src="https://lh3.googleusercontent.com/d/1BCHlkHFIaxwhUfLzIRtCkncAztfC3U44" class="w-40 h-20 object-contain drop-shadow-sm rounded-xl" alt="SK PSC Logo">
+          <img src="https://lh3.googleusercontent.com/d/1BCHlkHFIaxwhUfLzIRtCkncAztfC3U44" class="w-36 h-16 object-contain drop-shadow-sm rounded-lg" alt="SK PSC Logo">
         </div>
 
         <div class="w-4/12 text-right text-xs text-slate-500 font-mono">
-          <p id="pdfRankExamDate" class="text-slate-600 font-semibold">Date: --/--/----</p>
-          <p class="text-emerald-700 font-black tracking-wider text-xs mt-1">FINAL PUBLISHED</p>
+          <p id="pdfRankExamDate" class="text-slate-600 font-semibold text-[11px]">Date: --/--/----</p>
+          <p class="text-emerald-700 font-black tracking-wider text-[11px] mt-0.5">FINAL PUBLISHED</p>
         </div>
       </div>
 
-      <div class="my-4 p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between text-xs">
+      <div class="my-3 p-2.5 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between text-xs">
         <div>
-          <span class="text-[10px] text-slate-500 uppercase block font-semibold">Exam Title</span>
-          <h4 class="text-sm font-black text-slate-900 mt-0.5" id="pdfRankExamTitle">-</h4>
+          <span class="text-[9px] text-slate-500 uppercase block font-semibold">Exam Title</span>
+          <h4 class="text-xs font-black text-slate-900 mt-0.5" id="pdfRankExamTitle">-</h4>
         </div>
-        <div class="flex items-center space-x-4">
+        <div class="flex items-center space-x-4 text-[11px]">
           <span class="font-mono">പങ്കെടുത്തവർ: <strong id="pdfRankPartCount" class="text-emerald-700 font-bold">0</strong></span>
           <span class="font-mono">ടോപ്പ് സ്കോർ: <strong id="pdfRankTopScore" class="text-emerald-700 font-bold">0.00</strong></span>
         </div>
       </div>
 
-      <div class="my-4">
-        <table class="w-full text-left text-xs border border-slate-200">
-          <thead class="bg-slate-100 text-slate-700 text-[11px] border-b border-slate-200">
+      <!-- 🌟 കൃത്യമായ ഉയരമുള്ള ടേബിൾ (ഒന്നാം പേജിൽത്തന്നെ ആദ്യ വരികൾ വരാൻ) -->
+      <div class="my-2">
+        <table class="w-full text-left border border-slate-200">
+          <thead class="bg-slate-100 text-slate-700 text-[10px] border-b border-slate-200">
             <tr>
-              <th class="p-2.5 border-r border-slate-200 text-center">Rank</th>
-              <th class="p-2.5 border-r border-slate-200">Candidate Name</th>
-              <th class="p-2.5 border-r border-slate-200 text-center font-mono">Phone</th>
-              <th class="p-2.5 border-r border-slate-200 text-center">Score</th>
-              <th class="p-2.5 border-r border-slate-200 text-center">Right</th>
-              <th class="p-2.5 text-center">Wrong</th>
+              <th class="py-1.5 px-2 border-r border-slate-200 text-center">Rank</th>
+              <th class="py-1.5 px-2 border-r border-slate-200">Candidate Name</th>
+              <th class="py-1.5 px-2 border-r border-slate-200 text-center font-mono">Phone</th>
+              <th class="py-1.5 px-2 border-r border-slate-200 text-center">Score</th>
+              <th class="py-1.5 px-2 border-r border-slate-200 text-center">Right</th>
+              <th class="py-1.5 px-2 text-center">Wrong</th>
             </tr>
           </thead>
           <tbody id="pdfRankTableBody" class="divide-y divide-slate-200 text-[11px]"></tbody>
         </table>
       </div>
 
-      <div class="mt-8 pt-4 border-t border-slate-200 flex items-center justify-between text-[11px] text-slate-500">
+      <div class="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between text-[10px] text-slate-500">
         <div>
           <p class="font-bold text-emerald-800">SK PSC Model Exam Portal</p>
-          <p class="text-[10px]">പരീക്ഷാഫലം ഔദ്യോഗികമായി പ്രസിദ്ധീകരിച്ചു (First Attempts)</p>
+          <p class="text-[9px]">പരീക്ഷാഫലം ഔദ്യോഗികമായി പ്രസിദ്ധീകരിച്ചു (First Attempts)</p>
         </div>
         <div class="text-right">
           <p class="font-bold text-slate-700">Subhash Kumar</p>
-          <p class="text-[10px]">Authorized Signature / Verified</p>
+          <p class="text-[9px]">Authorized Signature / Verified</p>
         </div>
       </div>
     </div>
@@ -414,6 +426,17 @@
     let allCandidatesCache = [];
     let currentStudentData = null;
     let currentSelectedExamData = null;
+
+    function maskPhoneNumber(phone) {
+      if (!phone) return '-';
+      const clean = String(phone).replace(/\D/g, '');
+      if (clean.length === 10) {
+        return `${clean.substring(0, 3)}••••${clean.substring(7)}`;
+      } else if (clean.length > 6) {
+        return `${clean.substring(0, 2)}••••${clean.substring(clean.length - 2)}`;
+      }
+      return phone;
+    }
 
     function verifyPin() {
       const entered = document.getElementById('adminPinInput').value.trim();
@@ -546,7 +569,7 @@
             tr.innerHTML = `
               <td class="p-3 text-center">${rankBadge}</td>
               <td class="p-3 font-bold text-white">${r.name || 'വിദ്യാർത്ഥി'}</td>
-              <td class="p-3 font-mono text-slate-400">${r.phone}</td>
+              <td class="p-3 font-mono text-slate-400 tracking-wider">${maskPhoneNumber(r.phone)}</td>
               <td class="p-3 text-center font-mono font-bold text-emerald-400 text-sm">${r.score}</td>
               <td class="p-3 text-center font-mono text-teal-300">${r.correct}</td>
               <td class="p-3 text-center font-mono text-rose-400">${r.wrong}</td>
@@ -557,6 +580,7 @@
         });
     }
 
+    // 🌟 കൃത്യമായി ഒന്നാം പേജിൽ തുടങ്ങി വരികൾ മുറിയാതെ split ആകുന്ന PDF എക്സ്പോർട്ട്
     function downloadExamRankListPDF() {
       if (!currentSelectedExamData || !currentSelectedExamData.rankList) {
         alert("റാങ്ക് ലിസ്റ്റ് ഡാറ്റ ലഭ്യമല്ല.");
@@ -573,39 +597,41 @@
 
       currentSelectedExamData.rankList.forEach((r, idx) => {
         const row = document.createElement('tr');
-        let rankCol = `<span class="font-bold font-mono">${idx + 1}</span>`;
+        let rankCol = `<span class="font-bold font-mono text-[11px]">${idx + 1}</span>`;
         let rowStyle = "";
         
         if (idx === 0) {
-          rankCol = `<span style="background:#fef08a; color:#854d0e; font-weight:800; padding:2px 8px; border-radius:12px; border:1px solid #facc15;">🥇 1st Rank</span>`;
+          rankCol = `<span style="background:#fef08a; color:#854d0e; font-weight:800; padding:1px 6px; border-radius:10px; border:1px solid #facc15; font-size:10px;">🥇 1st Rank</span>`;
           rowStyle = "background-color: #fefce8;";
         } else if (idx === 1) {
-          rankCol = `<span style="background:#f1f5f9; color:#334155; font-weight:800; padding:2px 8px; border-radius:12px; border:1px solid #cbd5e1;">🥈 2nd Rank</span>`;
+          rankCol = `<span style="background:#f1f5f9; color:#334155; font-weight:800; padding:1px 6px; border-radius:10px; border:1px solid #cbd5e1; font-size:10px;">🥈 2nd Rank</span>`;
           rowStyle = "background-color: #f8fafc;";
         } else if (idx === 2) {
-          rankCol = `<span style="background:#ffedd5; color:#9a3412; font-weight:800; padding:2px 8px; border-radius:12px; border:1px solid #fdba74;">🥉 3rd Rank</span>`;
+          rankCol = `<span style="background:#ffedd5; color:#9a3412; font-weight:800; padding:1px 6px; border-radius:10px; border:1px solid #fdba74; font-size:10px;">🥉 3rd Rank</span>`;
           rowStyle = "background-color: #fff7ed;";
         }
 
         row.setAttribute("style", rowStyle);
         row.innerHTML = `
-          <td class="p-2 border-r border-slate-200 text-center">${rankCol}</td>
-          <td class="p-2 border-r border-slate-200 font-bold text-slate-900">${r.name || 'വിദ്യാർത്ഥി'}</td>
-          <td class="p-2 border-r border-slate-200 text-center font-mono text-slate-600">${r.phone}</td>
-          <td class="p-2 border-r border-slate-200 text-center font-mono font-bold text-emerald-800">${r.score}</td>
-          <td class="p-2 border-r border-slate-200 text-center font-mono text-emerald-700 font-semibold">${r.correct}</td>
-          <td class="p-2 text-center font-mono text-rose-700 font-semibold">${r.wrong}</td>
+          <td class="py-1.5 px-2 border-r border-slate-200 text-center">${rankCol}</td>
+          <td class="py-1.5 px-2 border-r border-slate-200 font-bold text-slate-900 text-[11px]">${r.name || 'വിദ്യാർത്ഥി'}</td>
+          <td class="py-1.5 px-2 border-r border-slate-200 text-center font-mono text-slate-600 tracking-wider text-[11px]">${maskPhoneNumber(r.phone)}</td>
+          <td class="py-1.5 px-2 border-r border-slate-200 text-center font-mono font-bold text-emerald-800 text-[11px]">${r.score}</td>
+          <td class="py-1.5 px-2 border-r border-slate-200 text-center font-mono text-emerald-700 font-semibold text-[11px]">${r.correct}</td>
+          <td class="py-1.5 px-2 text-center font-mono text-rose-700 font-semibold text-[11px]">${r.wrong}</td>
         `;
         pdfTbody.appendChild(row);
       });
 
       const element = document.getElementById('printableRankListCard');
       const opt = {
-        margin: 8,
-        filename: `${currentSelectedExamData.examTitle}_Official_RankList.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        margin:       [8, 8, 8, 8],
+        filename:     `${currentSelectedExamData.examTitle}_Official_RankList.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        // 🌟 avoid-all മാറ്റി, കൃത്യമായി വരികൾ മാത്രം split ആകാതിരിക്കാൻ css മോഡ് നൽകി
+        pagebreak:    { mode: ['css', 'legacy'] }
       };
 
       html2pdf().set(opt).from(element).save();
@@ -676,7 +702,6 @@
       document.getElementById('pdfStudentAvgScore').innerText = `${currentStudentData.avgScore} Marks`;
       document.getElementById('pdfStudentReportDate').innerText = `Date: ${new Date().toLocaleDateString('en-GB')}`;
 
-      // പെർഫോമൻസ് അനാലിസിസും പേഴ്സണലൈസ്ഡ് മെസ്സേജും
       const avg = parseFloat(currentStudentData.avgScore || 0);
       const tests = currentStudentData.history.length;
 
@@ -705,7 +730,7 @@
       document.getElementById('pdfFeedbackEmoji').innerText = emoji;
       document.getElementById('pdfFeedbackCategory').innerText = category;
       document.getElementById('pdfFeedbackText').innerText = message;
-      document.getElementById('pdfFeedbackCard').className = `my-3 p-3 rounded-xl border flex items-start space-x-3 text-xs ${cardBgClass}`;
+      document.getElementById('pdfFeedbackCard').className = `my-2 p-2.5 rounded-xl border flex items-start space-x-2.5 text-[11px] ${cardBgClass}`;
 
       const pdfTbody = document.getElementById('pdfStudentTableBody');
       pdfTbody.innerHTML = '';
@@ -713,23 +738,24 @@
       currentStudentData.history.slice().reverse().forEach((h, idx) => {
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td class="p-2 border-r border-slate-200 text-center font-mono">${idx + 1}</td>
-          <td class="p-2 border-r border-slate-200 font-bold text-slate-900">${h.title}</td>
-          <td class="p-2 border-r border-slate-200 text-center font-mono font-bold text-emerald-700">${h.score}</td>
-          <td class="p-2 border-r border-slate-200 text-center font-mono text-emerald-600">${h.correct}</td>
-          <td class="p-2 border-r border-slate-200 text-center font-mono text-rose-600">${h.wrong}</td>
-          <td class="p-2 text-center text-slate-500 font-mono">${h.date || '-'}</td>
+          <td class="py-1.5 px-2 border-r border-slate-200 text-center font-mono text-[11px]">${idx + 1}</td>
+          <td class="py-1.5 px-2 border-r border-slate-200 font-bold text-slate-900 text-[11px]">${h.title}</td>
+          <td class="py-1.5 px-2 border-r border-slate-200 text-center font-mono font-bold text-emerald-700 text-[11px]">${h.score}</td>
+          <td class="py-1.5 px-2 border-r border-slate-200 text-center font-mono text-emerald-600 text-[11px]">${h.correct}</td>
+          <td class="py-1.5 px-2 border-r border-slate-200 text-center font-mono text-rose-600 text-[11px]">${h.wrong}</td>
+          <td class="py-1.5 px-2 text-center text-slate-500 font-mono text-[11px]">${h.date || '-'}</td>
         `;
         pdfTbody.appendChild(row);
       });
 
       const element = document.getElementById('printableStudentReportCard');
       const opt = {
-        margin: 8,
-        filename: `${currentStudentData.name}_${currentStudentData.phone}_SK_PSC.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        margin:       [8, 8, 8, 8],
+        filename:     `${currentStudentData.name}_${currentStudentData.phone}_SK_PSC.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak:    { mode: ['css', 'legacy'] }
       };
 
       html2pdf().set(opt).from(element).save();
