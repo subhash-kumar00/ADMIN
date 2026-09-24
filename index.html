@@ -31,7 +31,7 @@
       width: 100%;
     }
 
-    /* 🌟 ടേബിൾ അടുത്ത പേജിലേക്ക് ചാടാതിരിക്കാനും വരികൾ മുറിയാതിരിക്കാനും */
+    /* 🌟 പേജ് ബ്രേക്ക് വരുമ്പോൾ വരികൾ മുറിഞ്ഞുപോകാതിരിക്കാനുള്ള CSS */
     table {
       page-break-inside: auto !important;
       border-collapse: collapse;
@@ -42,6 +42,15 @@
     }
     thead {
       display: table-header-group;
+    }
+
+    /* റെഡ് അലേർട്ട് പൾസ് ആനിമേഷൻ */
+    @keyframes redPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.1); }
+    }
+    .pulse-red {
+      animation: redPulse 1.8s infinite;
     }
   </style>
 </head>
@@ -58,6 +67,31 @@
     </div>
   </div>
 
+  <!-- 🌟 റിപ്പോർട്ട് ചെയ്ത ചോദ്യങ്ങൾ കാണാനും Solve ചെയ്യാനുമുള്ള MODAL POPUP -->
+  <div id="reportedQuestionsModal" class="fixed inset-0 bg-slate-950/80 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+    <div class="bg-slate-900 border border-rose-500/40 p-5 sm:p-6 rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center space-x-2">
+          <span class="w-3 h-3 bg-rose-500 rounded-full animate-ping"></span>
+          <h3 class="font-bold text-white text-base sm:text-lg flex items-center space-x-2">
+            <span>വിദ്യാർത്ഥികൾ റിപ്പോർട്ട് ചെയ്ത ചോദ്യങ്ങൾ</span>
+            <span id="modalReportCountBadge" class="bg-rose-500/20 text-rose-400 text-xs px-2 py-0.5 rounded-full border border-rose-500/30 font-mono">0</span>
+          </h3>
+        </div>
+        <button onclick="closeReportModal()" class="text-slate-400 hover:text-white text-lg font-bold p-1 bg-slate-800 rounded-xl w-8 h-8 flex items-center justify-center">✕</button>
+      </div>
+
+      <!-- ലിസ്റ്റ് ഏരിയ -->
+      <div id="reportedListArea" class="flex-1 overflow-y-auto custom-scroll py-4 space-y-3">
+        <p class="text-xs text-slate-500 text-center py-6">റിപ്പോർട്ടുകൾ ശേഖരിക്കുന്നു...</p>
+      </div>
+
+      <div class="pt-3 border-t border-slate-800 flex justify-end">
+        <button onclick="closeReportModal()" class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl transition">അടയ്ക്കുക</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Header -->
   <header class="bg-slate-900/95 border-b border-slate-800 px-4 sm:px-8 py-3.5 sticky top-0 z-40 backdrop-blur">
     <div class="max-w-7xl mx-auto flex items-center justify-between">
@@ -71,10 +105,20 @@
           <p class="text-[11px] text-slate-400">റാങ്ക് ലിസ്റ്റും വിദ്യാർത്ഥി പെർഫോമൻസ് മാനേജ്‌മെന്റും</p>
         </div>
       </div>
-      <button onclick="location.reload()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-xl border border-slate-700 transition flex items-center space-x-1 shadow">
-        <span>🔄</span>
-        <span>Refresh</span>
-      </button>
+      
+      <div class="flex items-center space-x-3">
+        <!-- റെഡ് അലേർട്ട് നോട്ടിഫിക്കേഷൻ ബട്ടൺ -->
+        <button onclick="openReportModal()" id="reportedNotificationBtn" class="relative bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/40 text-rose-400 px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 shadow">
+          <span class="text-sm">🚨</span>
+          <span class="hidden sm:inline">ചോദ്യ റിപ്പോർട്ടുകൾ</span>
+          <span id="badgeReportCount" class="bg-rose-600 text-white font-black text-[10px] px-2 py-0.5 rounded-full pulse-red font-mono">0</span>
+        </button>
+
+        <button onclick="location.reload()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-xl border border-slate-700 transition flex items-center space-x-1 shadow">
+          <span>🔄</span>
+          <span class="hidden sm:inline">Refresh</span>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -95,8 +139,8 @@
         <span id="statAvailableExams" class="text-2xl font-black text-cyan-400 font-mono">...</span>
       </div>
       <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow">
-        <span class="text-[11px] text-slate-400 block font-semibold">ക്ലൗഡ് കണക്ഷൻ</span>
-        <span class="text-xs text-emerald-400 font-bold bg-emerald-950/80 px-2.5 py-1 rounded-md inline-block mt-1 border border-emerald-500/30">● Connected Live</span>
+        <span class="text-[11px] text-slate-400 block font-semibold">പരിഹരിക്കാനുള്ള ചോദ്യങ്ങൾ</span>
+        <span id="statReportedQCount" class="text-2xl font-black text-rose-400 font-mono">0</span>
       </div>
     </div>
 
@@ -277,26 +321,21 @@
     
     <!-- 1. ഇൻഡിവിജ്വൽ സ്റ്റുഡന്റ് PDF -->
     <div id="printableStudentReportCard" class="pdf-container p-6 max-w-3xl mx-auto border border-slate-300 font-sans">
-      
-      <!-- Report Header -->
       <div class="border-b-2 border-emerald-600 pb-2 flex items-center justify-between gap-2">
         <div class="w-4/12 text-left">
           <h2 class="text-2xl font-black text-emerald-800 tracking-tight leading-none">SK PSC</h2>
           <p class="text-[10px] text-slate-600 mt-1 font-medium">Special Notes & Guidance by Subhash Kumar</p>
           <span class="inline-block mt-1 bg-emerald-100 text-emerald-900 text-[9px] font-bold px-2 py-0.5 rounded border border-emerald-300">CANDIDATE DOSSIER</span>
         </div>
-        
         <div class="w-4/12 flex items-center justify-center">
-          <img src="https://lh3.googleusercontent.com/d/1BCHlkHFIaxwhUfLzIRtCkncAztfC3U44" class="w-36 h-16 object-contain drop-shadow-sm rounded-lg" alt="SK PSC Logo">
+          <img src="https://lh3.googleusercontent.com/d/1BCHlkHFIaxwhUfLzIRtCkncAztfC3U44" class="w-40 h-20 object-contain drop-shadow-sm rounded-lg" alt="SK PSC Logo">
         </div>
-
         <div class="w-4/12 text-right text-xs text-slate-500 font-mono">
           <p id="pdfStudentReportDate" class="text-slate-600 font-semibold text-[11px]">Date: --/--/----</p>
           <p class="text-emerald-700 font-black tracking-wider text-[11px] mt-0.5">VERIFIED REPORT</p>
         </div>
       </div>
 
-      <!-- Candidate Information Grid -->
       <div class="my-3 p-3 bg-slate-50 rounded-xl border border-slate-200 grid grid-cols-4 gap-2 text-xs">
         <div>
           <p class="text-slate-500 font-semibold uppercase text-[9px]">Student Name</p>
@@ -316,7 +355,6 @@
         </div>
       </div>
 
-      <!-- പെർഫോമൻസ് ഫീഡ്‌ബാക്ക് ബോക്സ് -->
       <div id="pdfFeedbackCard" class="my-2 p-2.5 rounded-xl border flex items-start space-x-2.5 bg-emerald-50/80 border-emerald-200 text-[11px]">
         <span class="text-base shrink-0 mt-0.5" id="pdfFeedbackEmoji">🎯</span>
         <div>
@@ -325,7 +363,6 @@
         </div>
       </div>
 
-      <!-- Exam History Table -->
       <div class="my-2">
         <h4 class="text-[10px] font-bold text-slate-800 uppercase tracking-wider mb-1.5">Detailed Exam Performance History:</h4>
         <table class="w-full text-left text-[11px] border border-slate-200">
@@ -343,7 +380,6 @@
         </table>
       </div>
 
-      <!-- Report Footer -->
       <div class="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between text-[10px] text-slate-500">
         <div>
           <p class="font-bold text-emerald-800">SK PSC Model Exam Portal</p>
@@ -358,19 +394,15 @@
 
     <!-- 2. എക്സാം റാങ്ക് ലിസ്റ്റ് PDF -->
     <div id="printableRankListCard" class="pdf-container p-6 max-w-3xl mx-auto border border-slate-300 font-sans">
-      
-      <!-- Report Header -->
       <div class="border-b-2 border-emerald-600 pb-2 flex items-center justify-between gap-2">
         <div class="w-4/12 text-left">
           <h2 class="text-2xl font-black text-emerald-800 tracking-tight leading-none">SK PSC</h2>
           <p class="text-[10px] text-slate-600 mt-1 font-medium">Special Notes & Guidance by Subhash Kumar</p>
           <span class="inline-block mt-1 bg-emerald-100 text-emerald-900 text-[9px] font-bold px-2 py-0.5 rounded border border-emerald-300">OFFICIAL MODEL EXAM RANK LIST</span>
         </div>
-        
         <div class="w-4/12 flex items-center justify-center">
-          <img src="https://lh3.googleusercontent.com/d/1BCHlkHFIaxwhUfLzIRtCkncAztfC3U44" class="w-36 h-16 object-contain drop-shadow-sm rounded-lg" alt="SK PSC Logo">
+          <img src="https://lh3.googleusercontent.com/d/1BCHlkHFIaxwhUfLzIRtCkncAztfC3U44" class="w-40 h-20 object-contain drop-shadow-sm rounded-lg" alt="SK PSC Logo">
         </div>
-
         <div class="w-4/12 text-right text-xs text-slate-500 font-mono">
           <p id="pdfRankExamDate" class="text-slate-600 font-semibold text-[11px]">Date: --/--/----</p>
           <p class="text-emerald-700 font-black tracking-wider text-[11px] mt-0.5">FINAL PUBLISHED</p>
@@ -388,7 +420,6 @@
         </div>
       </div>
 
-      <!-- 🌟 കൃത്യമായ ഉയരമുള്ള ടേബിൾ (ഒന്നാം പേജിൽത്തന്നെ ആദ്യ വരികൾ വരാൻ) -->
       <div class="my-2">
         <table class="w-full text-left border border-slate-200">
           <thead class="bg-slate-100 text-slate-700 text-[10px] border-b border-slate-200">
@@ -426,7 +457,9 @@
     let allCandidatesCache = [];
     let currentStudentData = null;
     let currentSelectedExamData = null;
+    let reportedQuestionsList = [];
 
+    // ഫോൺ നമ്പർ പ്രൈവസി മാസ്കിങ്
     function maskPhoneNumber(phone) {
       if (!phone) return '-';
       const clean = String(phone).replace(/\D/g, '');
@@ -444,10 +477,123 @@
         document.getElementById('pinLockModal').classList.add('hidden');
         loadDashboardData();
         loadExamDropdownList();
+        loadReportedQuestions();
       } else {
         alert("തെറ്റായ PIN നമ്പർ! ദയവായി വീണ്ടും ശ്രമിക്കുക.");
         document.getElementById('adminPinInput').value = "";
       }
+    }
+
+    // 🌟 Reported_Questions ഷീറ്റിൽ നിന്നുള്ള ചോദ്യങ്ങൾ ശേഖരിക്കുന്നു
+    function loadReportedQuestions() {
+      fetch(`${GLOBAL_SHEET_WEBAPP_URL}?action=admin_get_reported_questions`)
+        .then(res => res.json())
+        .then(data => {
+          reportedQuestionsList = data.reports || [];
+          const count = reportedQuestionsList.length;
+          
+          document.getElementById('badgeReportCount').innerText = count;
+          document.getElementById('statReportedQCount').innerText = count;
+          document.getElementById('modalReportCountBadge').innerText = `${count} എണ്ണം`;
+
+          if (count > 0) {
+            document.getElementById('reportedNotificationBtn').classList.add('pulse-red');
+          } else {
+            document.getElementById('reportedNotificationBtn').classList.remove('pulse-red');
+          }
+        })
+        .catch(err => console.log("Report fetch error:", err));
+    }
+
+    // 🌟 അഡ്മിൻ 'Solve' ചെയ്യുമ്പോൾ Reported_Questions ഷീറ്റിൽ നേരിട്ട് Solved എന്ന് രേഖപ്പെടുത്തുന്നു
+    function solveQuestionByIndex(idx, btnElement) {
+      const rep = reportedQuestionsList[idx];
+      if (!rep) return;
+
+      btnElement.innerText = "പരിഹരിക്കുന്നു...";
+      btnElement.disabled = true;
+
+      const url = `${GLOBAL_SHEET_WEBAPP_URL}?action=resolve_reported_question&rowIndex=${rep.rowIndex}`;
+
+      fetch(url)
+      .then(res => res.json())
+      .then(res => {
+        if (res.status === "success") {
+          // ലിസ്റ്റിൽ നിന്ന് നീക്കം ചെയ്യുന്നു
+          reportedQuestionsList.splice(idx, 1);
+          
+          const count = reportedQuestionsList.length;
+          document.getElementById('badgeReportCount').innerText = count;
+          document.getElementById('statReportedQCount').innerText = count;
+          document.getElementById('modalReportCountBadge').innerText = `${count} എണ്ണം`;
+
+          if (count === 0) {
+            document.getElementById('reportedNotificationBtn').classList.remove('pulse-red');
+          }
+
+          // ലിസ്റ്റ് റീ-റെൻഡർ ചെയ്യുന്നു
+          openReportModal();
+        } else {
+          alert("അപ്ഡേറ്റ് പരാജയപ്പെട്ടു: " + (res.message || ""));
+          btnElement.innerText = "✓ Solve";
+          btnElement.disabled = false;
+        }
+      })
+      .catch(err => {
+        alert("കണക്ഷൻ തകരാർ: " + err.toString());
+        btnElement.innerText = "✓ Solve";
+        btnElement.disabled = false;
+      });
+    }
+
+    function openReportModal() {
+      document.getElementById('reportedQuestionsModal').classList.remove('hidden');
+      const listArea = document.getElementById('reportedListArea');
+      listArea.innerHTML = '';
+
+      if (reportedQuestionsList.length === 0) {
+        listArea.innerHTML = `
+          <div class="text-center py-10 space-y-2">
+            <span class="text-4xl">🎉</span>
+            <p class="text-xs text-slate-400 font-bold">നിലവിൽ സംശയങ്ങൾ ഒന്നും പരിഹരിക്കാനില്ല!</p>
+          </div>
+        `;
+        return;
+      }
+
+      reportedQuestionsList.forEach((rep, idx) => {
+        const item = document.createElement('div');
+        item.className = "bg-slate-950 border border-slate-800 p-4 rounded-2xl space-y-2 hover:border-rose-500/40 transition flex flex-col justify-between";
+        item.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] bg-rose-500/20 text-rose-400 border border-rose-500/30 px-2.5 py-0.5 rounded-full font-bold">
+              ${rep.question}
+            </span>
+            <div class="flex items-center space-x-2">
+              <span class="text-[10px] text-slate-500 font-mono">${rep.date}</span>
+              <button onclick="solveQuestionByIndex(${idx}, this)" class="px-3 py-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-lg text-xs transition shadow flex items-center space-x-1">
+                <span>✓</span>
+                <span>Solve</span>
+              </button>
+            </div>
+          </div>
+          <div>
+            <h4 class="text-xs font-bold text-white flex items-center space-x-1.5 mt-1">
+              <span>📖</span>
+              <span>പരീക്ഷ: ${rep.exam}</span>
+            </h4>
+            <p class="text-xs text-slate-300 mt-2 bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 leading-relaxed">
+              <strong class="text-rose-400 font-semibold block text-[10px] uppercase">വിദ്യാർത്ഥിയുടെ സംശയം / കാരണം:</strong>
+              ${rep.reason}
+            </p>
+          </div>
+        `;
+        listArea.appendChild(item);
+      });
+    }
+
+    function closeReportModal() {
+      document.getElementById('reportedQuestionsModal').classList.add('hidden');
     }
 
     function switchTab(tab) {
@@ -580,7 +726,6 @@
         });
     }
 
-    // 🌟 കൃത്യമായി ഒന്നാം പേജിൽ തുടങ്ങി വരികൾ മുറിയാതെ split ആകുന്ന PDF എക്സ്പോർട്ട്
     function downloadExamRankListPDF() {
       if (!currentSelectedExamData || !currentSelectedExamData.rankList) {
         alert("റാങ്ക് ലിസ്റ്റ് ഡാറ്റ ലഭ്യമല്ല.");
@@ -630,7 +775,6 @@
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        // 🌟 avoid-all മാറ്റി, കൃത്യമായി വരികൾ മാത്രം split ആകാതിരിക്കാൻ css മോഡ് നൽകി
         pagebreak:    { mode: ['css', 'legacy'] }
       };
 
