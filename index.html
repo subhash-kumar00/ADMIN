@@ -24,14 +24,12 @@
     .custom-scroll::-webkit-scrollbar { width: 5px; height: 5px; }
     .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
 
-    /* PDF പ്രിന്റ് കണ്ടെയ്‌നർ */
     .pdf-container {
       background: #ffffff;
       color: #0f172a;
       width: 100%;
     }
 
-    /* 🌟 പേജ് ബ്രേക്ക് വരുമ്പോൾ വരികൾ മുറിഞ്ഞുപോകാതിരിക്കാനുള്ള CSS */
     table {
       page-break-inside: auto !important;
       border-collapse: collapse;
@@ -44,7 +42,6 @@
       display: table-header-group;
     }
 
-    /* റെഡ് അലേർട്ട് പൾസ് ആനിമേഷൻ */
     @keyframes redPulse {
       0%, 100% { opacity: 1; transform: scale(1); }
       50% { opacity: 0.7; transform: scale(1.1); }
@@ -67,7 +64,7 @@
     </div>
   </div>
 
-  <!-- 🌟 റിപ്പോർട്ട് ചെയ്ത ചോദ്യങ്ങൾ കാണാനും Solve ചെയ്യാനുമുള്ള MODAL POPUP -->
+  <!-- റിപ്പോർട്ട് ചെയ്ത ചോദ്യങ്ങൾ കാണാനും Solve ചെയ്യാനുമുള്ള MODAL POPUP -->
   <div id="reportedQuestionsModal" class="fixed inset-0 bg-slate-950/80 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
     <div class="bg-slate-900 border border-rose-500/40 p-5 sm:p-6 rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl">
       <div class="flex items-center justify-between border-b border-slate-800 pb-3">
@@ -81,7 +78,6 @@
         <button onclick="closeReportModal()" class="text-slate-400 hover:text-white text-lg font-bold p-1 bg-slate-800 rounded-xl w-8 h-8 flex items-center justify-center">✕</button>
       </div>
 
-      <!-- ലിസ്റ്റ് ഏരിയ -->
       <div id="reportedListArea" class="flex-1 overflow-y-auto custom-scroll py-4 space-y-3">
         <p class="text-xs text-slate-500 text-center py-6">റിപ്പോർട്ടുകൾ ശേഖരിക്കുന്നു...</p>
       </div>
@@ -102,12 +98,11 @@
             <span>SK PSC അഡ്മിൻ കൺട്രോൾ പാനൽ</span>
             <span class="text-[10px] bg-rose-500/20 text-rose-400 border border-rose-500/30 px-2 py-0.5 rounded font-mono font-bold">MASTER</span>
           </h1>
-          <p class="text-[11px] text-slate-400">റാങ്ക് ലിസ്റ്റും വിദ്യാർത്ഥി പെർഫോമൻസ് മാനേജ്‌മെന്റും</p>
+          <p class="text-[11px] text-slate-400">റാങ്ക് ലിസ്റ്റും പരീക്ഷാ പബ്ലിഷിംഗ് മാനേജ്‌മെന്റും</p>
         </div>
       </div>
       
       <div class="flex items-center space-x-3">
-        <!-- റെഡ് അലേർട്ട് നോട്ടിഫിക്കേഷൻ ബട്ടൺ -->
         <button onclick="openReportModal()" id="reportedNotificationBtn" class="relative bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/40 text-rose-400 px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 shadow">
           <span class="text-sm">🚨</span>
           <span class="hidden sm:inline">ചോദ്യ റിപ്പോർട്ടുകൾ</span>
@@ -145,23 +140,84 @@
     </div>
 
     <!-- Navigation Tabs -->
-    <div class="flex items-center space-x-2 border-b border-slate-800 pb-2 text-xs">
-      <button onclick="switchTab('examWise')" id="tabBtnExam" class="px-4 py-2 rounded-xl font-bold bg-emerald-500 text-slate-950 transition flex items-center space-x-1.5 shadow">
+    <div class="flex items-center space-x-2 border-b border-slate-800 pb-2 text-xs overflow-x-auto custom-scroll">
+      <button onclick="switchTab('publishManager')" id="tabBtnPublish" class="px-4 py-2 rounded-xl font-bold bg-emerald-500 text-slate-950 transition flex items-center space-x-1.5 shadow whitespace-nowrap">
+        <span>📢</span>
+        <span>പരീക്ഷാ പബ്ലിഷർ & നോട്ടീസ് (Publish Manager)</span>
+      </button>
+      <button onclick="switchTab('examWise')" id="tabBtnExam" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap">
         <span>🏆</span>
         <span>പരീക്ഷാ റാങ്ക് ലിസ്റ്റ് (Exam Rank List)</span>
       </button>
-      <button onclick="switchTab('studentWise')" id="tabBtnStudent" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800">
+      <button onclick="switchTab('studentWise')" id="tabBtnStudent" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap">
         <span>👤</span>
         <span>വിദ്യാർത്ഥിയുടെ റിപ്പോർട്ട് (Student Search)</span>
       </button>
-      <button onclick="switchTab('summaryWise')" id="tabBtnSummary" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800">
+      <button onclick="switchTab('summaryWise')" id="tabBtnSummary" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap">
         <span>📊</span>
         <span>മുഴുവൻ സമ്മറി (All Candidates)</span>
       </button>
     </div>
 
+    <!-- PUBLISH MANAGER & NOTICE CONTROLLER -->
+    <div id="sectionPublishManager" class="bg-slate-900 border border-emerald-500/30 rounded-3xl p-5 sm:p-7 space-y-6 shadow-2xl">
+      
+      <!-- നോട്ടീസ് മെസ്സേജ് എഡിറ്റർ -->
+      <div class="bg-slate-950 border border-slate-800 p-4 sm:p-5 rounded-2xl space-y-3">
+        <div class="flex items-center justify-between">
+          <h4 class="text-xs sm:text-sm font-bold text-white flex items-center space-x-2">
+            <span>📢</span>
+            <span>ഹോം പേജ് നോട്ടീസ് മെസ്സേജ് കൺട്രോളർ (Notice Message)</span>
+          </h4>
+          <span class="text-[10px] text-slate-500 font-mono">Live in HomePage Sheet (Sheet2 D2)</span>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-2.5">
+          <input type="text" id="adminNoticeInput" placeholder="ഹോം പേജിൽ വരേണ്ട നോട്ടീസ് മെസ്സേജ് ടൈപ്പ് ചെയ്യുക..." class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+          <button onclick="saveNoticeMessage()" id="btnSaveNotice" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-xl text-xs transition shadow flex items-center justify-center space-x-1.5 whitespace-nowrap">
+            <span>💾</span>
+            <span>നോട്ടീസ് സേവ് ചെയ്യുക</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- പരീക്ഷാ പബ്ലിഷ് മാനേജർ ടേബിൾ -->
+      <div class="space-y-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-2">
+          <div>
+            <h3 class="text-sm sm:text-base font-bold text-white flex items-center space-x-2">
+              <span>🚀</span>
+              <span>ഹോം പേജിലേക്ക് പരീക്ഷകൾ പബ്ലിഷ് ചെയ്യുക (Publish & Schedule)</span>
+            </h3>
+            <p class="text-xs text-slate-400">ഏറ്റവും പുതിയ പരീക്ഷകൾ മുകളിൽ കാണിക്കും. പരീക്ഷ ലൈവ് ആകേണ്ട തീയതിയും സമയവും ഇവിടെ മാറ്റാം.</p>
+          </div>
+          <input type="text" id="searchPublishInput" oninput="filterPublishExams()" placeholder="പരീക്ഷ തിരയുക..." class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+        </div>
+
+        <div class="overflow-x-auto custom-scroll border border-slate-800 rounded-2xl">
+          <table class="w-full text-left text-xs text-slate-300">
+            <thead class="bg-slate-950 text-slate-400 uppercase text-[10px] border-b border-slate-800">
+              <tr>
+                <th class="p-3">#</th>
+                <th class="p-3">പരീക്ഷയുടെ പേര് (Title)</th>
+                <th class="p-3">വിഷയം (Subject)</th>
+                <th class="p-3 text-center">സ്റ്റാറ്റസ് (LATEST / NORMAL)</th>
+                <th class="p-3 text-center">ഷെഡ്യൂൾ സമയം (Date & Time)</th>
+                <th class="p-3 text-center">ഹോം പേജ് സ്റ്റാറ്റസ്</th>
+                <th class="p-3 text-center">ആക്ഷൻ</th>
+              </tr>
+            </thead>
+            <tbody id="publishTableBody" class="divide-y divide-slate-800/60 bg-slate-900/60">
+              <tr>
+                <td colspan="7" class="p-6 text-center text-slate-500">പരീക്ഷകളുടെ ലിസ്റ്റ് ശേഖരിക്കുന്നു...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
     <!-- 1. EXAM-WISE RANK LIST SECTION -->
-    <div id="sectionExamWise" class="bg-slate-900 border border-emerald-500/30 rounded-3xl p-5 sm:p-7 space-y-5 shadow-2xl">
+    <div id="sectionExamWise" class="hidden bg-slate-900 border border-emerald-500/30 rounded-3xl p-5 sm:p-7 space-y-5 shadow-2xl">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
         <div>
           <h3 class="text-base sm:text-lg font-black text-white flex items-center space-x-2">
@@ -316,7 +372,7 @@
 
   </main>
 
-  <!-- 🌟 ഒളിപ്പിച്ച വെച്ച ഔദ്യോഗിക PDF റിപ്പോർട്ട് കാർഡുകൾ -->
+  <!-- ഒളിപ്പിച്ച വെച്ച ഔദ്യോഗിക PDF റിപ്പോർട്ട് കാർഡുകൾ -->
   <div class="hidden">
     
     <!-- 1. ഇൻഡിവിജ്വൽ സ്റ്റുഡന്റ് PDF -->
@@ -452,14 +508,21 @@
 
   <script>
     const GLOBAL_SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwKBTm6Hj11YhzZLCEMBupKa3XAuq7Ns4M5iyU4vzwxaXfppLGWIR9ZWJeWlvGBjRaG/exec";
+    const HOMEPAGE_SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzRZTSShquCnRV1xMZ4YHv2SdpwuKOrJ8kc9EyWOlrPOdEhhwnTy79e1D2wfqjsPXna/exec";
+
     const ADMIN_SECRET_PIN = "1234";
 
     let allCandidatesCache = [];
     let currentStudentData = null;
     let currentSelectedExamData = null;
     let reportedQuestionsList = [];
+    let publishExamsList = [];
 
-    // ഫോൺ നമ്പർ പ്രൈവസി മാസ്കിങ്
+    // PIN എൻ്റർ കീ ലിസണർ
+    document.getElementById('adminPinInput').addEventListener('keyup', (e) => {
+      if (e.key === 'Enter') verifyPin();
+    });
+
     function maskPhoneNumber(phone) {
       if (!phone) return '-';
       const clean = String(phone).replace(/\D/g, '');
@@ -478,13 +541,229 @@
         loadDashboardData();
         loadExamDropdownList();
         loadReportedQuestions();
+        loadPublishManagerData();
       } else {
         alert("തെറ്റായ PIN നമ്പർ! ദയവായി വീണ്ടും ശ്രമിക്കുക.");
         document.getElementById('adminPinInput').value = "";
       }
     }
 
-    // 🌟 Reported_Questions ഷീറ്റിൽ നിന്നുള്ള ചോദ്യങ്ങൾ ശേഖരിക്കുന്നു
+    // പരീക്ഷകളുടെ വിവരങ്ങൾ ശേഖരിച്ച് തീയതി അടിസ്ഥാനമാക്കി ഏറ്റവും പുതിയവ മുകളിൽ വരുന്നു
+    function loadPublishManagerData() {
+      const tbody = document.getElementById('publishTableBody');
+      tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-400">ഹോം പേജ് ഷീറ്റിൽ നിന്നും ഡാറ്റ ശേഖരിക്കുന്നു, കാത്തിരിക്കുക...</td></tr>';
+
+      fetch(`${HOMEPAGE_SHEET_WEBAPP_URL}?action=admin_get_publish_manager_data`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === "error") {
+            tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-rose-400 font-bold">എറർ: ${data.message}</td></tr>`;
+            return;
+          }
+
+          document.getElementById('adminNoticeInput').value = data.notice || "";
+          
+          let rawList = Array.isArray(data.exams) ? data.exams : [];
+
+          // തീയതി പ്രകാരം കൃത്യമായി പുതിയവ മുകളിൽ വരുന്ന സോർട്ടിംഗ്
+          publishExamsList = rawList.sort((a, b) => {
+            let parseD = (d) => {
+              if (!d) return 0;
+              let s = String(d).trim().replace(' ', 'T');
+              let t = new Date(s).getTime();
+              return isNaN(t) ? 0 : t;
+            };
+            return parseD(b.releaseDate) - parseD(a.releaseDate);
+          });
+
+          renderPublishTable(publishExamsList);
+        })
+        .catch(err => {
+          tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-rose-400 font-bold">കണക്ഷൻ തകരാർ: ${err.toString()}</td></tr>`;
+        });
+    }
+
+    // ഷെഡ്യൂൾ ടൈം ഇൻപുട്ടിനായുള്ള ഫോർമാറ്റിംഗ് (YYYY-MM-DDTHH:mm)
+    function formatForDateTimeLocal(dateStr) {
+      if (!dateStr || dateStr === '-') return '';
+      let clean = String(dateStr).trim().replace(' ', 'T');
+      if (clean.length === 19) return clean.substring(0, 16); // YYYY-MM-DDTHH:mm
+      return clean;
+    }
+
+    function renderPublishTable(list) {
+      const tbody = document.getElementById('publishTableBody');
+      tbody.innerHTML = '';
+
+      if (list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-400">Sheet1-ൽ പരീക്ഷകൾ ഒന്നും കണ്ടെത്തിയില്ല.</td></tr>';
+        return;
+      }
+
+      list.forEach((ex, idx) => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-800/40 transition border-b border-slate-800/50";
+
+        const isPub = ex.isPublished;
+        const statusBadge = isPub 
+          ? `<span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-full text-[10px] font-bold">● Published Live</span>`
+          : `<span class="bg-slate-800 text-slate-400 border border-slate-700 px-2 py-0.5 rounded-full text-[10px] font-bold">Hidden (Draft)</span>`;
+
+        const isLatest = String(ex.status).toUpperCase() === "LATEST";
+        const statusToggleBtn = isLatest
+          ? `<button onclick="changeExamStatus('${encodeURIComponent(ex.title)}', 'NORMAL', this)" class="px-2.5 py-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 border border-amber-500/40 text-[10px] font-bold rounded-lg transition">⭐ LATEST</button>`
+          : `<button onclick="changeExamStatus('${encodeURIComponent(ex.title)}', 'LATEST', this)" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-400 border border-slate-700 text-[10px] font-bold rounded-lg transition">NORMAL</button>`;
+
+        const actionBtn = isPub
+          ? `<button onclick="togglePublish('${encodeURIComponent(ex.title)}', false, this)" class="px-3 py-1.5 bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 border border-rose-500/40 text-[11px] font-bold rounded-xl transition shadow">Unpublish</button>`
+          : `<button onclick="togglePublish('${encodeURIComponent(ex.title)}', true, this)" class="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-[11px] font-black rounded-xl transition shadow">🚀 Publish to Home</button>`;
+
+        // ഷെഡ്യൂൾ സമയ എഡിറ്റർ HTML
+        const scheduleVal = formatForDateTimeLocal(ex.releaseDate);
+        const scheduleInputHtml = `
+          <div class="flex items-center justify-center space-x-1.5">
+            <input type="datetime-local" id="schedInput_${idx}" value="${scheduleVal}" class="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-[11px] text-cyan-300 font-mono focus:outline-none focus:border-cyan-500">
+            <button onclick="updateExamSchedule('${encodeURIComponent(ex.title)}', 'schedInput_${idx}', this)" title="സമയം സേവ് ചെയ്യുക" class="p-1.5 bg-cyan-500/20 hover:bg-cyan-500/40 text-cyan-300 border border-cyan-500/40 rounded-lg text-xs transition">
+              💾
+            </button>
+          </div>
+        `;
+
+        tr.innerHTML = `
+          <td class="p-3 font-mono text-slate-500">${idx + 1}</td>
+          <td class="p-3 font-bold text-white">${ex.title}</td>
+          <td class="p-3 text-slate-300">${ex.subject} <span class="text-slate-500 block text-[10px]">${ex.topic || ''}</span></td>
+          <td class="p-3 text-center">${statusToggleBtn}</td>
+          <td class="p-3 text-center">${scheduleInputHtml}</td>
+          <td class="p-3 text-center">${statusBadge}</td>
+          <td class="p-3 text-center">${actionBtn}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // പരീക്ഷ ലൈവ് ആകേണ്ട സമയം ഷീറ്റിൽ അപ്ഡേറ്റ് ചെയ്യുന്ന ഫംഗ്ഷൻ
+    function updateExamSchedule(encodedTitle, inputId, btnElement) {
+      const title = decodeURIComponent(encodedTitle);
+      const rawVal = document.getElementById(inputId).value;
+
+      if (!rawVal) {
+        alert("ദയവായി സാധുവായ തീയതിയും സമയവും തിരഞ്ഞെടുക്കുക.");
+        return;
+      }
+
+      // Format as "YYYY-MM-DD HH:mm:ss"
+      let formattedDate = rawVal.replace('T', ' ');
+      if (formattedDate.length === 16) formattedDate += ":00";
+
+      const originalText = btnElement.innerText;
+      btnElement.innerText = "⏳";
+      btnElement.disabled = true;
+
+      const url = `${HOMEPAGE_SHEET_WEBAPP_URL}?action=admin_update_exam_schedule&examTitle=${encodeURIComponent(title)}&scheduleDate=${encodeURIComponent(formattedDate)}`;
+
+      fetch(url)
+        .then(res => res.json())
+        .then(res => {
+          if (res.status === "success") {
+            alert("ഷെഡ്യൂൾ സമയം വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!");
+            const item = publishExamsList.find(e => e.title === title);
+            if (item) item.releaseDate = formattedDate;
+          } else {
+            alert("സമയം അപ്ഡേറ്റ് ചെയ്യുന്നതിൽ പ്രശ്നം: " + (res.message || ""));
+          }
+          btnElement.innerText = originalText;
+          btnElement.disabled = false;
+        })
+        .catch(err => {
+          alert("കണക്ഷൻ തകരാർ: " + err.toString());
+          btnElement.innerText = originalText;
+          btnElement.disabled = false;
+        });
+    }
+
+    function changeExamStatus(encodedTitle, nextStatus, btnElement) {
+      const title = decodeURIComponent(encodedTitle);
+      btnElement.innerText = "മാറ്റുന്നു...";
+      btnElement.disabled = true;
+
+      const url = `${HOMEPAGE_SHEET_WEBAPP_URL}?action=admin_update_exam_status&examTitle=${encodeURIComponent(title)}&status=${nextStatus}`;
+
+      fetch(url)
+        .then(res => res.json())
+        .then(res => {
+          if (res.status === "success") {
+            const item = publishExamsList.find(e => e.title === title);
+            if (item) item.status = nextStatus;
+            renderPublishTable(publishExamsList);
+          } else {
+            alert("സ്റ്റാറ്റസ് മാറ്റുന്നതിൽ തകരാർ!");
+            btnElement.disabled = false;
+          }
+        })
+        .catch(err => {
+          alert("കണക്ഷൻ തകരാർ!");
+          btnElement.disabled = false;
+        });
+    }
+
+    function togglePublish(encodedTitle, publishState, btnElement) {
+      const title = decodeURIComponent(encodedTitle);
+      btnElement.innerText = "അപ്ഡേറ്റ് ചെയ്യുന്നു...";
+      btnElement.disabled = true;
+
+      const url = `${HOMEPAGE_SHEET_WEBAPP_URL}?action=admin_toggle_publish_exam&examTitle=${encodeURIComponent(title)}&publish=${publishState}`;
+
+      fetch(url)
+        .then(res => res.json())
+        .then(res => {
+          if (res.status === "success") {
+            const item = publishExamsList.find(e => e.title === title);
+            if (item) item.isPublished = publishState;
+            renderPublishTable(publishExamsList);
+          } else {
+            alert("പബ്ലിഷ് ചെയ്യുന്നതിൽ പ്രശ്നം നേരിട്ടു.");
+            btnElement.disabled = false;
+          }
+        })
+        .catch(err => {
+          alert("കണക്ഷൻ തകരാർ!");
+          btnElement.disabled = false;
+        });
+    }
+
+    function saveNoticeMessage() {
+      const noticeVal = document.getElementById('adminNoticeInput').value.trim();
+      const btn = document.getElementById('btnSaveNotice');
+      btn.innerText = "സേവ് ചെയ്യുന്നു...";
+      btn.disabled = true;
+
+      const url = `${HOMEPAGE_SHEET_WEBAPP_URL}?action=admin_update_notice_message&notice=${encodeURIComponent(noticeVal)}`;
+
+      fetch(url)
+        .then(res => res.json())
+        .then(res => {
+          if (res.status === "success") {
+            alert("നോട്ടീസ് മെസ്സേജ് വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!");
+          } else {
+            alert("നോട്ടീസ് സേവ് ചെയ്യുന്നതിൽ പ്രശ്നം!");
+          }
+          btn.innerText = "💾 നോട്ടീസ് സേവ് ചെയ്യുക";
+          btn.disabled = false;
+        })
+        .catch(err => {
+          alert("കണക്ഷൻ തകരാർ: " + err.toString());
+          btn.innerText = "💾 നോട്ടീസ് സേവ് ചെയ്യുക";
+          btn.disabled = false;
+        });
+    }
+
+    function filterPublishExams() {
+      const q = document.getElementById('searchPublishInput').value.trim().toLowerCase();
+      const filtered = publishExamsList.filter(e => e.title.toLowerCase().includes(q) || (e.subject && e.subject.toLowerCase().includes(q)));
+      renderPublishTable(filtered);
+    }
+
     function loadReportedQuestions() {
       fetch(`${GLOBAL_SHEET_WEBAPP_URL}?action=admin_get_reported_questions`)
         .then(res => res.json())
@@ -505,7 +784,6 @@
         .catch(err => console.log("Report fetch error:", err));
     }
 
-    // 🌟 അഡ്മിൻ 'Solve' ചെയ്യുമ്പോൾ Reported_Questions ഷീറ്റിൽ നേരിട്ട് Solved എന്ന് രേഖപ്പെടുത്തുന്നു
     function solveQuestionByIndex(idx, btnElement) {
       const rep = reportedQuestionsList[idx];
       if (!rep) return;
@@ -519,9 +797,7 @@
       .then(res => res.json())
       .then(res => {
         if (res.status === "success") {
-          // ലിസ്റ്റിൽ നിന്ന് നീക്കം ചെയ്യുന്നു
           reportedQuestionsList.splice(idx, 1);
-          
           const count = reportedQuestionsList.length;
           document.getElementById('badgeReportCount').innerText = count;
           document.getElementById('statReportedQCount').innerText = count;
@@ -530,8 +806,6 @@
           if (count === 0) {
             document.getElementById('reportedNotificationBtn').classList.remove('pulse-red');
           }
-
-          // ലിസ്റ്റ് റീ-റെൻഡർ ചെയ്യുന്നു
           openReportModal();
         } else {
           alert("അപ്ഡേറ്റ് പരാജയപ്പെട്ടു: " + (res.message || ""));
@@ -597,22 +871,28 @@
     }
 
     function switchTab(tab) {
+      document.getElementById('sectionPublishManager').classList.add('hidden');
       document.getElementById('sectionExamWise').classList.add('hidden');
       document.getElementById('sectionStudentWise').classList.add('hidden');
       document.getElementById('sectionSummaryWise').classList.add('hidden');
 
+      const btnP = document.getElementById('tabBtnPublish');
       const btnE = document.getElementById('tabBtnExam');
       const btnS = document.getElementById('tabBtnStudent');
       const btnSm = document.getElementById('tabBtnSummary');
 
-      const activeClass = "px-4 py-2 rounded-xl font-bold bg-emerald-500 text-slate-950 transition flex items-center space-x-1.5 shadow";
-      const inactiveClass = "px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800";
+      const activeClass = "px-4 py-2 rounded-xl font-bold bg-emerald-500 text-slate-950 transition flex items-center space-x-1.5 shadow whitespace-nowrap";
+      const inactiveClass = "px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap";
 
+      btnP.className = inactiveClass;
       btnE.className = inactiveClass;
       btnS.className = inactiveClass;
       btnSm.className = inactiveClass;
 
-      if (tab === 'examWise') {
+      if (tab === 'publishManager') {
+        document.getElementById('sectionPublishManager').classList.remove('hidden');
+        btnP.className = activeClass;
+      } else if (tab === 'examWise') {
         document.getElementById('sectionExamWise').classList.remove('hidden');
         btnE.className = activeClass;
       } else if (tab === 'studentWise') {
@@ -632,16 +912,14 @@
           document.getElementById('statTotalStudents').innerText = data.totalCandidates || 0;
 
           let totalAttempts = 0;
-          let sumScore = 0;
-
           allCandidatesCache.forEach(c => {
             totalAttempts += c.totalExams;
-            sumScore += (c.avgScore * c.totalExams);
           });
 
           document.getElementById('statTotalAttempts').innerText = totalAttempts;
           renderSummaryTable(allCandidatesCache);
-        });
+        })
+        .catch(err => console.log("Dashboard fetch error:", err));
     }
 
     function loadExamDropdownList() {
@@ -659,7 +937,8 @@
             opt.innerText = ex.replace(/_/g, " ");
             select.appendChild(opt);
           });
-        });
+        })
+        .catch(err => console.log("Exam dropdown fetch error:", err));
     }
 
     function fetchSelectedExamDetails() {
