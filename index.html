@@ -167,7 +167,7 @@
       </button>
     </div>
 
-    <!-- 1. PUBLISH MANAGER (പുതിയ PUBLISH / UNPUBLISH കൺട്രോൾ സഹിതം) -->
+    <!-- 1. PUBLISH MANAGER -->
     <div id="sectionPublishManager" class="bg-slate-900 border border-emerald-500/30 rounded-3xl p-5 sm:p-7 space-y-6 shadow-2xl">
       <div class="bg-slate-950 border border-slate-800 p-4 sm:p-5 rounded-2xl space-y-3">
         <div class="flex items-center justify-between">
@@ -202,7 +202,7 @@
               <span>പരീക്ഷാ പബ്ലിഷിംഗ് & ഷെഡ്യൂളിംഗ് കൺട്രോളർ</span>
             </h3>
             <p class="text-xs text-slate-400">
-              <strong>"Publish"</strong> ക്ലിക്ക് ചെയ്താൽ മാത്രമേ പരീക്ഷ ലഭ്യമാകൂ. ഭാവി തീയതി സെറ്റ് ചെയ്തവ സമയം ആകുന്നത് വരെ ലോക്കായി നിൽക്കും, അല്ലെങ്കിൽ ആവശ്യമെങ്കിൽ <strong>"Unpublish"</strong> ചെയ്യാം[cite: 2].
+              <strong>"Publish"</strong> ക്ലിക്ക് ചെയ്താൽ മാത്രമേ പരീക്ഷ ലഭ്യമാകൂ[cite: 2]. ഭാവി തീയതി സെറ്റ് ചെയ്തവ സമയം ആകുന്നത് വരെ ലോക്കായി നിൽക്കും, അല്ലെങ്കിൽ ആവശ്യമെങ്കിൽ <strong>"Unpublish"</strong> ചെയ്യാം[cite: 2].
             </p>
           </div>
           <input type="text" id="searchPublishInput" oninput="filterPublishExams()" placeholder="പരീക്ഷ തിരയുക..." class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500">
@@ -237,7 +237,7 @@
             <span>🏆</span>
             <span>പരീക്ഷാഫലവും റാങ്ക് ലിസ്റ്റും (First Attempt Only)</span>
           </h3>
-          <p class="text-xs text-slate-400">ഫയർബേസ് ക്ലൗഡിൽ നിന്നുള്ള തത്സമയ ഔദ്യോഗിക റാങ്ക് ലിസ്റ്റ്.</p>
+          <p class="text-xs text-slate-400">ഫയർബേസ് ക്ലൗഡിൽ നിന്നുള്ള തത്സമയ ഔദ്യോഗിക റാങ്ക് ലിസ്റ്റ്[cite: 1].</p>
         </div>
         <div class="flex items-center space-x-2">
           <select id="examDropdownSelect" onchange="fetchSelectedExamDetails()" class="bg-slate-950 border border-slate-800 text-xs sm:text-sm text-emerald-400 font-bold rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-emerald-500 max-w-xs cursor-pointer">
@@ -349,7 +349,7 @@
       </div>
     </div>
 
-    <!-- 4. ALL CANDIDATES SUMMARY -->
+    <!-- 4. ALL CANDIDATES SUMMARY (ഡ്യൂപ്ലിക്കേറ്റ് രഹിത ലിസ്റ്റ്) -->
     <div id="sectionSummaryWise" class="hidden bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 space-y-4 shadow-xl">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-800 pb-3">
         <div class="flex items-center space-x-2">
@@ -655,7 +655,7 @@
       return exams.slice().reverse();
     }
 
-    // 🌟 1. PUBLISH MANAGER (PUBLISH / UNPUBLISH ലോഗിക് സഹിതം)
+    // 🌟 1. PUBLISH MANAGER
     async function loadPublishManagerData() {
       const tbody = document.getElementById('publishTableBody');
       tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-400">ഫയർബേസിൽ നിന്നും വിവരങ്ങൾ ശേഖരിക്കുന്നു...</td></tr>';
@@ -700,8 +700,6 @@
 
         const savedCtrl = adminControlsCache[key] || {};
         const currentStatus = savedCtrl.status || (ex.BADGE === 'LATEST' ? 'LATEST' : 'NORMAL');
-        
-        // Publish ക്ലിക്ക് ചെയ്താൽ മാത്രം ലൈവ് ആകുന്ന കണ്ടീഷൻ
         const isPublished = savedCtrl.isPublished !== undefined ? savedCtrl.isPublished : (ex.isPublished === true);
 
         let currentDateVal = savedCtrl.releaseDate || ex.Release_Date || '';
@@ -709,12 +707,10 @@
           currentDateVal = currentDateVal.replace(' ', 'T').substring(0, 16);
         }
 
-        // ലൈവ് സ്റ്റാറ്റസ് ബാഡ്ജ്
         const statusBadge = isPublished
           ? `<span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-full text-[10px] font-bold">● Published Live</span>`
           : `<span class="bg-slate-800 text-slate-400 border border-slate-700 px-2 py-0.5 rounded-full text-[10px] font-bold">🔒 Hidden (Draft)</span>`;
 
-        // Publish / Unpublish ടോഗിൾ ബട്ടൺ
         const publishActionBtn = isPublished
           ? `<button onclick="toggleExamPublish('${key}', false, this)" class="px-3 py-1 bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 border border-rose-500/40 text-[11px] font-bold rounded-lg transition shadow">🔒 Unpublish</button>`
           : `<button onclick="toggleExamPublish('${key}', true, this)" class="px-3 py-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-[11px] font-black rounded-lg transition shadow">🚀 Publish</button>`;
@@ -731,8 +727,8 @@
           <td class="p-3 text-center">
             <input type="datetime-local" id="date_${key}" value="${currentDateVal}" class="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-[11px] text-cyan-300 font-mono focus:outline-none focus:border-cyan-500">
           </td>
-          <td class="p-3 text-center" id="badge_area_${key}">${statusBadge}</td>
-          <td class="p-3 text-center" id="action_area_${key}">${publishActionBtn}</td>
+          <td class="p-3 text-center">${statusBadge}</td>
+          <td class="p-3 text-center">${publishActionBtn}</td>
           <td class="p-3 text-center">
             <div class="flex items-center justify-center space-x-1">
               <button onclick="saveExamControl('${key}')" class="px-2.5 py-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-lg text-xs transition shadow" title="ഷെഡ്യൂളും ബാഡ്ജും സേവ് ചെയ്യുക">💾</button>
@@ -744,7 +740,6 @@
       });
     }
 
-    // 🚀 പരീക്ഷ Publish / Unpublish ചെയ്യുന്ന ഫംഗ്ഷൻ
     async function toggleExamPublish(key, publishState, btnElement) {
       btnElement.innerText = "മാറ്റുന്നു...";
       btnElement.disabled = true;
@@ -854,18 +849,18 @@
       renderPublishTable(filtered);
     }
 
-    // 🌟 2. DASHBOARD DATA
+    // 🌟 2. DASHBOARD DATA (ഡ്യൂപ്ലിക്കേറ്റ് നമ്പറുകൾ ഒഴിവാക്കലും ശരിയായ പേര് ഉറപ്പാക്കലും)
     async function loadDashboardData() {
       try {
         const usersRes = await fetch(`${FIREBASE_DB_URL}/users.json?_t=${Date.now()}`);
         const usersData = await usersRes.json();
 
-        allCandidatesCache = [];
+        let rawList = [];
         if (usersData) {
           if (Array.isArray(usersData)) {
-            allCandidatesCache = usersData.filter(u => u !== null && u !== undefined);
+            rawList = usersData.filter(u => u !== null && u !== undefined);
           } else {
-            allCandidatesCache = Object.entries(usersData).map(([key, val]) => {
+            rawList = Object.entries(usersData).map(([key, val]) => {
               if (typeof val === 'object' && val !== null) {
                 return { key: key, ...val };
               }
@@ -874,11 +869,45 @@
           }
         }
 
+        // 🚀 ഫോൺ നമ്പർ അടിസ്ഥാനമാക്കി ഒരൊറ്റ കുട്ടിയായി ലയിപ്പിക്കുന്നു ("വിദ്യാർത്ഥി" ഒഴിവാക്കി യഥാർത്ഥ പേരിന് മുൻഗണന)
+        const phoneMap = {};
+
+        rawList.forEach(item => {
+          const pRaw = extractPhone(item);
+          const phone = pRaw.length >= 10 ? pRaw.slice(-10) : pRaw;
+          if (!phone) return;
+
+          const currentName = extractName(item);
+          const currentExams = Number(item.Unique_Exams || item.Total_Attempts || item.totalExams || item.examsCount || 0);
+          const currentAvg = Number(item.First_Attempt_Avg || item.avgScore || item.averageScore || 0);
+
+          if (!phoneMap[phone]) {
+            phoneMap[phone] = {
+              ...item,
+              phone: phone,
+              name: currentName,
+              totalExams: currentExams,
+              avgScore: currentAvg
+            };
+          } else {
+            // പേര് "വിദ്യാർത്ഥി" എന്നാണെങ്കിൽ യഥാർത്ഥ പേര് മാറ്റുന്നു
+            if (phoneMap[phone].name === 'വിദ്യാർത്ഥി' && currentName !== 'വിദ്യാർത്ഥി') {
+              phoneMap[phone].name = currentName;
+            }
+            if (currentExams > phoneMap[phone].totalExams) {
+              phoneMap[phone].totalExams = currentExams;
+              phoneMap[phone].avgScore = currentAvg;
+            }
+          }
+        });
+
+        allCandidatesCache = Object.values(phoneMap);
+
         document.getElementById('statTotalStudents').innerText = allCandidatesCache.length;
 
         let totalAttempts = 0;
         allCandidatesCache.forEach(c => {
-          totalAttempts += Number(c.Unique_Exams || c.Total_Attempts || c.totalExams || c.examsCount || 0);
+          totalAttempts += Number(c.totalExams || 0);
         });
         document.getElementById('statTotalAttempts').innerText = totalAttempts;
 
@@ -900,10 +929,10 @@
       list.forEach((item, index) => {
         const tr = document.createElement('tr');
         tr.className = "hover:bg-slate-800/40 transition";
-        const phone = extractPhone(item);
-        const name = extractName(item);
-        const tests = Number(item.Unique_Exams || item.Total_Attempts || item.totalExams || item.examsCount || 0);
-        const avg = Number(item.First_Attempt_Avg || item.avgScore || item.averageScore || 0).toFixed(1);
+        const phone = item.phone || extractPhone(item);
+        const name = item.name || extractName(item);
+        const tests = Number(item.totalExams || item.Unique_Exams || 0);
+        const avg = Number(item.avgScore || item.First_Attempt_Avg || 0).toFixed(1);
 
         tr.innerHTML = `
           <td class="p-3 font-mono text-slate-500">${index + 1}</td>
@@ -935,18 +964,18 @@
 
       let list = allCandidatesCache.filter(c => {
         if (!q) return true;
-        const name = String(extractName(c)).toLowerCase();
-        const phone = String(extractPhone(c));
+        const name = String(c.name || extractName(c)).toLowerCase();
+        const phone = String(c.phone || extractPhone(c));
         return name.includes(q) || (numQ.length > 0 && phone.includes(numQ));
       });
 
       list.sort((a, b) => {
-        const testsA = Number(a.Unique_Exams || a.Total_Attempts || a.totalExams || a.examsCount || 0);
-        const testsB = Number(b.Unique_Exams || b.Total_Attempts || b.totalExams || b.examsCount || 0);
-        const avgA = Number(a.First_Attempt_Avg || a.avgScore || a.averageScore || 0);
-        const avgB = Number(b.First_Attempt_Avg || b.avgScore || b.averageScore || 0);
-        const nameA = String(extractName(a) || '').toLowerCase();
-        const nameB = String(extractName(b) || '').toLowerCase();
+        const testsA = Number(a.totalExams || a.Unique_Exams || 0);
+        const testsB = Number(b.totalExams || b.Unique_Exams || 0);
+        const avgA = Number(a.avgScore || a.First_Attempt_Avg || 0);
+        const avgB = Number(b.avgScore || b.First_Attempt_Avg || 0);
+        const nameA = String(a.name || extractName(a) || '').toLowerCase();
+        const nameB = String(b.name || extractName(b) || '').toLowerCase();
 
         switch (sortType) {
           case 'exams_desc': return testsB - testsA;
@@ -1065,6 +1094,7 @@
 
         ranks = Array.isArray(data) ? data : Object.values(data);
 
+        // Smart Enrichment
         const needsLookup = ranks.some(r => parseCandidateCorrect(r) === '-' || parseCandidateScore(r) === 0);
         if (needsLookup) {
           await Promise.all(ranks.map(async (r) => {
@@ -1237,11 +1267,7 @@
 
       try {
         if (allCandidatesCache.length === 0) {
-          const usersRes = await fetch(`${FIREBASE_DB_URL}/users.json?_t=${Date.now()}`);
-          const usersData = await usersRes.json();
-          if (usersData) {
-            allCandidatesCache = Array.isArray(usersData) ? usersData : Object.entries(usersData).map(([k, v]) => ({ key: k, ...(typeof v === 'object' ? v : { name: v }) }));
-          }
+          await loadDashboardData();
         }
 
         const cleanQ = rawInput.toLowerCase();
@@ -1256,7 +1282,7 @@
           targetName = matched ? extractName(matched) : "വിദ്യാർത്ഥി";
         } else {
           const matched = allCandidatesCache.find(c => {
-            const n = String(extractName(c)).toLowerCase();
+            const n = String(c.name || extractName(c)).toLowerCase();
             const p = extractPhone(c);
             return n.includes(cleanQ) || (numQ.length > 0 && p.includes(numQ));
           });
