@@ -34,6 +34,8 @@
     table {
       page-break-inside: auto !important;
       border-collapse: collapse;
+      table-layout: fixed;
+      width: 100%;
     }
     tr {
       page-break-inside: avoid !important;
@@ -181,7 +183,7 @@
           Enter അടിച്ച് പുതിയ ലൈനിലേക്ക് മെസ്സേജ് മാറ്റാം.
         </p>
         <div class="flex flex-col gap-2.5">
-          <textarea id="adminNoticeInput" rows="3" placeholder="ഹോം പേജിൽ കാണിക്കേണ്ട പ്രധാന നോട്ടീസ് ടൈപ്പ് ചെയ്യുക... (Enter അടിച്ച് പുതിയ ലൈൻ തുടങ്ങാം)" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 custom-scroll resize-y leading-relaxed font-sans"></textarea>
+          <textarea id="adminNoticeInput" rows="3" placeholder="ഹോം പേജിൽ കാണിക്കേണ്ട പ്രധാന നോട്ടീസ് ടൈപ്പ് ചെയ്യുക..." class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 custom-scroll resize-y leading-relaxed font-sans"></textarea>
           <div class="flex justify-end gap-2.5">
             <button onclick="clearNoticeMessage()" class="px-4 py-2.5 bg-rose-950/60 border border-rose-500/30 hover:bg-rose-900 text-rose-300 font-bold rounded-xl text-xs transition">
               ക്ലിയർ
@@ -202,7 +204,7 @@
               <span>പരീക്ഷാ പബ്ലിഷിംഗ് & ഷെഡ്യൂളിംഗ് കൺട്രോളർ</span>
             </h3>
             <p class="text-xs text-slate-400">
-              <strong>"Publish"</strong> കൊടുത്താൽ മാത്രമേ തീയതി നൽകിയില്ലെങ്കിലും ഹോം പേജിൽ പരീക്ഷ വരൂ. <strong>"Unpublish"</strong> ആക്കിയാൽ എപ്പോഴും മറഞ്ഞിരിക്കും[cite: 2, 14].
+              <strong>"Publish"</strong> കൊടുത്താൽ മാത്രമേ തീയതി നൽകിയില്ലെങ്കിലും ഹോം പേജിൽ പരീക്ഷ വരൂ. <strong>"Unpublish"</strong> ആക്കിയാൽ എപ്പോഴും മറഞ്ഞിരിക്കും.
             </p>
           </div>
           <input type="text" id="searchPublishInput" oninput="filterPublishExams()" placeholder="പരീക്ഷ തിരയുക..." class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500">
@@ -237,7 +239,7 @@
             <span>🏆</span>
             <span>പരീക്ഷാഫലവും റാങ്ക് ലിസ്റ്റും (Merged: live_ranks + ranks)</span>
           </h3>
-          <p class="text-xs text-slate-400">മൊബൈൽ നമ്പർ വഴി ഡ്യൂപ്ലിക്കേഷൻ ഒഴിവാക്കി തയ്യാറാക്കിയ തത്സമയ ആദ്യ ശ്രമ റാങ്ക് ലിസ്റ്റ്[cite: 1, 14].</p>
+          <p class="text-xs text-slate-400">മൊബൈൽ നമ്പർ വഴി ഡ്യൂപ്ലിക്കേഷൻ ഒഴിവാക്കി തയ്യാറാക്കിയ തത്സമയ ആദ്യ ശ്രമ റാങ്ക് ലിസ്റ്റ്.</p>
         </div>
         <div class="flex items-center space-x-2">
           <select id="examDropdownSelect" onchange="fetchSelectedExamDetails()" class="bg-slate-950 border border-slate-800 text-xs sm:text-sm text-emerald-400 font-bold rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-emerald-500 max-w-xs cursor-pointer">
@@ -293,7 +295,7 @@
           <span class="text-xl">🔍</span>
           <h3 class="text-sm sm:text-base font-bold text-white">വിദ്യാർത്ഥിയുടെ സമ്പൂർണ്ണ പരീക്ഷാ ഹിസ്റ്ററി തിരയുക</h3>
         </div>
-        <span class="text-[10px] text-slate-500 font-mono">ranks, live_ranks, users_history സംയോജിപ്പിച്ചത്</span>
+        <span class="text-[10px] text-slate-500 font-mono">സ്കോർ ആക്യുറസി (%) • ഏറ്റവും പുതിയത് മുകളിൽ</span>
       </div>
       
       <div class="flex flex-col sm:flex-row gap-2.5">
@@ -335,11 +337,12 @@
           <table class="w-full text-left text-xs text-slate-300">
             <thead class="bg-slate-950 text-slate-400 uppercase text-[10px] border-b border-slate-800">
               <tr>
-                <th class="p-3">#</th>
+                <th class="p-3 w-10">#</th>
                 <th class="p-3">പരീക്ഷയുടെ പേര്</th>
                 <th class="p-3 text-center">സ്കോർ</th>
                 <th class="p-3 text-center">ശരി</th>
                 <th class="p-3 text-center">തെറ്റ്</th>
+                <th class="p-3 text-center">സ്കോർ ആക്യുറസി (%)</th>
                 <th class="p-3 text-right">എഴുതിയ തീയതി</th>
               </tr>
             </thead>
@@ -392,7 +395,9 @@
 
   </main>
 
-  <!-- PDF Render Container -->
+  <!-- ======================================================== -->
+  <!-- 📄 ഔദ്യോഗിക PDF പ്രിന്റിംഗ് ഏരിയ (തീയതി മുറിയാത്ത ഫിക്സഡ് ലേഔട്ട്) -->
+  <!-- ======================================================== -->
   <div id="pdfRenderArea">
     <div id="printableStudentReportCard" class="pdf-container p-6 max-w-3xl mx-auto border border-slate-300 font-sans">
       <div class="border-b-2 border-emerald-600 pb-2 flex items-center justify-between gap-2">
@@ -439,18 +444,19 @@
 
       <div class="my-2">
         <h4 class="text-[10px] font-bold text-slate-800 uppercase tracking-wider mb-1.5">Detailed Exam Performance History:</h4>
-        <table class="w-full text-left text-[11px] border border-slate-200">
-          <thead class="bg-slate-100 text-slate-700 text-[10px] border-b border-slate-200">
+        <table class="w-full text-left border border-slate-200 text-[9.5px]">
+          <thead class="bg-slate-100 text-slate-700 border-b border-slate-200">
             <tr>
-              <th class="py-1.5 px-2 border-r border-slate-200 text-center">#</th>
-              <th class="py-1.5 px-2 border-r border-slate-200">Exam Title</th>
-              <th class="py-1.5 px-2 border-r border-slate-200 text-center">Score</th>
-              <th class="py-1.5 px-2 border-r border-slate-200 text-center">Correct</th>
-              <th class="py-1.5 px-2 border-r border-slate-200 text-center">Wrong</th>
-              <th class="py-1.5 px-2 text-center">Date</th>
+              <th style="width: 25px;" class="py-1 px-1 border-r border-slate-200 text-center">#</th>
+              <th style="width: 260px;" class="py-1 px-1.5 border-r border-slate-200">Exam Title</th>
+              <th style="width: 50px;" class="py-1 px-1 border-r border-slate-200 text-center">Score</th>
+              <th style="width: 40px;" class="py-1 px-1 border-r border-slate-200 text-center">Right</th>
+              <th style="width: 40px;" class="py-1 px-1 border-r border-slate-200 text-center">Wrong</th>
+              <th style="width: 65px;" class="py-1 px-1 border-r border-slate-200 text-center">Accuracy</th>
+              <th style="width: 95px;" class="py-1 px-1 text-center whitespace-nowrap">Date</th>
             </tr>
           </thead>
-          <tbody id="pdfStudentTableBody" class="divide-y divide-slate-200 text-[11px]"></tbody>
+          <tbody id="pdfStudentTableBody" class="divide-y divide-slate-200"></tbody>
         </table>
       </div>
 
@@ -466,6 +472,7 @@
       </div>
     </div>
 
+    <!-- 2. എക്സാം റാങ്ക് ലിസ്റ്റ് PDF -->
     <div id="printableRankListCard" class="pdf-container p-6 max-w-3xl mx-auto border border-slate-300 font-sans">
       <div class="border-b-2 border-emerald-600 pb-2 flex items-center justify-between gap-2">
         <div class="w-4/12 text-left">
@@ -494,18 +501,18 @@
       </div>
 
       <div class="my-2">
-        <table class="w-full text-left border border-slate-200">
-          <thead class="bg-slate-100 text-slate-700 text-[10px] border-b border-slate-200">
+        <table class="w-full text-left border border-slate-200 text-[10px]">
+          <thead class="bg-slate-100 text-slate-700 border-b border-slate-200">
             <tr>
-              <th class="py-1.5 px-2 border-r border-slate-200 text-center">Rank</th>
-              <th class="py-1.5 px-2 border-r border-slate-200">Candidate Name</th>
-              <th class="py-1.5 px-2 border-r border-slate-200 text-center font-mono">Phone</th>
-              <th class="py-1.5 px-2 border-r border-slate-200 text-center">Score</th>
-              <th class="py-1.5 px-2 border-r border-slate-200 text-center">Right</th>
-              <th class="py-1.5 px-2 text-center">Wrong</th>
+              <th style="width: 45px;" class="py-1 px-1 border-r border-slate-200 text-center">Rank</th>
+              <th class="py-1 px-2 border-r border-slate-200">Candidate Name</th>
+              <th style="width: 100px;" class="py-1 px-1 border-r border-slate-200 text-center font-mono">Phone</th>
+              <th style="width: 55px;" class="py-1 px-1 border-r border-slate-200 text-center">Score</th>
+              <th style="width: 45px;" class="py-1 px-1 border-r border-slate-200 text-center">Right</th>
+              <th style="width: 45px;" class="py-1 px-1 text-center">Wrong</th>
             </tr>
           </thead>
-          <tbody id="pdfRankTableBody" class="divide-y border-slate-200 text-[11px]"></tbody>
+          <tbody id="pdfRankTableBody" class="divide-y border-slate-200 text-[10px]"></tbody>
         </table>
       </div>
 
@@ -650,7 +657,7 @@
       return exams.slice().reverse();
     }
 
-    // 🌟 1. PUBLISH MANAGER (തീയതി ഇല്ലെങ്കിലും Publish കൊടുത്താൽ മാത്രം വരിക, Unpublish ആയാൽ മറഞ്ഞിരിക്കുക)
+    // 🌟 1. PUBLISH MANAGER
     async function loadPublishManagerData() {
       const tbody = document.getElementById('publishTableBody');
       tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-400">ഫയർബേസിൽ നിന്നും വിവരങ്ങൾ ശേഖരിക്കുന്നു...</td></tr>';
@@ -695,8 +702,6 @@
 
         const savedCtrl = adminControlsCache[key] || {};
         const currentStatus = savedCtrl.status || (ex.BADGE === 'LATEST' ? 'LATEST' : 'NORMAL');
-        
-        // 🚀 നിർബന്ധിത വ്യവസ്ഥ: വ്യക്തമായി true എന്ന് കൊടുത്താൽ മാത്രമേ Published ആകൂ
         const isPublished = savedCtrl.isPublished === true;
 
         let currentDateVal = savedCtrl.releaseDate || ex.Release_Date || '';
@@ -984,7 +989,7 @@
       renderSummaryTable(list);
     }
 
-    // 🌟 3. EXAM RANK LIST (ലയനം: live_ranks + ranks + ഫോൺ നമ്പർ ഡ്യൂപ്ലിക്കേഷൻ ഫിൽട്ടർ)
+    // 🌟 3. EXAM RANK LIST (ലയനം: live_ranks + ranks)
     async function loadExamDropdownList() {
       try {
         const res = await fetch(`${FIREBASE_DB_URL}/exams.json?_t=${Date.now()}`);
@@ -1027,7 +1032,6 @@
       const cleanKey = cleanTitle(examTitle);
 
       try {
-        // 🚀 live_ranks, ranks എന്നീ രണ്ട് നോഡുകളും ഒരേസമയം ഫെച്ച് ചെയ്യുന്നു
         const [liveRes, ranksRes] = await Promise.all([
           fetch(`${FIREBASE_DB_URL}/live_ranks/${cleanKey}.json?_t=${Date.now()}`).then(r => r.json()).catch(() => null),
           fetch(`${FIREBASE_DB_URL}/ranks/${cleanKey}.json?_t=${Date.now()}`).then(r => r.json()).catch(() => null)
@@ -1035,31 +1039,24 @@
 
         const mergedMap = {};
 
-        // 1. live_ranks ലൂടെ ആദ്യം എടുക്കുന്നു (ഇതിനാണ് മുൻഗണന - First Attempt)
         if (liveRes) {
           const lList = Array.isArray(liveRes) ? liveRes : Object.values(liveRes);
           lList.forEach(r => {
             const p = extractPhone(r);
-            if (p) {
-              mergedMap[p] = { ...r, phone: p };
-            }
+            if (p) mergedMap[p] = { ...r, phone: p };
           });
         }
 
-        // 2. ranks നോഡിൽ ഉള്ള അധിക എൻട്രികൾ കൂട്ടിച്ചേർക്കുന്നു (ഫോൺ നമ്പർ ഇല്ലാത്തവ മാത്രം)
         if (ranksRes) {
           const rList = Array.isArray(ranksRes) ? ranksRes : Object.values(ranksRes);
           rList.forEach(r => {
             const p = extractPhone(r);
-            if (p && !mergedMap[p]) {
-              mergedMap[p] = { ...r, phone: p };
-            }
+            if (p && !mergedMap[p]) mergedMap[p] = { ...r, phone: p };
           });
         }
 
         let ranks = Object.values(mergedMap);
 
-        // അഥവാ ഡാറ്റ കിട്ടിയില്ലെങ്കിൽ users_history യിൽ തിരയുന്നു
         if (ranks.length === 0) {
           const histRes = await fetch(`${FIREBASE_DB_URL}/users_history.json?_t=${Date.now()}`);
           const histData = await histRes.json();
@@ -1100,7 +1097,6 @@
           return;
         }
 
-        // ഡീറ്റെയിൽസ് എൻറിച്ച് ചെയ്യൽ (ശരി/തെറ്റ് എണ്ണങ്ങൾ ഇല്ലെങ്കിൽ)
         await Promise.all(ranks.map(async (r) => {
           if (parseCandidateCorrect(r) === '-' || parseCandidateWrong(r) === '-') {
             try {
@@ -1193,17 +1189,17 @@
 
       currentSelectedExamData.rankList.forEach((r, idx) => {
         const row = document.createElement('tr');
-        let rankCol = `<span class="font-bold font-mono text-[11px]">${idx + 1}</span>`;
+        let rankCol = `<span class="font-bold font-mono text-[10px]">${idx + 1}</span>`;
         let rowStyle = "";
         
         if (idx === 0) {
-          rankCol = `<span style="background:#fef08a; color:#854d0e; font-weight:800; padding:1px 6px; border-radius:10px; border:1px solid #facc15; font-size:10px;">🥇 1st Rank</span>`;
+          rankCol = `<span style="background:#fef08a; color:#854d0e; font-weight:800; padding:1px 4px; border-radius:6px; font-size:9px;">🥇 1st</span>`;
           rowStyle = "background-color: #fefce8;";
         } else if (idx === 1) {
-          rankCol = `<span style="background:#f1f5f9; color:#334155; font-weight:800; padding:1px 6px; border-radius:10px; border:1px solid #cbd5e1; font-size:10px;">🥈 2nd Rank</span>`;
+          rankCol = `<span style="background:#f1f5f9; color:#334155; font-weight:800; padding:1px 4px; border-radius:6px; font-size:9px;">🥈 2nd</span>`;
           rowStyle = "background-color: #f8fafc;";
         } else if (idx === 2) {
-          rankCol = `<span style="background:#ffedd5; color:#9a3412; font-weight:800; padding:1px 6px; border-radius:10px; border:1px solid #fdba74; font-size:10px;">🥉 3rd Rank</span>`;
+          rankCol = `<span style="background:#ffedd5; color:#9a3412; font-weight:800; padding:1px 4px; border-radius:6px; font-size:9px;">🥉 3rd</span>`;
           rowStyle = "background-color: #fff7ed;";
         }
 
@@ -1214,12 +1210,12 @@
 
         row.setAttribute("style", rowStyle);
         row.innerHTML = `
-          <td class="py-1.5 px-2 border-r border-slate-200 text-center">${rankCol}</td>
-          <td class="py-1.5 px-2 border-r border-slate-200 font-bold text-slate-900 text-[11px]">${extractName(r)}</td>
-          <td class="py-1.5 px-2 border-r border-slate-200 text-center font-mono text-slate-600 tracking-wider text-[11px]">${maskPhoneNumber(extractPhone(r))}</td>
-          <td class="py-1.5 px-2 border-r border-slate-200 text-center font-mono font-bold text-emerald-800 text-[11px]">${formattedScore}</td>
-          <td class="py-1.5 px-2 border-r border-slate-200 text-center font-mono text-emerald-700 font-semibold text-[11px]">${rightVal}</td>
-          <td class="py-1.5 px-2 text-center font-mono text-rose-700 font-semibold text-[11px]">${wrongVal}</td>
+          <td class="py-1 px-1 border-r border-slate-200 text-center">${rankCol}</td>
+          <td class="py-1 px-1.5 border-r border-slate-200 font-bold text-slate-900 text-[10px] truncate">${extractName(r)}</td>
+          <td class="py-1 px-1 border-r border-slate-200 text-center font-mono text-slate-600 text-[10px]">${maskPhoneNumber(extractPhone(r))}</td>
+          <td class="py-1 px-1 border-r border-slate-200 text-center font-mono font-bold text-emerald-800 text-[10px]">${formattedScore}</td>
+          <td class="py-1 px-1 border-r border-slate-200 text-center font-mono text-emerald-700 font-semibold text-[10px]">${rightVal}</td>
+          <td class="py-1 px-1 text-center font-mono text-rose-700 font-semibold text-[10px]">${wrongVal}</td>
         `;
         pdfTbody.appendChild(row);
       });
@@ -1239,7 +1235,7 @@
       html2pdf().set(opt).from(element).save();
     }
 
-    // 🌟 4. STUDENT SEARCH (users_history + live_ranks + ranks പരിശോധിച്ച് റിപ്പോർട്ട് നിർമ്മാണം)
+    // 🌟 4. STUDENT SEARCH (പൂർണ്ണമായി ഡ്യൂപ്ലിക്കേഷൻ മാറ്റിയ അപ്ഡേറ്റഡ് കോഡ്)
     async function searchStudentDetails() {
       const rawInput = document.getElementById('studentSearchInput').value.trim();
 
@@ -1254,7 +1250,7 @@
 
       const area = document.getElementById('searchResultArea');
       const tableBody = document.getElementById('studentHistoryTableBody');
-      tableBody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-slate-400">ഹിസ്റ്ററി ശേഖരിക്കുന്നു, ദയവായി കാത്തിരിക്കുക...</td></tr>';
+      tableBody.innerHTML = '<tr><td colspan="7" class="p-4 text-center text-slate-400">ഹിസ്റ്ററി ശേഖരിക്കുന്നു, ദയവായി കാത്തിരിക്കുക...</td></tr>';
       area.classList.remove('hidden');
 
       try {
@@ -1287,92 +1283,172 @@
         }
 
         if (!targetPhone) {
-          tableBody.innerHTML = '<tr><td colspan="6" class="p-6 text-center text-rose-400 font-bold">വിദ്യാർത്ഥിയെ കണ്ടെത്താൻ സാധിച്ചില്ല! പേരോ നമ്പറോ കൃത്യമാണോ എന്ന് പരിശോധിക്കുക.</td></tr>';
+          tableBody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-rose-400 font-bold">വിദ്യാർത്ഥിയെ കണ്ടെത്താൻ സാധിച്ചില്ല! പേരോ നമ്പറോ കൃത്യമാണോ എന്ന് പരിശോധിക്കുക.</td></tr>';
           btn.innerText = "സമ്പൂർണ്ണ റിപ്പോർട്ട് കാണുക ›";
           btn.disabled = false;
           return;
         }
 
-        // 🚀 1. users_history, 2. live_ranks, 3. ranks എന്നിവ പരിശോധിക്കുന്നു
+        // users_history, live_ranks, ranks എന്നീ മൂന്ന് നോഡുകളിൽ നിന്നും ഡാറ്റ ശേഖരിക്കുന്നു
         const [histRes, liveRanksRes, ranksRes] = await Promise.all([
           fetch(`${FIREBASE_DB_URL}/users_history/${targetPhone}.json?_t=${Date.now()}`).then(r => r.json()).catch(() => null),
           fetch(`${FIREBASE_DB_URL}/live_ranks.json?_t=${Date.now()}`).then(r => r.json()).catch(() => null),
           fetch(`${FIREBASE_DB_URL}/ranks.json?_t=${Date.now()}`).then(r => r.json()).catch(() => null)
         ]);
 
-        const uniqueExamHistory = {};
+        let rawAttemptsList = [];
 
-        // A. users_history യിൽ നിന്ന് ചേർക്കുന്നു
+        // 1. users_history
         if (histRes) {
           Object.values(histRes).forEach(h => {
-            if (h && (h.title || h.Title)) {
-              const k = cleanTitle(h.title || h.Title);
-              uniqueExamHistory[k] = h;
-            }
+            if (h && (h.title || h.Title)) rawAttemptsList.push(h);
           });
         }
 
-        // B. live_ranks ൽ ഉള്ള പരീക്ഷകൾ പരിശോധിക്കുന്നു
+        // 2. live_ranks
         if (liveRanksRes) {
-          for (const [examKey, examRanks] of Object.entries(liveRanksRes)) {
+          for (const [eKey, examRanks] of Object.entries(liveRanksRes)) {
             if (examRanks && typeof examRanks === 'object') {
               const entry = examRanks[targetPhone] || Object.values(examRanks).find(r => extractPhone(r) === targetPhone);
-              if (entry) {
-                const k = cleanTitle(entry.title || examKey);
-                if (!uniqueExamHistory[k]) {
-                  uniqueExamHistory[k] = { ...entry, title: entry.title || examKey.replace(/_/g, ' ') };
-                }
-              }
+              if (entry) rawAttemptsList.push({ ...entry, title: entry.title || eKey.replace(/_/g, ' ') });
             }
           }
         }
 
-        // C. ranks ൽ ഉള്ള പരീക്ഷകൾ പരിശോധിക്കുന്നു
+        // 3. ranks
         if (ranksRes) {
-          for (const [examKey, examRanks] of Object.entries(ranksRes)) {
+          for (const [eKey, examRanks] of Object.entries(ranksRes)) {
             if (examRanks && typeof examRanks === 'object') {
               const entry = examRanks[targetPhone] || Object.values(examRanks).find(r => extractPhone(r) === targetPhone);
-              if (entry) {
-                const k = cleanTitle(entry.title || examKey);
-                if (!uniqueExamHistory[k]) {
-                  uniqueExamHistory[k] = { ...entry, title: entry.title || examKey.replace(/_/g, ' ') };
-                }
-              }
+              if (entry) rawAttemptsList.push({ ...entry, title: entry.title || eKey.replace(/_/g, ' ') });
             }
           }
         }
 
-        const hist = Object.values(uniqueExamHistory);
+        // =====================================================================
+        // 🔥 സ്മാർട്ട് ഡ്യൂപ്ലിക്കേഷൻ റിമൂവർ (TITLE + DATE/TIMESTAMP + SCORE)
+        // =====================================================================
+        const uniqueAttemptsMap = new Map();
 
-        currentStudentData = { name: targetName, phone: targetPhone, history: hist };
+        rawAttemptsList.forEach(item => {
+          const cleanT = cleanTitle(item.title || item.Title);
+          if (!cleanT) return;
+
+          // തീയതിയിലെ വർഷവും മാസവും തീയതിയും മാത്രം എടുത്ത് നോർമലൈസ് ചെയ്യുന്നു (YYYY-MM-DD)
+          const rawDateStr = String(item.date || item.Date || '');
+          let dateOnly = rawDateStr.split(' ')[0].split('T')[0].trim();
+          
+          let ts = item.timestamp || item.Timestamp;
+          if (!ts && rawDateStr) {
+            const parsedTime = new Date(rawDateStr).getTime();
+            if (!isNaN(parsedTime) && parsedTime !== 0) {
+              ts = parsedTime;
+            }
+          }
+
+          const scoreVal = parseCandidateScore(item).toFixed(2);
+          
+          // ഒരേ പരീക്ഷയും തീയതിയും സ്കോറുമാണെങ്കിൽ അത് ഒരൊറ്റ ശ്രമമാണ്
+          const uniqueKey = `${cleanT}_${dateOnly || 'nodate'}_${scoreVal}`;
+
+          if (!uniqueAttemptsMap.has(uniqueKey)) {
+            uniqueAttemptsMap.set(uniqueKey, item);
+          } else {
+            const existing = uniqueAttemptsMap.get(uniqueKey);
+            // പൂർണ്ണ വിവരങ്ങൾ (ശരി/തെറ്റ് എണ്ണം) ഉള്ള എൻട്രിക്ക് മുൻഗണന നൽകുന്നു
+            if (parseCandidateCorrect(existing) === '-' && parseCandidateCorrect(item) !== '-') {
+              uniqueAttemptsMap.set(uniqueKey, item);
+            }
+          }
+        });
+
+        let deduplicatedList = Array.from(uniqueAttemptsMap.values());
+
+        // 🌟 First Attempt ബാഡ്ജ് കൃത്യമായി നിർണ്ണയിക്കാൻ Oldest First സോർട്ട് ചെയ്യുന്നു
+        deduplicatedList.sort((a, b) => {
+          let tA = a.timestamp || new Date(a.date || a.Date || 0).getTime() || 0;
+          let tB = b.timestamp || new Date(b.date || b.Date || 0).getTime() || 0;
+          return tA - tB;
+        });
+
+        const examOccurrences = {};
+        deduplicatedList.forEach(item => {
+          const cleanT = cleanTitle(item.title || item.Title);
+          examOccurrences[cleanT] = (examOccurrences[cleanT] || 0) + 1;
+        });
+
+        const seenExams = {};
+        deduplicatedList.forEach(item => {
+          const cleanT = cleanTitle(item.title || item.Title);
+          if (!seenExams[cleanT]) {
+            seenExams[cleanT] = true;
+            // വിദ്യാർത്ഥി മറ്റൊരു ദിവസം വീണ്ടും ഇതേ പരീക്ഷ എഴുതിയിട്ടുണ്ടെങ്കിൽ മാത്രം ബാഡ്ജ്
+            item.isFirstAttempt = examOccurrences[cleanT] > 1;
+            item.isRepeat = false;
+          } else {
+            item.isFirstAttempt = false;
+            item.isRepeat = true;
+          }
+        });
+
+        // 🚀 ഏറ്റവും ഒടുവിൽ എഴുതിയ പരീക്ഷ ഏറ്റവും മുകളിൽ വരാൻ (Latest on Top) സോർട്ട് ചെയ്യുന്നു
+        deduplicatedList.sort((a, b) => {
+          let tA = a.timestamp || new Date(a.date || a.Date || 0).getTime() || 0;
+          let tB = b.timestamp || new Date(b.date || b.Date || 0).getTime() || 0;
+          return tB - tA;
+        });
+
+        currentStudentData = { name: targetName, phone: targetPhone, history: deduplicatedList };
 
         document.getElementById('resStudentName').innerText = targetName;
         document.getElementById('resStudentPhone').innerText = `+91 ${targetPhone}`;
-        document.getElementById('resTotalTests').innerText = hist.length;
+        document.getElementById('resTotalTests').innerText = deduplicatedList.length;
 
         let totScore = 0;
-        hist.forEach(h => totScore += parseCandidateScore(h));
-        const avgScore = hist.length > 0 ? (totScore / hist.length).toFixed(2) : "0.00";
+        deduplicatedList.forEach(h => totScore += parseCandidateScore(h));
+        const avgScore = deduplicatedList.length > 0 ? (totScore / deduplicatedList.length).toFixed(2) : "0.00";
         document.getElementById('resAvgScore').innerText = avgScore;
         currentStudentData.avgScore = avgScore;
 
         tableBody.innerHTML = '';
-        if (hist.length === 0) {
-          tableBody.innerHTML = '<tr><td colspan="6" class="p-6 text-center text-slate-500">ഈ വിദ്യാർത്ഥി ഇതുവരെ പരീക്ഷകൾ ഒന്നും എഴുതിയിട്ടില്ല.</td></tr>';
+        if (deduplicatedList.length === 0) {
+          tableBody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-500">ഈ വിദ്യാർത്ഥി ഇതുവരെ പരീക്ഷകൾ ഒന്നും എഴുതിയിട്ടില്ല.</td></tr>';
           btn.innerText = "സമ്പൂർണ്ണ റിപ്പോർട്ട് കാണുക ›";
           btn.disabled = false;
           return;
         }
 
-        hist.slice().reverse().forEach((item, index) => {
+        deduplicatedList.forEach((item, index) => {
           const tr = document.createElement('tr');
-          tr.className = "hover:bg-slate-800/30 transition";
+          tr.className = "hover:bg-slate-800/30 transition border-b border-slate-800/40";
+
+          const correctNum = Number(parseCandidateCorrect(item)) || 0;
+          const wrongNum = Number(parseCandidateWrong(item)) || 0;
+          const scoreNum = parseCandidateScore(item);
+          
+          // ചോദ്യങ്ങളുടെ ആകെ എണ്ണം
+          const totalQ = item.totalQuestions || item.questions || (correctNum + wrongNum > 25 ? (correctNum + wrongNum) : 25);
+          
+          // സ്കോർ ആക്യുറസി (%)
+          let scoreAccuracy = Math.max(0, Math.round((scoreNum / totalQ) * 100));
+
+          let attemptBadge = '';
+          if (item.isFirstAttempt) {
+            attemptBadge = `<span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 px-2 py-0.5 rounded-full text-[10px] font-bold ml-2">🥇 First Attempt</span>`;
+          } else if (item.isRepeat) {
+            attemptBadge = `<span class="bg-slate-800 text-slate-400 border border-slate-700 px-2 py-0.5 rounded-full text-[10px] font-medium ml-2">Reattempt</span>`;
+          }
+
           tr.innerHTML = `
             <td class="p-3 font-mono text-slate-500">${index + 1}</td>
-            <td class="p-3 font-bold text-white">${item.title || item.Title || 'Exam'}</td>
-            <td class="p-3 text-center font-mono font-bold text-emerald-400">${parseCandidateScore(item)}</td>
-            <td class="p-3 text-center font-mono text-teal-300 font-semibold">${parseCandidateCorrect(item)}</td>
-            <td class="p-3 text-center font-mono text-rose-400 font-semibold">${parseCandidateWrong(item)}</td>
+            <td class="p-3 font-bold text-white flex items-center">
+              <span>${item.title || item.Title || 'Exam'}</span>
+              ${attemptBadge}
+            </td>
+            <td class="p-3 text-center font-mono font-bold text-emerald-400">${scoreNum}</td>
+            <td class="p-3 text-center font-mono text-teal-300 font-semibold">${correctNum}</td>
+            <td class="p-3 text-center font-mono text-rose-400 font-semibold">${wrongNum}</td>
+            <td class="p-3 text-center font-mono font-bold text-cyan-400">${scoreAccuracy}%</td>
             <td class="p-3 text-right font-mono text-slate-400 text-[11px]">${item.date || item.Date || '-'}</td>
           `;
           tableBody.appendChild(tr);
@@ -1380,7 +1456,7 @@
 
       } catch (err) {
         console.error("Search error:", err);
-        tableBody.innerHTML = '<tr><td colspan="6" class="p-6 text-center text-rose-400 font-bold">വിവരങ്ങൾ ശേഖരിക്കുന്നതിൽ തടസ്സം നേരിട്ടു.</td></tr>';
+        tableBody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-rose-400 font-bold">വിവരങ്ങൾ ശേഖരിക്കുന്നതിൽ തടസ്സം നേരിട്ടു.</td></tr>';
       } finally {
         btn.innerText = "സമ്പൂർണ്ണ റിപ്പോർട്ട് കാണുക ›";
         btn.disabled = false;
@@ -1429,22 +1505,38 @@
       const pdfTbody = document.getElementById('pdfStudentTableBody');
       pdfTbody.innerHTML = '';
 
-      currentStudentData.history.slice().reverse().forEach((h, idx) => {
+      currentStudentData.history.forEach((h, idx) => {
+        const correctNum = Number(parseCandidateCorrect(h)) || 0;
+        const wrongNum = Number(parseCandidateWrong(h)) || 0;
+        const scoreNum = parseCandidateScore(h);
+        const totalQ = h.totalQuestions || h.questions || (correctNum + wrongNum > 25 ? (correctNum + wrongNum) : 25);
+        let scoreAccuracy = Math.max(0, Math.round((scoreNum / totalQ) * 100));
+
+        let badgeText = '';
+        if (h.isFirstAttempt) {
+          badgeText = ' (1st Attempt)';
+        } else if (h.isRepeat) {
+          badgeText = ' (Reattempt)';
+        }
+
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td class="py-1.5 px-2 border-r border-slate-200 text-center font-mono text-[11px]">${idx + 1}</td>
-          <td class="py-1.5 px-2 border-r border-slate-200 font-bold text-slate-900 text-[11px]">${h.title || h.Title || 'Exam'}</td>
-          <td class="py-1.5 px-2 border-r border-slate-200 text-center font-mono font-bold text-emerald-700 text-[11px]">${parseCandidateScore(h)}</td>
-          <td class="py-1.5 px-2 border-r border-slate-200 text-center font-mono text-emerald-600 text-[11px]">${parseCandidateCorrect(h)}</td>
-          <td class="py-1.5 px-2 border-r border-slate-200 text-center font-mono text-rose-600 text-[11px]">${parseCandidateWrong(h)}</td>
-          <td class="py-1.5 px-2 text-center text-slate-500 font-mono text-[11px]">${h.date || h.Date || '-'}</td>
+          <td class="py-1 px-1 border-r border-slate-200 text-center font-mono text-[9.5px]">${idx + 1}</td>
+          <td class="py-1 px-1.5 border-r border-slate-200 font-bold text-slate-900 text-[9.5px] truncate">
+            ${h.title || h.Title || 'Exam'}${badgeText}
+          </td>
+          <td class="py-1 px-1 border-r border-slate-200 text-center font-mono font-bold text-emerald-800 text-[9.5px]">${scoreNum}</td>
+          <td class="py-1 px-1 border-r border-slate-200 text-center font-mono text-emerald-700 text-[9.5px]">${correctNum}</td>
+          <td class="py-1 px-1 border-r border-slate-200 text-center font-mono text-rose-700 text-[9.5px]">${wrongNum}</td>
+          <td class="py-1 px-1 border-r border-slate-200 text-center font-mono font-bold text-teal-700 text-[9.5px]">${scoreAccuracy}%</td>
+          <td class="py-1 px-1 text-center text-slate-600 font-mono text-[9.5px] whitespace-nowrap">${h.date || h.Date || '-'}</td>
         `;
         pdfTbody.appendChild(row);
       });
 
       const element = document.getElementById('printableStudentReportCard');
       const opt = {
-        margin:       [8, 8, 8, 8],
+        margin:       [6, 6, 6, 6],
         filename:     `${currentStudentData.name}_${currentStudentData.phone}_SK_PSC.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
@@ -1500,7 +1592,7 @@
     }
 
     function openReportModal() {
-      document.getElementById('reportedQuestionsModal').classList.remove('hidden');
+      document.getElementById('reportedQuestionsModal').classList.add('hidden');
       const listArea = document.getElementById('reportedListArea');
       listArea.innerHTML = '';
 
