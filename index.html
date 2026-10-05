@@ -202,7 +202,7 @@
               <span>പരീക്ഷാ പബ്ലിഷിംഗ് & ഷെഡ്യൂളിംഗ് കൺട്രോളർ</span>
             </h3>
             <p class="text-xs text-slate-400">
-              <strong>"Publish"</strong> ക്ലിക്ക് ചെയ്താൽ മാത്രമേ പരീക്ഷ ലഭ്യമാകൂ[cite: 2]. ഭാവി തീയതി സെറ്റ് ചെയ്തവ സമയം ആകുന്നത് വരെ ലോക്കായി നിൽക്കും, അല്ലെങ്കിൽ ആവശ്യമെങ്കിൽ <strong>"Unpublish"</strong> ചെയ്യാം[cite: 2].
+              <strong>"Publish"</strong> കൊടുത്താൽ മാത്രമേ തീയതി നൽകിയില്ലെങ്കിലും ഹോം പേജിൽ പരീക്ഷ വരൂ. <strong>"Unpublish"</strong> ആക്കിയാൽ എപ്പോഴും മറഞ്ഞിരിക്കും[cite: 2, 14].
             </p>
           </div>
           <input type="text" id="searchPublishInput" oninput="filterPublishExams()" placeholder="പരീക്ഷ തിരയുക..." class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500">
@@ -235,9 +235,9 @@
         <div>
           <h3 class="text-base sm:text-lg font-black text-white flex items-center space-x-2">
             <span>🏆</span>
-            <span>പരീക്ഷാഫലവും റാങ്ക് ലിസ്റ്റും (First Attempt Only)</span>
+            <span>പരീക്ഷാഫലവും റാങ്ക് ലിസ്റ്റും (Merged: live_ranks + ranks)</span>
           </h3>
-          <p class="text-xs text-slate-400">ഫയർബേസ് ക്ലൗഡിൽ നിന്നുള്ള തത്സമയ ഔദ്യോഗിക റാങ്ക് ലിസ്റ്റ്[cite: 1].</p>
+          <p class="text-xs text-slate-400">മൊബൈൽ നമ്പർ വഴി ഡ്യൂപ്ലിക്കേഷൻ ഒഴിവാക്കി തയ്യാറാക്കിയ തത്സമയ ആദ്യ ശ്രമ റാങ്ക് ലിസ്റ്റ്[cite: 1, 14].</p>
         </div>
         <div class="flex items-center space-x-2">
           <select id="examDropdownSelect" onchange="fetchSelectedExamDetails()" class="bg-slate-950 border border-slate-800 text-xs sm:text-sm text-emerald-400 font-bold rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-emerald-500 max-w-xs cursor-pointer">
@@ -293,7 +293,7 @@
           <span class="text-xl">🔍</span>
           <h3 class="text-sm sm:text-base font-bold text-white">വിദ്യാർത്ഥിയുടെ സമ്പൂർണ്ണ പരീക്ഷാ ഹിസ്റ്ററി തിരയുക</h3>
         </div>
-        <span class="text-[10px] text-slate-500 font-mono">പേരോ നമ്പറോ നൽകുക</span>
+        <span class="text-[10px] text-slate-500 font-mono">ranks, live_ranks, users_history സംയോജിപ്പിച്ചത്</span>
       </div>
       
       <div class="flex flex-col sm:flex-row gap-2.5">
@@ -349,7 +349,7 @@
       </div>
     </div>
 
-    <!-- 4. ALL CANDIDATES SUMMARY (ഡ്യൂപ്ലിക്കേറ്റ് രഹിത ലിസ്റ്റ്) -->
+    <!-- 4. ALL CANDIDATES SUMMARY -->
     <div id="sectionSummaryWise" class="hidden bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 space-y-4 shadow-xl">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-800 pb-3">
         <div class="flex items-center space-x-2">
@@ -392,12 +392,8 @@
 
   </main>
 
-  <!-- ======================================================== -->
-  <!-- 📄 ഔദ്യോഗിക PDF പ്രിന്റിംഗ് ഏരിയ -->
-  <!-- ======================================================== -->
+  <!-- PDF Render Container -->
   <div id="pdfRenderArea">
-    
-    <!-- 1. ഇൻഡിവിജ്വൽ സ്റ്റുഡന്റ് PDF -->
     <div id="printableStudentReportCard" class="pdf-container p-6 max-w-3xl mx-auto border border-slate-300 font-sans">
       <div class="border-b-2 border-emerald-600 pb-2 flex items-center justify-between gap-2">
         <div class="w-4/12 text-left">
@@ -470,7 +466,6 @@
       </div>
     </div>
 
-    <!-- 2. എക്സാം റാങ്ക് ലിസ്റ്റ് PDF -->
     <div id="printableRankListCard" class="pdf-container p-6 max-w-3xl mx-auto border border-slate-300 font-sans">
       <div class="border-b-2 border-emerald-600 pb-2 flex items-center justify-between gap-2">
         <div class="w-4/12 text-left">
@@ -525,7 +520,6 @@
         </div>
       </div>
     </div>
-
   </div>
 
   <script>
@@ -552,13 +546,14 @@
     });
 
     function cleanTitle(str) {
-      return String(str || '').replace(/[\s\-_,.:;()\/\\|\[\]+]+/g, '').toLowerCase();
+      return String(str || '').replace(/[\s\-_,.:;()\/\\|\[\]+&]+/g, '').toLowerCase();
     }
 
     function extractPhone(obj) {
       if (!obj) return '';
       let raw = obj.phone || obj.Phone || obj.mobile || obj.Mobile || obj.contact || obj.Contact || obj.key || '';
-      return String(raw).replace(/\D/g, '');
+      let clean = String(raw).replace(/\D/g, '');
+      return clean.length >= 10 ? clean.slice(-10) : clean;
     }
 
     function extractName(obj) {
@@ -655,7 +650,7 @@
       return exams.slice().reverse();
     }
 
-    // 🌟 1. PUBLISH MANAGER
+    // 🌟 1. PUBLISH MANAGER (തീയതി ഇല്ലെങ്കിലും Publish കൊടുത്താൽ മാത്രം വരിക, Unpublish ആയാൽ മറഞ്ഞിരിക്കുക)
     async function loadPublishManagerData() {
       const tbody = document.getElementById('publishTableBody');
       tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-400">ഫയർബേസിൽ നിന്നും വിവരങ്ങൾ ശേഖരിക്കുന്നു...</td></tr>';
@@ -700,7 +695,9 @@
 
         const savedCtrl = adminControlsCache[key] || {};
         const currentStatus = savedCtrl.status || (ex.BADGE === 'LATEST' ? 'LATEST' : 'NORMAL');
-        const isPublished = savedCtrl.isPublished !== undefined ? savedCtrl.isPublished : (ex.isPublished === true);
+        
+        // 🚀 നിർബന്ധിത വ്യവസ്ഥ: വ്യക്തമായി true എന്ന് കൊടുത്താൽ മാത്രമേ Published ആകൂ
+        const isPublished = savedCtrl.isPublished === true;
 
         let currentDateVal = savedCtrl.releaseDate || ex.Release_Date || '';
         if (currentDateVal.includes(' ')) {
@@ -709,7 +706,7 @@
 
         const statusBadge = isPublished
           ? `<span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-full text-[10px] font-bold">● Published Live</span>`
-          : `<span class="bg-slate-800 text-slate-400 border border-slate-700 px-2 py-0.5 rounded-full text-[10px] font-bold">🔒 Hidden (Draft)</span>`;
+          : `<span class="bg-slate-800 text-slate-400 border border-slate-700 px-2 py-0.5 rounded-full text-[10px] font-bold">🔒 Hidden (Draft / Unlisted)</span>`;
 
         const publishActionBtn = isPublished
           ? `<button onclick="toggleExamPublish('${key}', false, this)" class="px-3 py-1 bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 border border-rose-500/40 text-[11px] font-bold rounded-lg transition shadow">🔒 Unpublish</button>`
@@ -779,7 +776,7 @@
         ...currentCtrl,
         status: st,
         releaseDate: dt,
-        isPublished: currentCtrl.isPublished !== undefined ? currentCtrl.isPublished : false
+        isPublished: currentCtrl.isPublished === true
       };
 
       await fetch(`${FIREBASE_DB_URL}/portal_config/exam_controls/${key}.json`, {
@@ -849,7 +846,7 @@
       renderPublishTable(filtered);
     }
 
-    // 🌟 2. DASHBOARD DATA (ഡ്യൂപ്ലിക്കേറ്റ് നമ്പറുകൾ ഒഴിവാക്കലും ശരിയായ പേര് ഉറപ്പാക്കലും)
+    // 🌟 2. DASHBOARD DATA
     async function loadDashboardData() {
       try {
         const usersRes = await fetch(`${FIREBASE_DB_URL}/users.json?_t=${Date.now()}`);
@@ -869,12 +866,10 @@
           }
         }
 
-        // 🚀 ഫോൺ നമ്പർ അടിസ്ഥാനമാക്കി ഒരൊറ്റ കുട്ടിയായി ലയിപ്പിക്കുന്നു ("വിദ്യാർത്ഥി" ഒഴിവാക്കി യഥാർത്ഥ പേരിന് മുൻഗണന)
         const phoneMap = {};
 
         rawList.forEach(item => {
-          const pRaw = extractPhone(item);
-          const phone = pRaw.length >= 10 ? pRaw.slice(-10) : pRaw;
+          const phone = extractPhone(item);
           if (!phone) return;
 
           const currentName = extractName(item);
@@ -890,7 +885,6 @@
               avgScore: currentAvg
             };
           } else {
-            // പേര് "വിദ്യാർത്ഥി" എന്നാണെങ്കിൽ യഥാർത്ഥ പേര് മാറ്റുന്നു
             if (phoneMap[phone].name === 'വിദ്യാർത്ഥി' && currentName !== 'വിദ്യാർത്ഥി') {
               phoneMap[phone].name = currentName;
             }
@@ -902,7 +896,6 @@
         });
 
         allCandidatesCache = Object.values(phoneMap);
-
         document.getElementById('statTotalStudents').innerText = allCandidatesCache.length;
 
         let totalAttempts = 0;
@@ -991,7 +984,7 @@
       renderSummaryTable(list);
     }
 
-    // 🌟 3. EXAM RANK LIST (സ്മാർട്ട് മാച്ചിംഗ് സഹിതം)
+    // 🌟 3. EXAM RANK LIST (ലയനം: live_ranks + ranks + ഫോൺ നമ്പർ ഡ്യൂപ്ലിക്കേഷൻ ഫിൽട്ടർ)
     async function loadExamDropdownList() {
       try {
         const res = await fetch(`${FIREBASE_DB_URL}/exams.json?_t=${Date.now()}`);
@@ -1030,61 +1023,76 @@
         return;
       }
 
-      tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-400">റാങ്ക് ലിസ്റ്റ് ശേഖരിക്കുന്നു...</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-400">ലൈവ് ranks & ranks നോഡുകൾ സംയോജിപ്പിച്ചു ശേഖരിക്കുന്നു...</td></tr>';
       const cleanKey = cleanTitle(examTitle);
 
       try {
-        let ranks = null;
+        // 🚀 live_ranks, ranks എന്നീ രണ്ട് നോഡുകളും ഒരേസമയം ഫെച്ച് ചെയ്യുന്നു
+        const [liveRes, ranksRes] = await Promise.all([
+          fetch(`${FIREBASE_DB_URL}/live_ranks/${cleanKey}.json?_t=${Date.now()}`).then(r => r.json()).catch(() => null),
+          fetch(`${FIREBASE_DB_URL}/ranks/${cleanKey}.json?_t=${Date.now()}`).then(r => r.json()).catch(() => null)
+        ]);
 
-        let res = await fetch(`${FIREBASE_DB_URL}/ranks/${cleanKey}.json?_t=${Date.now()}`);
-        let data = await res.json();
+        const mergedMap = {};
 
-        if (!data) {
-          const allRanksRes = await fetch(`${FIREBASE_DB_URL}/ranks.json?_t=${Date.now()}`);
-          const allRanksData = await allRanksRes.json();
-          if (allRanksData) {
-            for (const [rKey, rVal] of Object.entries(allRanksData)) {
-              if (cleanTitle(rKey) === cleanKey || cleanKey.includes(cleanTitle(rKey)) || cleanTitle(rKey).includes(cleanKey)) {
-                data = rVal;
-                break;
-              }
+        // 1. live_ranks ലൂടെ ആദ്യം എടുക്കുന്നു (ഇതിനാണ് മുൻഗണന - First Attempt)
+        if (liveRes) {
+          const lList = Array.isArray(liveRes) ? liveRes : Object.values(liveRes);
+          lList.forEach(r => {
+            const p = extractPhone(r);
+            if (p) {
+              mergedMap[p] = { ...r, phone: p };
             }
-          }
+          });
         }
 
-        if (!data) {
+        // 2. ranks നോഡിൽ ഉള്ള അധിക എൻട്രികൾ കൂട്ടിച്ചേർക്കുന്നു (ഫോൺ നമ്പർ ഇല്ലാത്തവ മാത്രം)
+        if (ranksRes) {
+          const rList = Array.isArray(ranksRes) ? ranksRes : Object.values(ranksRes);
+          rList.forEach(r => {
+            const p = extractPhone(r);
+            if (p && !mergedMap[p]) {
+              mergedMap[p] = { ...r, phone: p };
+            }
+          });
+        }
+
+        let ranks = Object.values(mergedMap);
+
+        // അഥവാ ഡാറ്റ കിട്ടിയില്ലെങ്കിൽ users_history യിൽ തിരയുന്നു
+        if (ranks.length === 0) {
           const histRes = await fetch(`${FIREBASE_DB_URL}/users_history.json?_t=${Date.now()}`);
           const histData = await histRes.json();
           if (histData) {
-            const generatedRanks = [];
             for (const [uPhone, uExams] of Object.entries(histData)) {
               if (uExams && typeof uExams === 'object') {
                 for (const examItem of Object.values(uExams)) {
                   const itemTitle = cleanTitle(examItem.title || examItem.Title || '');
                   if (itemTitle === cleanKey || itemTitle.includes(cleanKey) || cleanKey.includes(itemTitle)) {
-                    generatedRanks.push({
-                      phone: uPhone,
-                      name: examItem.userName || examItem.name || 'വിദ്യാർത്ഥി',
-                      score: parseCandidateScore(examItem),
-                      correct: parseCandidateCorrect(examItem),
-                      wrong: parseCandidateWrong(examItem),
-                      date: examItem.date || examItem.Date || '-'
-                    });
+                    const p10 = uPhone.slice(-10);
+                    if (!mergedMap[p10]) {
+                      mergedMap[p10] = {
+                        phone: p10,
+                        name: examItem.userName || examItem.name || 'വിദ്യാർത്ഥി',
+                        score: parseCandidateScore(examItem),
+                        correct: parseCandidateCorrect(examItem),
+                        wrong: parseCandidateWrong(examItem),
+                        date: examItem.date || examItem.Date || '-'
+                      };
+                    }
                     break;
                   }
                 }
               }
             }
-            if (generatedRanks.length > 0) {
-              data = generatedRanks;
-            }
+            ranks = Object.values(mergedMap);
           }
         }
 
         overview.classList.remove('hidden');
         downloadBtn.classList.remove('hidden');
 
-        if (!data) {
+        if (ranks.length === 0) {
           document.getElementById('examPartCount').innerText = 0;
           document.getElementById('examHighestScore').innerText = "0.00";
           document.getElementById('examAverageScore').innerText = "0.00";
@@ -1092,40 +1100,24 @@
           return;
         }
 
-        ranks = Array.isArray(data) ? data : Object.values(data);
-
-        // Smart Enrichment
-        const needsLookup = ranks.some(r => parseCandidateCorrect(r) === '-' || parseCandidateScore(r) === 0);
-        if (needsLookup) {
-          await Promise.all(ranks.map(async (r) => {
-            const phone = extractPhone(r);
-            if (phone.length >= 10) {
-              const p10 = phone.slice(-10);
-              try {
-                const ures = await fetch(`${FIREBASE_DB_URL}/users_history/${p10}.json`);
-                const udata = await ures.json();
-                if (udata) {
-                  const histList = Object.values(udata);
-                  const matched = histList.find(h => cleanTitle(h.title) === cleanKey || cleanTitle(h.title).includes(cleanKey) || cleanKey.includes(cleanTitle(h.title)));
-                  if (matched) {
-                    if (parseCandidateScore(r) === 0 && parseCandidateScore(matched) > 0) {
-                      r.score = parseCandidateScore(matched);
-                    }
-                    if (parseCandidateCorrect(r) === '-') {
-                      r.correct = parseCandidateCorrect(matched);
-                    }
-                    if (parseCandidateWrong(r) === '-') {
-                      r.wrong = parseCandidateWrong(matched);
-                    }
-                    if (!r.date || r.date === '-') {
-                      r.date = matched.date || matched.Timestamp || matched.timestamp || r.date;
-                    }
-                  }
+        // ഡീറ്റെയിൽസ് എൻറിച്ച് ചെയ്യൽ (ശരി/തെറ്റ് എണ്ണങ്ങൾ ഇല്ലെങ്കിൽ)
+        await Promise.all(ranks.map(async (r) => {
+          if (parseCandidateCorrect(r) === '-' || parseCandidateWrong(r) === '-') {
+            try {
+              const ures = await fetch(`${FIREBASE_DB_URL}/users_history/${r.phone}.json`);
+              const udata = await ures.json();
+              if (udata) {
+                const histList = Object.values(udata);
+                const matched = histList.find(h => cleanTitle(h.title) === cleanKey || cleanTitle(h.title).includes(cleanKey) || cleanKey.includes(cleanTitle(h.title)));
+                if (matched) {
+                  if (parseCandidateCorrect(r) === '-') r.correct = parseCandidateCorrect(matched);
+                  if (parseCandidateWrong(r) === '-') r.wrong = parseCandidateWrong(matched);
+                  if (!r.date || r.date === '-') r.date = matched.date || '-';
                 }
-              } catch (e) {}
-            }
-          }));
-        }
+              }
+            } catch (e) {}
+          }
+        }));
 
         ranks.sort((a, b) => parseCandidateScore(b) - parseCandidateScore(a));
 
@@ -1247,7 +1239,7 @@
       html2pdf().set(opt).from(element).save();
     }
 
-    // 🌟 4. STUDENT SEARCH
+    // 🌟 4. STUDENT SEARCH (users_history + live_ranks + ranks പരിശോധിച്ച് റിപ്പോർട്ട് നിർമ്മാണം)
     async function searchStudentDetails() {
       const rawInput = document.getElementById('studentSearchInput').value.trim();
 
@@ -1262,7 +1254,7 @@
 
       const area = document.getElementById('searchResultArea');
       const tableBody = document.getElementById('studentHistoryTableBody');
-      tableBody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-slate-400">വിവരങ്ങൾ ശേഖരിക്കുന്നു, ദയവായി കാത്തിരിക്കുക...</td></tr>';
+      tableBody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-slate-400">ഹിസ്റ്ററി ശേഖരിക്കുന്നു, ദയവായി കാത്തിരിക്കുക...</td></tr>';
       area.classList.remove('hidden');
 
       try {
@@ -1301,9 +1293,56 @@
           return;
         }
 
-        const histRes = await fetch(`${FIREBASE_DB_URL}/users_history/${targetPhone}.json?_t=${Date.now()}`);
-        const histData = await histRes.json();
-        const hist = histData ? Object.values(histData) : [];
+        // 🚀 1. users_history, 2. live_ranks, 3. ranks എന്നിവ പരിശോധിക്കുന്നു
+        const [histRes, liveRanksRes, ranksRes] = await Promise.all([
+          fetch(`${FIREBASE_DB_URL}/users_history/${targetPhone}.json?_t=${Date.now()}`).then(r => r.json()).catch(() => null),
+          fetch(`${FIREBASE_DB_URL}/live_ranks.json?_t=${Date.now()}`).then(r => r.json()).catch(() => null),
+          fetch(`${FIREBASE_DB_URL}/ranks.json?_t=${Date.now()}`).then(r => r.json()).catch(() => null)
+        ]);
+
+        const uniqueExamHistory = {};
+
+        // A. users_history യിൽ നിന്ന് ചേർക്കുന്നു
+        if (histRes) {
+          Object.values(histRes).forEach(h => {
+            if (h && (h.title || h.Title)) {
+              const k = cleanTitle(h.title || h.Title);
+              uniqueExamHistory[k] = h;
+            }
+          });
+        }
+
+        // B. live_ranks ൽ ഉള്ള പരീക്ഷകൾ പരിശോധിക്കുന്നു
+        if (liveRanksRes) {
+          for (const [examKey, examRanks] of Object.entries(liveRanksRes)) {
+            if (examRanks && typeof examRanks === 'object') {
+              const entry = examRanks[targetPhone] || Object.values(examRanks).find(r => extractPhone(r) === targetPhone);
+              if (entry) {
+                const k = cleanTitle(entry.title || examKey);
+                if (!uniqueExamHistory[k]) {
+                  uniqueExamHistory[k] = { ...entry, title: entry.title || examKey.replace(/_/g, ' ') };
+                }
+              }
+            }
+          }
+        }
+
+        // C. ranks ൽ ഉള്ള പരീക്ഷകൾ പരിശോധിക്കുന്നു
+        if (ranksRes) {
+          for (const [examKey, examRanks] of Object.entries(ranksRes)) {
+            if (examRanks && typeof examRanks === 'object') {
+              const entry = examRanks[targetPhone] || Object.values(examRanks).find(r => extractPhone(r) === targetPhone);
+              if (entry) {
+                const k = cleanTitle(entry.title || examKey);
+                if (!uniqueExamHistory[k]) {
+                  uniqueExamHistory[k] = { ...entry, title: entry.title || examKey.replace(/_/g, ' ') };
+                }
+              }
+            }
+          }
+        }
+
+        const hist = Object.values(uniqueExamHistory);
 
         currentStudentData = { name: targetName, phone: targetPhone, history: hist };
 
