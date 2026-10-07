@@ -85,7 +85,7 @@
             <span id="modalReportCountBadge" class="bg-rose-500/20 text-rose-400 text-xs px-2 py-0.5 rounded-full border border-rose-500/30 font-mono">0</span>
           </h3>
         </div>
-        <button onclick="closeReportModal()" class="text-slate-400 hover:text-white text-lg font-bold p-1 bg-slate-800 rounded-xl w-8 h-8 flex items-center justify-center">✕</button>
+        <button onclick="closeReportModal()" class="text-slate-400 hover:text-white text-lg font-bold p-1 bg-slate-800 rounded-xl w-8 h-8 flex items-center justify-center cursor-pointer">✕</button>
       </div>
 
       <div id="reportedListArea" class="flex-1 overflow-y-auto custom-scroll py-4 space-y-3">
@@ -93,7 +93,7 @@
       </div>
 
       <div class="pt-3 border-t border-slate-800 flex justify-end">
-        <button onclick="closeReportModal()" class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl transition">അടയ്ക്കുക</button>
+        <button onclick="closeReportModal()" class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl transition cursor-pointer">അടയ്ക്കുക</button>
       </div>
     </div>
   </div>
@@ -113,13 +113,13 @@
       </div>
       
       <div class="flex items-center space-x-3">
-        <button onclick="openReportModal()" id="reportedNotificationBtn" class="relative bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/40 text-rose-400 px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 shadow">
+        <button onclick="openReportModal()" id="reportedNotificationBtn" class="relative bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/40 text-rose-400 px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 shadow cursor-pointer">
           <span class="text-sm">🚨</span>
           <span class="hidden sm:inline">ചോദ്യ റിപ്പോർട്ടുകൾ</span>
           <span id="badgeReportCount" class="bg-rose-600 text-white font-black text-[10px] px-2 py-0.5 rounded-full pulse-red font-mono">0</span>
         </button>
 
-        <button onclick="location.reload()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-xl border border-slate-700 transition flex items-center space-x-1 shadow">
+        <button onclick="location.reload()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-xl border border-slate-700 transition flex items-center space-x-1 shadow cursor-pointer">
           <span>🔄</span>
           <span class="hidden sm:inline">Refresh</span>
         </button>
@@ -151,19 +151,19 @@
 
     <!-- Navigation Tabs -->
     <div class="flex items-center space-x-2 border-b border-slate-800 pb-2 text-xs overflow-x-auto custom-scroll">
-      <button onclick="switchTab('publishManager')" id="tabBtnPublish" class="px-4 py-2 rounded-xl font-bold bg-emerald-500 text-slate-950 transition flex items-center space-x-1.5 shadow whitespace-nowrap">
+      <button onclick="switchTab('publishManager')" id="tabBtnPublish" class="px-4 py-2 rounded-xl font-bold bg-emerald-500 text-slate-950 transition flex items-center space-x-1.5 shadow whitespace-nowrap cursor-pointer">
         <span>📢</span>
         <span>പരീക്ഷാ പബ്ലിഷർ & നോട്ടീസ്</span>
       </button>
-      <button onclick="switchTab('examWise')" id="tabBtnExam" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap">
+      <button onclick="switchTab('examWise')" id="tabBtnExam" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap cursor-pointer">
         <span>🏆</span>
         <span>പരീക്ഷാ റാങ്ക് ലിസ്റ്റ്</span>
       </button>
-      <button onclick="switchTab('studentWise')" id="tabBtnStudent" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap">
+      <button onclick="switchTab('studentWise')" id="tabBtnStudent" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap cursor-pointer">
         <span>👤</span>
         <span>വിദ്യാർത്ഥിയുടെ റിപ്പോർട്ട്</span>
       </button>
-      <button onclick="switchTab('summaryWise')" id="tabBtnSummary" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap">
+      <button onclick="switchTab('summaryWise')" id="tabBtnSummary" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap cursor-pointer">
         <span>📊</span>
         <span>മുഴുവൻ സമ്മറി</span>
       </button>
@@ -185,10 +185,10 @@
         <div class="flex flex-col gap-2.5">
           <textarea id="adminNoticeInput" rows="3" placeholder="ഹോം പേജിൽ കാണിക്കേണ്ട പ്രധാന നോട്ടീസ് ടൈപ്പ് ചെയ്യുക..." class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 custom-scroll resize-y leading-relaxed font-sans"></textarea>
           <div class="flex justify-end gap-2.5">
-            <button onclick="clearNoticeMessage()" class="px-4 py-2.5 bg-rose-950/60 border border-rose-500/30 hover:bg-rose-900 text-rose-300 font-bold rounded-xl text-xs transition">
+            <button onclick="clearNoticeMessage()" class="px-4 py-2.5 bg-rose-950/60 border border-rose-500/30 hover:bg-rose-900 text-rose-300 font-bold rounded-xl text-xs transition cursor-pointer">
               ക്ലിയർ
             </button>
-            <button onclick="saveNoticeMessage()" id="btnSaveNotice" class="px-6 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-xl text-xs transition shadow flex items-center justify-center space-x-1.5 whitespace-nowrap">
+            <button onclick="saveNoticeMessage()" id="btnSaveNotice" class="px-6 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-xl text-xs transition shadow flex items-center justify-center space-x-1.5 whitespace-nowrap cursor-pointer">
               <span>💾</span>
               <span>നോട്ടീസ് സേവ് ചെയ്യുക</span>
             </button>
@@ -204,7 +204,7 @@
               <span>പരീക്ഷാ പബ്ലിഷിംഗ് & ഷെഡ്യൂളിംഗ് കൺട്രോളർ</span>
             </h3>
             <p class="text-xs text-slate-400">
-              <strong>"Publish"</strong> കൊടുത്താൽ മാത്രമേ തീയതി നൽകിയില്ലെങ്കിലും ഹോം പേജിൽ പരീക്ഷ വരൂ. <strong>"Unpublish"</strong> ആക്കിയാൽ എപ്പോഴും മറഞ്ഞിരിക്കും.
+              <strong>"Publish"</strong> കൊടുത്താൽ മാത്രമേ തീയതി നൽകിയില്ലെങ്കിലും ഹോം പേജിൽ പരീക്ഷ വരൂ[cite: 8]. <strong>"Unpublish"</strong> ആക്കിയാൽ എപ്പോഴും മറഞ്ഞിരിക്കും[cite: 8].
             </p>
           </div>
           <input type="text" id="searchPublishInput" oninput="filterPublishExams()" placeholder="പരീക്ഷ തിരയുക..." class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500">
@@ -239,13 +239,13 @@
             <span>🏆</span>
             <span>പരീക്ഷാഫലവും റാങ്ക് ലിസ്റ്റും (Merged: live_ranks + ranks)</span>
           </h3>
-          <p class="text-xs text-slate-400">മൊബൈൽ നമ്പർ വഴി ഡ്യൂപ്ലിക്കേഷൻ ഒഴിവാക്കി തയ്യാറാക്കിയ തത്സമയ ആദ്യ ശ്രമ റാങ്ക് ലിസ്റ്റ്.</p>
+          <p class="text-xs text-slate-400">മൊബൈൽ നമ്പർ വഴി ഡ്യൂപ്ലിക്കേഷൻ ഒഴിവാക്കി തയ്യാറാക്കിയ തത്സമയ ആദ്യ ശ്രമ റാങ്ക് ലിസ്റ്റ്[cite: 8].</p>
         </div>
         <div class="flex items-center space-x-2">
           <select id="examDropdownSelect" onchange="fetchSelectedExamDetails()" class="bg-slate-950 border border-slate-800 text-xs sm:text-sm text-emerald-400 font-bold rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-emerald-500 max-w-xs cursor-pointer">
             <option value="">പരീക്ഷ തിരഞ്ഞെടുക്കുക...</option>
           </select>
-          <button onclick="downloadExamRankListPDF()" id="downloadRankPdfBtn" class="hidden px-4 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 text-slate-950 font-black rounded-xl text-xs transition shadow flex items-center space-x-1.5 whitespace-nowrap">
+          <button onclick="downloadExamRankListPDF()" id="downloadRankPdfBtn" class="hidden px-4 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 text-slate-950 font-black rounded-xl text-xs transition shadow flex items-center space-x-1.5 whitespace-nowrap cursor-pointer">
             <span id="pdfBtnSpinner" class="hidden animate-spin">⏳</span>
             <span id="pdfBtnIcon">📥</span>
             <span id="pdfBtnText">ഡൗൺലോഡ് റാങ്ക് ലിസ്റ്റ് PDF</span>
@@ -303,7 +303,7 @@
           <span class="text-slate-400 text-xs mr-2 font-mono select-none">👤 / 📞</span>
           <input type="text" id="studentSearchInput" placeholder="വിദ്യാർത്ഥിയുടെ പേരോ മൊബൈൽ നമ്പറോ ടൈപ്പ് ചെയ്യുക..." class="w-full bg-transparent text-white text-xs sm:text-sm focus:outline-none tracking-wider">
         </div>
-        <button onclick="searchStudentDetails()" id="btnSearchStudent" class="px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 text-slate-950 font-black rounded-xl text-xs sm:text-sm transition flex items-center justify-center space-x-2 shadow-lg">
+        <button onclick="searchStudentDetails()" id="btnSearchStudent" class="px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 text-slate-950 font-black rounded-xl text-xs sm:text-sm transition flex items-center justify-center space-x-2 shadow-lg cursor-pointer">
           <span>സമ്പൂർണ്ണ റിപ്പോർട്ട് കാണുക</span>
           <span>›</span>
         </button>
@@ -326,7 +326,7 @@
               <span class="text-[10px] text-slate-400 block font-semibold">ശരാശരി സ്കോർ</span>
               <span id="resAvgScore" class="text-lg font-black text-cyan-400 font-mono">0.00</span>
             </div>
-            <button onclick="downloadStudentPDF()" class="px-4 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 font-black rounded-xl text-xs transition shadow flex items-center space-x-1.5 whitespace-nowrap">
+            <button onclick="downloadStudentPDF()" class="px-4 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 font-black rounded-xl text-xs transition shadow flex items-center space-x-1.5 whitespace-nowrap cursor-pointer">
               <span>📥</span>
               <span>ഡൗൺലോഡ് PDF റിപ്പോർട്ട്</span>
             </button>
@@ -395,9 +395,7 @@
 
   </main>
 
-  <!-- ======================================================== -->
-  <!-- 📄 ഔദ്യോഗിക PDF പ്രിന്റിംഗ് ഏരിയ (തീയതി മുറിയാത്ത ഫിക്സഡ് ലേഔട്ട്) -->
-  <!-- ======================================================== -->
+  <!-- PDF Render Area -->
   <div id="pdfRenderArea">
     <div id="printableStudentReportCard" class="pdf-container p-6 max-w-3xl mx-auto border border-slate-300 font-sans">
       <div class="border-b-2 border-emerald-600 pb-2 flex items-center justify-between gap-2">
@@ -629,8 +627,8 @@
       const btnS = document.getElementById('tabBtnStudent');
       const btnSm = document.getElementById('tabBtnSummary');
 
-      const activeClass = "px-4 py-2 rounded-xl font-bold bg-emerald-500 text-slate-950 transition flex items-center space-x-1.5 shadow whitespace-nowrap";
-      const inactiveClass = "px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap";
+      const activeClass = "px-4 py-2 rounded-xl font-bold bg-emerald-500 text-slate-950 transition flex items-center space-x-1.5 shadow whitespace-nowrap cursor-pointer";
+      const inactiveClass = "px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap cursor-pointer";
 
       btnP.className = inactiveClass;
       btnE.className = inactiveClass;
@@ -714,8 +712,8 @@
           : `<span class="bg-slate-800 text-slate-400 border border-slate-700 px-2 py-0.5 rounded-full text-[10px] font-bold">🔒 Hidden (Draft / Unlisted)</span>`;
 
         const publishActionBtn = isPublished
-          ? `<button onclick="toggleExamPublish('${key}', false, this)" class="px-3 py-1 bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 border border-rose-500/40 text-[11px] font-bold rounded-lg transition shadow">🔒 Unpublish</button>`
-          : `<button onclick="toggleExamPublish('${key}', true, this)" class="px-3 py-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-[11px] font-black rounded-lg transition shadow">🚀 Publish</button>`;
+          ? `<button onclick="toggleExamPublish('${key}', false, this)" class="px-3 py-1 bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 border border-rose-500/40 text-[11px] font-bold rounded-lg transition shadow cursor-pointer">🔒 Unpublish</button>`
+          : `<button onclick="toggleExamPublish('${key}', true, this)" class="px-3 py-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-[11px] font-black rounded-lg transition shadow cursor-pointer">🚀 Publish</button>`;
 
         tr.innerHTML = `
           <td class="p-3 font-mono text-slate-500">${idx + 1}</td>
@@ -733,8 +731,8 @@
           <td class="p-3 text-center">${publishActionBtn}</td>
           <td class="p-3 text-center">
             <div class="flex items-center justify-center space-x-1">
-              <button onclick="saveExamControl('${key}')" class="px-2.5 py-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-lg text-xs transition shadow" title="ഷെഡ്യൂളും ബാഡ്ജും സേവ് ചെയ്യുക">💾</button>
-              <button onclick="clearExamLock('${key}')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-400 rounded-lg text-xs" title="സമയം ക്ലിയർ ചെയ്യുക">✕</button>
+              <button onclick="saveExamControl('${key}')" class="px-2.5 py-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-lg text-xs transition shadow cursor-pointer" title="ഷെഡ്യൂളും ബാഡ്ജും സേവ് ചെയ്യുക">💾</button>
+              <button onclick="clearExamLock('${key}')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-400 rounded-lg text-xs cursor-pointer" title="സമയം ക്ലിയർ ചെയ്യുക">✕</button>
             </div>
           </td>
         `;
@@ -939,7 +937,7 @@
           <td class="p-3 text-center font-bold text-emerald-400 font-mono">${tests}</td>
           <td class="p-3 text-center font-bold text-cyan-400 font-mono">${avg}</td>
           <td class="p-3 text-center">
-            <button onclick="quickSelectStudent('${phone || name}')" class="px-3 py-1 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-lg border border-emerald-500/30 transition shadow-sm">
+            <button onclick="quickSelectStudent('${phone || name}')" class="px-3 py-1 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-lg border border-emerald-500/30 transition shadow-sm cursor-pointer">
               ഹിസ്റ്ററി
             </button>
           </td>
@@ -1235,7 +1233,7 @@
       html2pdf().set(opt).from(element).save();
     }
 
-    // 🌟 4. STUDENT SEARCH (പൂർണ്ണമായി ഡ്യൂപ്ലിക്കേഷൻ മാറ്റിയ അപ്ഡേറ്റഡ് കോഡ്)
+    // 🌟 4. STUDENT SEARCH
     async function searchStudentDetails() {
       const rawInput = document.getElementById('studentSearchInput').value.trim();
 
@@ -1289,7 +1287,6 @@
           return;
         }
 
-        // users_history, live_ranks, ranks എന്നീ മൂന്ന് നോഡുകളിൽ നിന്നും ഡാറ്റ ശേഖരിക്കുന്നു
         const [histRes, liveRanksRes, ranksRes] = await Promise.all([
           fetch(`${FIREBASE_DB_URL}/users_history/${targetPhone}.json?_t=${Date.now()}`).then(r => r.json()).catch(() => null),
           fetch(`${FIREBASE_DB_URL}/live_ranks.json?_t=${Date.now()}`).then(r => r.json()).catch(() => null),
@@ -1298,14 +1295,12 @@
 
         let rawAttemptsList = [];
 
-        // 1. users_history
         if (histRes) {
           Object.values(histRes).forEach(h => {
             if (h && (h.title || h.Title)) rawAttemptsList.push(h);
           });
         }
 
-        // 2. live_ranks
         if (liveRanksRes) {
           for (const [eKey, examRanks] of Object.entries(liveRanksRes)) {
             if (examRanks && typeof examRanks === 'object') {
@@ -1315,7 +1310,6 @@
           }
         }
 
-        // 3. ranks
         if (ranksRes) {
           for (const [eKey, examRanks] of Object.entries(ranksRes)) {
             if (examRanks && typeof examRanks === 'object') {
@@ -1325,16 +1319,12 @@
           }
         }
 
-        // =====================================================================
-        // 🔥 സ്മാർട്ട് ഡ്യൂപ്ലിക്കേഷൻ റിമൂവർ (TITLE + DATE/TIMESTAMP + SCORE)
-        // =====================================================================
         const uniqueAttemptsMap = new Map();
 
         rawAttemptsList.forEach(item => {
           const cleanT = cleanTitle(item.title || item.Title);
           if (!cleanT) return;
 
-          // തീയതിയിലെ വർഷവും മാസവും തീയതിയും മാത്രം എടുത്ത് നോർമലൈസ് ചെയ്യുന്നു (YYYY-MM-DD)
           const rawDateStr = String(item.date || item.Date || '');
           let dateOnly = rawDateStr.split(' ')[0].split('T')[0].trim();
           
@@ -1347,15 +1337,12 @@
           }
 
           const scoreVal = parseCandidateScore(item).toFixed(2);
-          
-          // ഒരേ പരീക്ഷയും തീയതിയും സ്കോറുമാണെങ്കിൽ അത് ഒരൊറ്റ ശ്രമമാണ്
           const uniqueKey = `${cleanT}_${dateOnly || 'nodate'}_${scoreVal}`;
 
           if (!uniqueAttemptsMap.has(uniqueKey)) {
             uniqueAttemptsMap.set(uniqueKey, item);
           } else {
             const existing = uniqueAttemptsMap.get(uniqueKey);
-            // പൂർണ്ണ വിവരങ്ങൾ (ശരി/തെറ്റ് എണ്ണം) ഉള്ള എൻട്രിക്ക് മുൻഗണന നൽകുന്നു
             if (parseCandidateCorrect(existing) === '-' && parseCandidateCorrect(item) !== '-') {
               uniqueAttemptsMap.set(uniqueKey, item);
             }
@@ -1364,7 +1351,6 @@
 
         let deduplicatedList = Array.from(uniqueAttemptsMap.values());
 
-        // 🌟 First Attempt ബാഡ്ജ് കൃത്യമായി നിർണ്ണയിക്കാൻ Oldest First സോർട്ട് ചെയ്യുന്നു
         deduplicatedList.sort((a, b) => {
           let tA = a.timestamp || new Date(a.date || a.Date || 0).getTime() || 0;
           let tB = b.timestamp || new Date(b.date || b.Date || 0).getTime() || 0;
@@ -1382,7 +1368,6 @@
           const cleanT = cleanTitle(item.title || item.Title);
           if (!seenExams[cleanT]) {
             seenExams[cleanT] = true;
-            // വിദ്യാർത്ഥി മറ്റൊരു ദിവസം വീണ്ടും ഇതേ പരീക്ഷ എഴുതിയിട്ടുണ്ടെങ്കിൽ മാത്രം ബാഡ്ജ്
             item.isFirstAttempt = examOccurrences[cleanT] > 1;
             item.isRepeat = false;
           } else {
@@ -1391,7 +1376,6 @@
           }
         });
 
-        // 🚀 ഏറ്റവും ഒടുവിൽ എഴുതിയ പരീക്ഷ ഏറ്റവും മുകളിൽ വരാൻ (Latest on Top) സോർട്ട് ചെയ്യുന്നു
         deduplicatedList.sort((a, b) => {
           let tA = a.timestamp || new Date(a.date || a.Date || 0).getTime() || 0;
           let tB = b.timestamp || new Date(b.date || b.Date || 0).getTime() || 0;
@@ -1426,10 +1410,7 @@
           const wrongNum = Number(parseCandidateWrong(item)) || 0;
           const scoreNum = parseCandidateScore(item);
           
-          // ചോദ്യങ്ങളുടെ ആകെ എണ്ണം
           const totalQ = item.totalQuestions || item.questions || (correctNum + wrongNum > 25 ? (correctNum + wrongNum) : 25);
-          
-          // സ്കോർ ആക്യുറസി (%)
           let scoreAccuracy = Math.max(0, Math.round((scoreNum / totalQ) * 100));
 
           let attemptBadge = '';
@@ -1522,13 +1503,13 @@
         const row = document.createElement('tr');
         row.innerHTML = `
           <td class="py-1 px-1 border-r border-slate-200 text-center font-mono text-[9.5px]">${idx + 1}</td>
-          <td class="py-1 px-1.5 border-r border-slate-200 font-bold text-slate-900 text-[9.5px] truncate">
+          <td class="py-1 px-1.5 border-r border-slate-200 font-bold text-slate-900 text-[10px] truncate">
             ${h.title || h.Title || 'Exam'}${badgeText}
           </td>
-          <td class="py-1 px-1 border-r border-slate-200 text-center font-mono font-bold text-emerald-800 text-[9.5px]">${scoreNum}</td>
-          <td class="py-1 px-1 border-r border-slate-200 text-center font-mono text-emerald-700 text-[9.5px]">${correctNum}</td>
-          <td class="py-1 px-1 border-r border-slate-200 text-center font-mono text-rose-700 text-[9.5px]">${wrongNum}</td>
-          <td class="py-1 px-1 border-r border-slate-200 text-center font-mono font-bold text-teal-700 text-[9.5px]">${scoreAccuracy}%</td>
+          <td class="py-1 px-1 border-r border-slate-200 text-center font-mono font-bold text-emerald-800 text-[10px]">${scoreNum}</td>
+          <td class="py-1 px-1 border-r border-slate-200 text-center font-mono text-emerald-700 text-[10px]">${correctNum}</td>
+          <td class="py-1 px-1 border-r border-slate-200 text-center font-mono text-rose-700 text-[10px]">${wrongNum}</td>
+          <td class="py-1 px-1 border-r border-slate-200 text-center font-mono font-bold text-teal-700 text-[10px]">${scoreAccuracy}%</td>
           <td class="py-1 px-1 text-center text-slate-600 font-mono text-[9.5px] whitespace-nowrap">${h.date || h.Date || '-'}</td>
         `;
         pdfTbody.appendChild(row);
@@ -1591,8 +1572,9 @@
       }
     }
 
+    // 🌟 തിരുത്തിയ ഭാഗം: Modal തുറക്കാൻ remove('hidden') ഉപയോഗിച്ചു
     function openReportModal() {
-      document.getElementById('reportedQuestionsModal').classList.add('hidden');
+      document.getElementById('reportedQuestionsModal').classList.remove('hidden');
       const listArea = document.getElementById('reportedListArea');
       listArea.innerHTML = '';
 
@@ -1616,7 +1598,7 @@
             </span>
             <div class="flex items-center space-x-2">
               <span class="text-[10px] text-slate-500 font-mono">${rep.date || ''}</span>
-              <button onclick="solveQuestionById('${rep.id}', this)" class="px-3 py-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-lg text-xs transition shadow flex items-center space-x-1">
+              <button onclick="solveQuestionById('${rep.id}', this)" class="px-3 py-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-lg text-xs transition shadow flex items-center space-x-1 cursor-pointer">
                 <span>✓</span>
                 <span>Solve</span>
               </button>
