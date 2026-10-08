@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SK PSC - അഡ്മിൻ കൺട്രോൾ പാനൽ & റിപ്പോർട്ട്</title>
+  <title>SK PSC - അഡ്മിൻ കൺട്രോൾ പാനൽ & അനലിറ്റിക്സ്</title>
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -13,6 +13,9 @@
   
   <!-- html2pdf.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <!-- 🌟 Chart.js ലൈബ്രറി -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <!-- PWA Meta tags -->
   <meta name="mobile-web-app-capable" content="yes">
@@ -70,7 +73,7 @@
       <h3 class="text-lg font-bold text-white">അഡ്മിൻ പ്രവേശനം</h3>
       <p class="text-xs text-slate-400">സുരക്ഷിതമായി കൺട്രോൾ പാനൽ തുറക്കാൻ അഡ്മിൻ പിൻ നൽകുക.</p>
       <input type="password" id="adminPinInput" maxlength="6" placeholder="PIN നൽകുക" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-center text-white tracking-widest text-lg focus:outline-none focus:border-emerald-500 font-mono">
-      <button onclick="verifyPin()" class="w-full py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-xl text-sm transition shadow-lg">തുറക്കുക ›</button>
+      <button onclick="verifyPin()" class="w-full py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-xl text-sm transition shadow-lg cursor-pointer">തുറക്കുക ›</button>
     </div>
   </div>
 
@@ -106,9 +109,9 @@
         <div>
           <h1 class="font-bold text-base text-white flex items-center space-x-2">
             <span>SK PSC അഡ്മിൻ കൺട്രോൾ പാനൽ</span>
-            <span class="text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded font-mono font-bold">FIREBASE SYNC</span>
+            <span class="text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded font-mono font-bold">LIVE SYNC</span>
           </h1>
-          <p class="text-[11px] text-slate-400">റാങ്ക് ലിസ്റ്റും പരീക്ഷാ പബ്ലിഷിംഗ് മാനേജ്‌‌മെന്റും</p>
+          <p class="text-[11px] text-slate-400">വളർച്ചാ അനലിറ്റിക്സും മാനേജ്‌‌മെന്റും</p>
         </div>
       </div>
       
@@ -151,17 +154,21 @@
 
     <!-- Navigation Tabs -->
     <div class="flex items-center space-x-2 border-b border-slate-800 pb-2 text-xs overflow-x-auto custom-scroll">
-      <button onclick="switchTab('publishManager')" id="tabBtnPublish" class="px-4 py-2 rounded-xl font-bold bg-emerald-500 text-slate-950 transition flex items-center space-x-1.5 shadow whitespace-nowrap cursor-pointer">
+      <button onclick="switchTab('analyticsDashboard')" id="tabBtnAnalytics" class="px-4 py-2 rounded-xl font-bold bg-emerald-500 text-slate-950 transition flex items-center space-x-1.5 shadow whitespace-nowrap cursor-pointer">
+        <span>📈</span>
+        <span>പോർട്ടൽ ഗ്രോത്ത് ചാർട്ട്</span>
+      </button>
+      <button onclick="switchTab('publishManager')" id="tabBtnPublish" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap cursor-pointer">
         <span>📢</span>
-        <span>പരീക്ഷാ പബ്ലിഷർ & നോട്ടീസ്</span>
+        <span>പരീക്ഷാ പബ്ലിഷർ</span>
       </button>
       <button onclick="switchTab('examWise')" id="tabBtnExam" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap cursor-pointer">
         <span>🏆</span>
-        <span>പരീക്ഷാ റാങ്ക് ലിസ്റ്റ്</span>
+        <span>റാങ്ക് ലിസ്റ്റ്</span>
       </button>
       <button onclick="switchTab('studentWise')" id="tabBtnStudent" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap cursor-pointer">
         <span>👤</span>
-        <span>വിദ്യാർത്ഥിയുടെ റിപ്പോർട്ട്</span>
+        <span>വിദ്യാർത്ഥി ഹിസ്റ്ററി</span>
       </button>
       <button onclick="switchTab('summaryWise')" id="tabBtnSummary" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap cursor-pointer">
         <span>📊</span>
@@ -169,8 +176,81 @@
       </button>
     </div>
 
+    <!-- 🌟 0. പോർട്ടൽ ഗ്രോത്ത് ചാർട്ട് & അനലിറ്റിക്സ് (New Section) -->
+    <div id="sectionAnalyticsDashboard" class="space-y-6">
+      
+      <!-- മെയിൻ ചാർട്ട് കാർഡ് -->
+      <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-7 shadow-2xl space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+          <div>
+            <h3 class="text-base sm:text-lg font-black text-white flex items-center space-x-2">
+              <span>📊</span>
+              <span>വിദ്യാർത്ഥികളുടെ പരീക്ഷാ പങ്കാളിത്തം (Attendance Progress)</span>
+            </h3>
+            <p class="text-xs text-slate-400 mt-0.5">ഓരോ ദിവസവും/ആഴ്ചയിലും കുട്ടികൾ പരീക്ഷ അറ്റൻഡ് ചെയ്തതിന്റെ ട്രെൻഡ്.</p>
+          </div>
+
+          <!-- Timeframe Filters -->
+          <div class="flex items-center space-x-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-xs">
+            <button onclick="updateGrowthChart('daily')" id="btnFilterDaily" class="px-3 py-1.5 rounded-lg font-bold bg-emerald-500 text-slate-950 transition cursor-pointer">Daily (14 Days)</button>
+            <button onclick="updateGrowthChart('weekly')" id="btnFilterWeekly" class="px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition cursor-pointer">Weekly</button>
+            <button onclick="updateGrowthChart('monthly')" id="btnFilterMonthly" class="px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition cursor-pointer">Monthly</button>
+          </div>
+        </div>
+
+        <!-- ചാർട്ട് ഏരിയ -->
+        <div class="relative w-full h-72 sm:h-80">
+          <canvas id="growthLineChart"></canvas>
+        </div>
+      </div>
+
+      <!-- രണ്ട് സബ് ചാർട്ടുകൾ: കാറ്റഗറി അനലിറ്റിക്സ് & പെർഫോമൻസ് -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- വിഷയങ്ങളുടെ പൈ ചാർട്ട് -->
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xl space-y-4">
+          <div class="border-b border-slate-800 pb-3">
+            <h4 class="text-sm font-bold text-white flex items-center space-x-2">
+              <span>🎯</span>
+              <span>ഏറ്റവും കൂടുതൽ ആളുകൾ എഴുതിയ വിഷയങ്ങൾ</span>
+            </h4>
+            <p class="text-[11px] text-slate-400">കുട്ടികളുടെ ഇഷ്ട വിഷയങ്ങൾ തിരിച്ചറിഞ്ഞ് കൂടുതൽ ടെസ്റ്റുകൾ നൽകാൻ</p>
+          </div>
+          <div class="relative w-full h-56 flex items-center justify-center">
+            <canvas id="categoryDoughnutChart"></canvas>
+          </div>
+        </div>
+
+        <!-- പരീക്ഷാ അറ്റൻഡൻസ് സമ്മറി കാർഡ് -->
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xl space-y-4 flex flex-col justify-between">
+          <div class="border-b border-slate-800 pb-3">
+            <h4 class="text-sm font-bold text-white flex items-center space-x-2">
+              <span>🚀</span>
+              <span>പോർട്ടൽ ഗ്രോത്ത് ഇൻസൈറ്റ്സ് (Insights)</span>
+            </h4>
+            <p class="text-[11px] text-slate-400">തത്സമയ വിശകലന ഡാറ്റ</p>
+          </div>
+
+          <div class="space-y-3 flex-1 flex flex-col justify-center">
+            <div class="bg-slate-950 p-3.5 rounded-2xl border border-slate-800 flex items-center justify-between">
+              <span class="text-xs text-slate-400 font-medium">ഇന്ന് പരീക്ഷ എഴുതിയ കുട്ടികൾ</span>
+              <span id="statTodayAttempts" class="text-lg font-mono font-black text-emerald-400">0</span>
+            </div>
+            <div class="bg-slate-950 p-3.5 rounded-2xl border border-slate-800 flex items-center justify-between">
+              <span class="text-xs text-slate-400 font-medium">കഴിഞ്ഞ 7 ദിവസത്തെ ശരാശരി (Daily Avg)</span>
+              <span id="statWeeklyDailyAvg" class="text-lg font-mono font-black text-cyan-400">0</span>
+            </div>
+            <div class="bg-slate-950 p-3.5 rounded-2xl border border-slate-800 flex items-center justify-between">
+              <span class="text-xs text-slate-400 font-medium">ഏറ്റവും കൂടുതൽ പങ്കാളിത്തം ഉള്ള ദിവസം</span>
+              <span id="statPeakDay" class="text-xs font-mono font-bold text-amber-400">None</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
     <!-- 1. PUBLISH MANAGER -->
-    <div id="sectionPublishManager" class="bg-slate-900 border border-emerald-500/30 rounded-3xl p-5 sm:p-7 space-y-6 shadow-2xl">
+    <div id="sectionPublishManager" class="hidden bg-slate-900 border border-emerald-500/30 rounded-3xl p-5 sm:p-7 space-y-6 shadow-2xl">
       <div class="bg-slate-950 border border-slate-800 p-4 sm:p-5 rounded-2xl space-y-3">
         <div class="flex items-center justify-between">
           <h4 class="text-xs sm:text-sm font-bold text-white flex items-center space-x-2">
@@ -180,7 +260,7 @@
           <span class="text-[10px] text-slate-500 font-mono">portal_config/notice</span>
         </div>
         <p class="text-[11px] text-slate-400">
-          Enter അടിച്ച് പുതിയ ലൈനിലേക്ക് മെസ്സേജ് മാറ്റാം.
+          Enter അടിച്ച് പുതിയ ലൈനിലേക്ക് മെസ്സേജ് മാറ്റാം[cite: 8].
         </p>
         <div class="flex flex-col gap-2.5">
           <textarea id="adminNoticeInput" rows="3" placeholder="ഹോം പേജിൽ കാണിക്കേണ്ട പ്രധാന നോട്ടീസ് ടൈപ്പ് ചെയ്യുക..." class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 custom-scroll resize-y leading-relaxed font-sans"></textarea>
@@ -542,6 +622,13 @@
     let publishExamsList = [];
     let adminControlsCache = {};
 
+    // 🌟 ചാർട്ട് ഡാറ്റാ കാഷെ
+    let rawTimelineData = [];
+    let categoryStatsMap = {};
+    let growthLineChartInstance = null;
+    let categoryDoughnutChartInstance = null;
+    let currentActiveTimeframe = 'daily';
+
     document.getElementById('adminPinInput').addEventListener('keyup', (e) => {
       if (e.key === 'Enter') verifyPin();
     });
@@ -606,6 +693,7 @@
       const entered = document.getElementById('adminPinInput').value.trim();
       if (entered === ADMIN_SECRET_PIN) {
         document.getElementById('pinLockModal').classList.add('hidden');
+        loadAnalyticsData();
         loadDashboardData();
         loadPublishManagerData();
         loadExamDropdownList();
@@ -617,11 +705,13 @@
     }
 
     function switchTab(tab) {
+      document.getElementById('sectionAnalyticsDashboard').classList.add('hidden');
       document.getElementById('sectionPublishManager').classList.add('hidden');
       document.getElementById('sectionExamWise').classList.add('hidden');
       document.getElementById('sectionStudentWise').classList.add('hidden');
       document.getElementById('sectionSummaryWise').classList.add('hidden');
 
+      const btnA = document.getElementById('tabBtnAnalytics');
       const btnP = document.getElementById('tabBtnPublish');
       const btnE = document.getElementById('tabBtnExam');
       const btnS = document.getElementById('tabBtnStudent');
@@ -630,12 +720,16 @@
       const activeClass = "px-4 py-2 rounded-xl font-bold bg-emerald-500 text-slate-950 transition flex items-center space-x-1.5 shadow whitespace-nowrap cursor-pointer";
       const inactiveClass = "px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap cursor-pointer";
 
+      btnA.className = inactiveClass;
       btnP.className = inactiveClass;
       btnE.className = inactiveClass;
       btnS.className = inactiveClass;
       btnSm.className = inactiveClass;
 
-      if (tab === 'publishManager') {
+      if (tab === 'analyticsDashboard') {
+        document.getElementById('sectionAnalyticsDashboard').classList.remove('hidden');
+        btnA.className = activeClass;
+      } else if (tab === 'publishManager') {
         document.getElementById('sectionPublishManager').classList.remove('hidden');
         btnP.className = activeClass;
       } else if (tab === 'examWise') {
@@ -648,6 +742,292 @@
         document.getElementById('sectionSummaryWise').classList.remove('hidden');
         btnSm.className = activeClass;
       }
+    }
+
+    // 🌟 0. അഡ്വാൻസ്ഡ് അനലിറ്റിക്സ് ഡാറ്റാ കളക്ഷൻ & ചാർട്ടുകൾ
+    async function loadAnalyticsData() {
+      try {
+        const [histRes, examsRes] = await Promise.all([
+          fetch(`${FIREBASE_DB_URL}/users_history.json?_t=${Date.now()}`).then(r => r.json()).catch(() => null),
+          fetch(`${FIREBASE_DB_URL}/exams.json?_t=${Date.now()}`).then(r => r.json()).catch(() => null)
+        ]);
+
+        const examCategoryLookup = {};
+        if (examsRes) {
+          const eList = Array.isArray(examsRes) ? examsRes : Object.values(examsRes);
+          eList.forEach(e => {
+            if (!e) return;
+            const t = cleanTitle(e.TITLE || e.title || '');
+            examCategoryLookup[t] = e.CATEGORY || e.category || 'പൊതുവിജ്ഞാനം';
+          });
+        }
+
+        rawTimelineData = [];
+        categoryStatsMap = {};
+
+        if (histRes) {
+          for (const [phone, userTests] of Object.entries(histRes)) {
+            if (userTests && typeof userTests === 'object') {
+              for (const test of Object.values(userTests)) {
+                if (!test) return;
+                
+                // തീയതി എക്സ്ട്രാക്റ്റ് ചെയ്യുന്നു
+                let dateStr = String(test.date || test.Date || '').trim();
+                let parsedDate = null;
+
+                if (test.timestamp) {
+                  parsedDate = new Date(test.timestamp);
+                } else if (dateStr) {
+                  const parts = dateStr.split(' ')[0].split('/');
+                  if (parts.length === 3) {
+                    parsedDate = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+                  } else {
+                    parsedDate = new Date(dateStr);
+                  }
+                }
+
+                if (parsedDate && !isNaN(parsedDate.getTime())) {
+                  const isoDate = parsedDate.toISOString().split('T')[0];
+                  rawTimelineData.push({
+                    date: isoDate,
+                    timestamp: parsedDate.getTime(),
+                    title: test.title || test.Title || 'Exam'
+                  });
+                }
+
+                // കാറ്റഗറി മാപ്പിംഗ്
+                const cTitle = cleanTitle(test.title || test.Title || '');
+                const cat = examCategoryLookup[cTitle] || 'മറ്റുള്ളവ';
+                categoryStatsMap[cat] = (categoryStatsMap[cat] || 0) + 1;
+              }
+            }
+          }
+        }
+
+        updateGrowthChart(currentActiveTimeframe);
+        renderCategoryDoughnut();
+        calculateInsights();
+
+      } catch (err) {
+        console.error("Analytics Load Error:", err);
+      }
+    }
+
+    function calculateInsights() {
+      const todayISO = new Date().toISOString().split('T')[0];
+      const todayCount = rawTimelineData.filter(d => d.date === todayISO).length;
+      document.getElementById('statTodayAttempts').innerText = todayCount;
+
+      // കഴിഞ്ഞ 7 ദിവസത്തെ കണക്ക്
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+      const recentAttempts = rawTimelineData.filter(d => d.timestamp >= sevenDaysAgo.getTime());
+      const dailyAvg = (recentAttempts.length / 7).toFixed(1);
+      document.getElementById('statWeeklyDailyAvg').innerText = dailyAvg;
+
+      // പീക്ക് ഡേ കണ്ടെത്തുന്നു
+      const dayFrequency = {};
+      rawTimelineData.forEach(d => {
+        dayFrequency[d.date] = (dayFrequency[d.date] || 0) + 1;
+      });
+
+      let peakDay = "None";
+      let maxCount = 0;
+      for (const [d, count] of Object.entries(dayFrequency)) {
+        if (count > maxCount) {
+          maxCount = count;
+          peakDay = `${d} (${count} പേർ)`;
+        }
+      }
+      document.getElementById('statPeakDay').innerText = peakDay;
+    }
+
+    function updateGrowthChart(timeframe) {
+      currentActiveTimeframe = timeframe;
+
+      const btnD = document.getElementById('btnFilterDaily');
+      const btnW = document.getElementById('btnFilterWeekly');
+      const btnM = document.getElementById('btnFilterMonthly');
+
+      btnD.className = "px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition cursor-pointer";
+      btnW.className = "px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition cursor-pointer";
+      btnM.className = "px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition cursor-pointer";
+
+      let labels = [];
+      let counts = [];
+
+      if (timeframe === 'daily') {
+        btnD.className = "px-3 py-1.5 rounded-lg font-bold bg-emerald-500 text-slate-950 transition cursor-pointer";
+
+        // കഴിഞ്ഞ 14 ദിവസങ്ങൾ തയ്യാറാക്കുന്നു
+        const dateMap = {};
+        for (let i = 13; i >= 0; i--) {
+          const d = new Date();
+          d.setDate(d.getDate() - i);
+          const iso = d.toISOString().split('T')[0];
+          const displayLabel = `${d.getDate()}/${d.getMonth() + 1}`;
+          dateMap[iso] = { label: displayLabel, count: 0 };
+        }
+
+        rawTimelineData.forEach(item => {
+          if (dateMap[item.date]) {
+            dateMap[item.date].count += 1;
+          }
+        });
+
+        labels = Object.values(dateMap).map(v => v.label);
+        counts = Object.values(dateMap).map(v => v.count);
+
+      } else if (timeframe === 'weekly') {
+        btnW.className = "px-3 py-1.5 rounded-lg font-bold bg-emerald-500 text-slate-950 transition cursor-pointer";
+
+        // കഴിഞ്ഞ 6 ആഴ്ചകൾ
+        const weekMap = {};
+        for (let i = 5; i >= 0; i--) {
+          const wName = `Week -${i}`;
+          weekMap[wName] = 0;
+        }
+
+        const now = Date.now();
+        rawTimelineData.forEach(item => {
+          const diffDays = Math.floor((now - item.timestamp) / (1000 * 60 * 60 * 24));
+          const weekIndex = Math.floor(diffDays / 7);
+          if (weekIndex >= 0 && weekIndex <= 5) {
+            const key = `Week -${weekIndex}`;
+            if (weekMap[key] !== undefined) weekMap[key] += 1;
+          }
+        });
+
+        labels = Object.keys(weekMap).reverse();
+        counts = Object.values(weekMap).reverse();
+
+      } else if (timeframe === 'monthly') {
+        btnM.className = "px-3 py-1.5 rounded-lg font-bold bg-emerald-500 text-slate-950 transition cursor-pointer";
+
+        const monthMap = {};
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+        for (let i = 5; i >= 0; i--) {
+          const d = new Date();
+          d.setMonth(d.getMonth() - i);
+          const mKey = `${months[d.getMonth()]} ${d.getFullYear()}`;
+          monthMap[mKey] = 0;
+        }
+
+        rawTimelineData.forEach(item => {
+          const d = new Date(item.timestamp);
+          const mKey = `${months[d.getMonth()]} ${d.getFullYear()}`;
+          if (monthMap[mKey] !== undefined) {
+            monthMap[mKey] += 1;
+          }
+        });
+
+        labels = Object.keys(monthMap);
+        counts = Object.values(monthMap);
+      }
+
+      renderLineChart(labels, counts, timeframe);
+    }
+
+    function renderLineChart(labels, counts, timeframe) {
+      const ctx = document.getElementById('growthLineChart').getContext('2d');
+
+      if (growthLineChartInstance) {
+        growthLineChartInstance.destroy();
+      }
+
+      // ഗ്രേഡിയന്റ് കളർ
+      const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+      gradient.addColorStop(0, 'rgba(16, 185, 129, 0.4)');
+      gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
+
+      growthLineChartInstance = new Chart(ctx, {
+        type: timeframe === 'monthly' ? 'bar' : 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'പരീക്ഷാർത്ഥികളുടെ എണ്ണം',
+            data: counts,
+            borderColor: '#10b981',
+            backgroundColor: gradient,
+            borderWidth: 3,
+            fill: true,
+            tension: 0.35,
+            pointBackgroundColor: '#10b981',
+            pointRadius: 4,
+            pointHoverRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#0f172a',
+              titleColor: '#10b981',
+              bodyColor: '#f8fafc',
+              borderColor: '#334155',
+              borderWidth: 1,
+              padding: 10,
+              displayColors: false
+            }
+          },
+          scales: {
+            x: {
+              grid: { color: 'rgba(51, 65, 85, 0.3)' },
+              ticks: { color: '#94a3b8', font: { size: 10 } }
+            },
+            y: {
+              beginAtZero: true,
+              grid: { color: 'rgba(51, 65, 85, 0.3)' },
+              ticks: { color: '#94a3b8', font: { size: 10 } }
+            }
+          }
+        }
+      });
+    }
+
+    function renderCategoryDoughnut() {
+      const ctx = document.getElementById('categoryDoughnutChart').getContext('2d');
+
+      if (categoryDoughnutChartInstance) {
+        categoryDoughnutChartInstance.destroy();
+      }
+
+      const labels = Object.keys(categoryStatsMap);
+      const data = Object.values(categoryStatsMap);
+
+      if (labels.length === 0) {
+        labels.push("ഡാറ്റ ലഭ്യമല്ല");
+        data.push(1);
+      }
+
+      categoryDoughnutChartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: labels,
+          datasets: [{
+            data: data,
+            backgroundColor: [
+              '#10b981', '#06b6d4', '#3b82f6', '#8b5cf6', '#f43f5e', '#f59e0b', '#14b8a6'
+            ],
+            borderWidth: 2,
+            borderColor: '#0f172a'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'right',
+              labels: { color: '#cbd5e1', font: { size: 10 }, boxWidth: 12 }
+            }
+          },
+          cutout: '65%'
+        }
+      });
     }
 
     function sortExamsNewestFirst(exams) {
@@ -987,7 +1367,7 @@
       renderSummaryTable(list);
     }
 
-    // 🌟 3. EXAM RANK LIST (ലയനം: live_ranks + ranks)
+    // 🌟 3. EXAM RANK LIST
     async function loadExamDropdownList() {
       try {
         const res = await fetch(`${FIREBASE_DB_URL}/exams.json?_t=${Date.now()}`);
@@ -1409,7 +1789,6 @@
           const correctNum = Number(parseCandidateCorrect(item)) || 0;
           const wrongNum = Number(parseCandidateWrong(item)) || 0;
           const scoreNum = parseCandidateScore(item);
-          
           const totalQ = item.totalQuestions || item.questions || (correctNum + wrongNum > 25 ? (correctNum + wrongNum) : 25);
           let scoreAccuracy = Math.max(0, Math.round((scoreNum / totalQ) * 100));
 
@@ -1572,7 +1951,6 @@
       }
     }
 
-    // 🌟 തിരുത്തിയ ഭാഗം: Modal തുറക്കാൻ remove('hidden') ഉപയോഗിച്ചു
     function openReportModal() {
       document.getElementById('reportedQuestionsModal').classList.remove('hidden');
       const listArea = document.getElementById('reportedListArea');
