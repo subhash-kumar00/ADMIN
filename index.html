@@ -109,7 +109,7 @@
         <div>
           <h1 class="font-bold text-base text-white flex items-center space-x-2">
             <span>SK PSC അഡ്മിൻ കൺട്രോൾ പാനൽ</span>
-            <span class="text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded font-mono font-bold">LIVE SYNC</span>
+            <span class="text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded font-mono font-bold">OPTIMIZED SYNC</span>
           </h1>
           <p class="text-[11px] text-slate-400">വളർച്ചാ അനലിറ്റിക്സും മാനേജ്‌‌മെന്റും</p>
         </div>
@@ -176,10 +176,9 @@
       </button>
     </div>
 
-    <!-- 🌟 0. പോർട്ടൽ ഗ്രോത്ത് ചാർട്ട് & അനലിറ്റിക്സ് (New Section) -->
+    <!-- 0. പോർട്ടൽ ഗ്രോത്ത് ചാർട്ട് & അനലിറ്റിക്സ് -->
     <div id="sectionAnalyticsDashboard" class="space-y-6">
       
-      <!-- മെയിൻ ചാർട്ട് കാർഡ് -->
       <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-7 shadow-2xl space-y-5">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
           <div>
@@ -187,10 +186,9 @@
               <span>📊</span>
               <span>വിദ്യാർത്ഥികളുടെ പരീക്ഷാ പങ്കാളിത്തം (Attendance Progress)</span>
             </h3>
-            <p class="text-xs text-slate-400 mt-0.5">ഓരോ ദിവസവും/ആഴ്ചയിലും കുട്ടികൾ പരീക്ഷ അറ്റൻഡ് ചെയ്തതിന്റെ ട്രെൻഡ്.</p>
+            <p class="text-xs text-slate-400 mt-0.5">ലൈവ് റാങ്ക് ലിസ്റ്റുകൾ അടിസ്ഥാനമാക്കിയുള്ള വിദ്യാർത്ഥികളുടെ അറ്റൻഡൻസ് ട്രെൻഡ്.</p>
           </div>
 
-          <!-- Timeframe Filters -->
           <div class="flex items-center space-x-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-xs">
             <button onclick="updateGrowthChart('daily')" id="btnFilterDaily" class="px-3 py-1.5 rounded-lg font-bold bg-emerald-500 text-slate-950 transition cursor-pointer">Daily (14 Days)</button>
             <button onclick="updateGrowthChart('weekly')" id="btnFilterWeekly" class="px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition cursor-pointer">Weekly</button>
@@ -198,15 +196,12 @@
           </div>
         </div>
 
-        <!-- ചാർട്ട് ഏരിയ -->
         <div class="relative w-full h-72 sm:h-80">
           <canvas id="growthLineChart"></canvas>
         </div>
       </div>
 
-      <!-- രണ്ട് സബ് ചാർട്ടുകൾ: കാറ്റഗറി അനലിറ്റിക്സ് & പെർഫോമൻസ് -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- വിഷയങ്ങളുടെ പൈ ചാർട്ട് -->
         <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xl space-y-4">
           <div class="border-b border-slate-800 pb-3">
             <h4 class="text-sm font-bold text-white flex items-center space-x-2">
@@ -220,7 +215,6 @@
           </div>
         </div>
 
-        <!-- പരീക്ഷാ അറ്റൻഡൻസ് സമ്മറി കാർഡ് -->
         <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xl space-y-4 flex flex-col justify-between">
           <div class="border-b border-slate-800 pb-3">
             <h4 class="text-sm font-bold text-white flex items-center space-x-2">
@@ -260,7 +254,7 @@
           <span class="text-[10px] text-slate-500 font-mono">portal_config/notice</span>
         </div>
         <p class="text-[11px] text-slate-400">
-          Enter അടിച്ച് പുതിയ ലൈനിലേക്ക് മെസ്സേജ് മാറ്റാം[cite: 8].
+          Enter അടിച്ച് പുതിയ ലൈനിലേക്ക് മെസ്സേജ് മാറ്റാം[cite: 14].
         </p>
         <div class="flex flex-col gap-2.5">
           <textarea id="adminNoticeInput" rows="3" placeholder="ഹോം പേജിൽ കാണിക്കേണ്ട പ്രധാന നോട്ടീസ് ടൈപ്പ് ചെയ്യുക..." class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 custom-scroll resize-y leading-relaxed font-sans"></textarea>
@@ -284,7 +278,7 @@
               <span>പരീക്ഷാ പബ്ലിഷിംഗ് & ഷെഡ്യൂളിംഗ് കൺട്രോളർ</span>
             </h3>
             <p class="text-xs text-slate-400">
-              <strong>"Publish"</strong> കൊടുത്താൽ മാത്രമേ തീയതി നൽകിയില്ലെങ്കിലും ഹോം പേജിൽ പരീക്ഷ വരൂ[cite: 8]. <strong>"Unpublish"</strong> ആക്കിയാൽ എപ്പോഴും മറഞ്ഞിരിക്കും[cite: 8].
+              <strong>"Publish"</strong> കൊടുത്താൽ മാത്രമേ തീയതി നൽകിയില്ലെങ്കിലും ഹോം പേജിൽ പരീക്ഷ വരൂ[cite: 14]. <strong>"Unpublish"</strong> ആക്കിയാൽ എപ്പോഴും മറഞ്ഞിരിക്കും[cite: 14].
             </p>
           </div>
           <input type="text" id="searchPublishInput" oninput="filterPublishExams()" placeholder="പരീക്ഷ തിരയുക..." class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500">
@@ -317,9 +311,9 @@
         <div>
           <h3 class="text-base sm:text-lg font-black text-white flex items-center space-x-2">
             <span>🏆</span>
-            <span>പരീക്ഷാഫലവും റാങ്ക് ലിസ്റ്റും (Merged: live_ranks + ranks)</span>
+            <span>പരീക്ഷാഫലവും റാങ്ക് ലിസ്റ്റും</span>
           </h3>
-          <p class="text-xs text-slate-400">മൊബൈൽ നമ്പർ വഴി ഡ്യൂപ്ലിക്കേഷൻ ഒഴിവാക്കി തയ്യാറാക്കിയ തത്സമയ ആദ്യ ശ്രമ റാങ്ക് ലിസ്റ്റ്[cite: 8].</p>
+          <p class="text-xs text-slate-400">ഡ്യൂപ്ലിക്കേഷൻ ഒഴിവാക്കി തയ്യാറാക്കിയ തത്സമയ ആദ്യ ശ്രമ റാങ്ക് ലിസ്റ്റ്[cite: 14].</p>
         </div>
         <div class="flex items-center space-x-2">
           <select id="examDropdownSelect" onchange="fetchSelectedExamDetails()" class="bg-slate-950 border border-slate-800 text-xs sm:text-sm text-emerald-400 font-bold rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-emerald-500 max-w-xs cursor-pointer">
@@ -621,8 +615,8 @@
     let reportedQuestionsList = [];
     let publishExamsList = [];
     let adminControlsCache = {};
+    let examsLookupMap = {};
 
-    // 🌟 ചാർട്ട് ഡാറ്റാ കാഷെ
     let rawTimelineData = [];
     let categoryStatsMap = {};
     let growthLineChartInstance = null;
@@ -744,65 +738,82 @@
       }
     }
 
-    // 🌟 0. അഡ്വാൻസ്ഡ് അനലിറ്റിക്സ് ഡാറ്റാ കളക്ഷൻ & ചാർട്ടുകൾ
+    // 🌟 ഒപ്റ്റിമൈസ്ഡ് അനലിറ്റിക്സ്: users_history ബൾക്ക് ഡൗൺലോഡ് ചെയ്യാതെ ranks/live_ranks വെച്ച് ചാർട്ട് നിർമ്മിക്കുന്നു
     async function loadAnalyticsData() {
       try {
-        const [histRes, examsRes] = await Promise.all([
-          fetch(`${FIREBASE_DB_URL}/users_history.json?_t=${Date.now()}`).then(r => r.json()).catch(() => null),
-          fetch(`${FIREBASE_DB_URL}/exams.json?_t=${Date.now()}`).then(r => r.json()).catch(() => null)
+        const [ranksRes, liveRanksRes, examsRes] = await Promise.all([
+          fetch(`${FIREBASE_DB_URL}/ranks.json`).then(r => r.json()).catch(() => null),
+          fetch(`${FIREBASE_DB_URL}/live_ranks.json`).then(r => r.json()).catch(() => null),
+          fetch(`${FIREBASE_DB_URL}/exams.json`).then(r => r.json()).catch(() => null)
         ]);
 
         const examCategoryLookup = {};
+        examsLookupMap = {};
+
         if (examsRes) {
           const eList = Array.isArray(examsRes) ? examsRes : Object.values(examsRes);
           eList.forEach(e => {
             if (!e) return;
-            const t = cleanTitle(e.TITLE || e.title || '');
-            examCategoryLookup[t] = e.CATEGORY || e.category || 'പൊതുവിജ്ഞാനം';
+            const t = e.TITLE || e.title || '';
+            const cKey = cleanTitle(t);
+            const rawK = cleanTitle(e.KEY || e.key || '');
+            const cat = e.CATEGORY || e.category || 'പൊതുവിജ്ഞാനം';
+            
+            examCategoryLookup[cKey] = cat;
+            if (rawK) examCategoryLookup[rawK] = cat;
+
+            examsLookupMap[cKey] = { title: t, key: e.KEY || e.key || '' };
+            if (rawK) examsLookupMap[rawK] = { title: t, key: e.KEY || e.key || '' };
           });
         }
 
         rawTimelineData = [];
         categoryStatsMap = {};
 
-        if (histRes) {
-          for (const [phone, userTests] of Object.entries(histRes)) {
-            if (userTests && typeof userTests === 'object') {
-              for (const test of Object.values(userTests)) {
-                if (!test) return;
-                
-                // തീയതി എക്സ്ട്രാക്റ്റ് ചെയ്യുന്നു
-                let dateStr = String(test.date || test.Date || '').trim();
-                let parsedDate = null;
-
-                if (test.timestamp) {
-                  parsedDate = new Date(test.timestamp);
-                } else if (dateStr) {
-                  const parts = dateStr.split(' ')[0].split('/');
-                  if (parts.length === 3) {
-                    parsedDate = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
-                  } else {
-                    parsedDate = new Date(dateStr);
-                  }
-                }
-
-                if (parsedDate && !isNaN(parsedDate.getTime())) {
-                  const isoDate = parsedDate.toISOString().split('T')[0];
-                  rawTimelineData.push({
-                    date: isoDate,
-                    timestamp: parsedDate.getTime(),
-                    title: test.title || test.Title || 'Exam'
-                  });
-                }
-
-                // കാറ്റഗറി മാപ്പിംഗ്
-                const cTitle = cleanTitle(test.title || test.Title || '');
-                const cat = examCategoryLookup[cTitle] || 'മറ്റുള്ളവ';
-                categoryStatsMap[cat] = (categoryStatsMap[cat] || 0) + 1;
+        const pool = [];
+        const processNode = (nodeObj) => {
+          if (!nodeObj || typeof nodeObj !== 'object') return;
+          for (const [examKey, entries] of Object.entries(nodeObj)) {
+            if (entries && typeof entries === 'object') {
+              for (const item of Object.values(entries)) {
+                if (!item) continue;
+                pool.push({ ...item, examKey: examKey });
               }
             }
           }
-        }
+        };
+
+        processNode(ranksRes);
+        processNode(liveRanksRes);
+
+        pool.forEach(test => {
+          let dateStr = String(test.date || test.Date || '').trim();
+          let parsedDate = null;
+
+          if (test.timestamp) {
+            parsedDate = new Date(test.timestamp);
+          } else if (dateStr) {
+            const parts = dateStr.split(' ')[0].split('/');
+            if (parts.length === 3) {
+              parsedDate = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+            } else {
+              parsedDate = new Date(dateStr);
+            }
+          }
+
+          if (parsedDate && !isNaN(parsedDate.getTime())) {
+            const isoDate = parsedDate.toISOString().split('T')[0];
+            rawTimelineData.push({
+              date: isoDate,
+              timestamp: parsedDate.getTime(),
+              title: test.title || test.Title || test.examKey || 'Exam'
+            });
+          }
+
+          const cTitle = cleanTitle(test.title || test.Title || test.examKey || '');
+          const cat = examCategoryLookup[cTitle] || 'പൊതുവിജ്ഞാനം';
+          categoryStatsMap[cat] = (categoryStatsMap[cat] || 0) + 1;
+        });
 
         updateGrowthChart(currentActiveTimeframe);
         renderCategoryDoughnut();
@@ -818,14 +829,12 @@
       const todayCount = rawTimelineData.filter(d => d.date === todayISO).length;
       document.getElementById('statTodayAttempts').innerText = todayCount;
 
-      // കഴിഞ്ഞ 7 ദിവസത്തെ കണക്ക്
       const sevenDaysAgo = new Date();
       sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
       const recentAttempts = rawTimelineData.filter(d => d.timestamp >= sevenDaysAgo.getTime());
       const dailyAvg = (recentAttempts.length / 7).toFixed(1);
       document.getElementById('statWeeklyDailyAvg').innerText = dailyAvg;
 
-      // പീക്ക് ഡേ കണ്ടെത്തുന്നു
       const dayFrequency = {};
       rawTimelineData.forEach(d => {
         dayFrequency[d.date] = (dayFrequency[d.date] || 0) + 1;
@@ -859,7 +868,6 @@
       if (timeframe === 'daily') {
         btnD.className = "px-3 py-1.5 rounded-lg font-bold bg-emerald-500 text-slate-950 transition cursor-pointer";
 
-        // കഴിഞ്ഞ 14 ദിവസങ്ങൾ തയ്യാറാക്കുന്നു
         const dateMap = {};
         for (let i = 13; i >= 0; i--) {
           const d = new Date();
@@ -881,7 +889,6 @@
       } else if (timeframe === 'weekly') {
         btnW.className = "px-3 py-1.5 rounded-lg font-bold bg-emerald-500 text-slate-950 transition cursor-pointer";
 
-        // കഴിഞ്ഞ 6 ആഴ്ചകൾ
         const weekMap = {};
         for (let i = 5; i >= 0; i--) {
           const wName = `Week -${i}`;
@@ -936,7 +943,6 @@
         growthLineChartInstance.destroy();
       }
 
-      // ഗ്രേഡിയന്റ് കളർ
       const gradient = ctx.createLinearGradient(0, 0, 0, 300);
       gradient.addColorStop(0, 'rgba(16, 185, 129, 0.4)');
       gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
@@ -1035,15 +1041,15 @@
       return exams.slice().reverse();
     }
 
-    // 🌟 1. PUBLISH MANAGER
+    // 1. PUBLISH MANAGER
     async function loadPublishManagerData() {
       const tbody = document.getElementById('publishTableBody');
       tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-400">ഫയർബേസിൽ നിന്നും വിവരങ്ങൾ ശേഖരിക്കുന്നു...</td></tr>';
 
       try {
         const [examsRes, configRes] = await Promise.all([
-          fetch(`${FIREBASE_DB_URL}/exams.json?_t=${Date.now()}`).then(r => r.json()),
-          fetch(`${FIREBASE_DB_URL}/portal_config.json?_t=${Date.now()}`).then(r => r.json()).catch(() => ({}))
+          fetch(`${FIREBASE_DB_URL}/exams.json`).then(r => r.json()),
+          fetch(`${FIREBASE_DB_URL}/portal_config.json`).then(r => r.json()).catch(() => ({}))
         ]);
 
         if (configRes && configRes.notice) {
@@ -1229,10 +1235,10 @@
       renderPublishTable(filtered);
     }
 
-    // 🌟 2. DASHBOARD DATA
+    // 2. DASHBOARD DATA
     async function loadDashboardData() {
       try {
-        const usersRes = await fetch(`${FIREBASE_DB_URL}/users.json?_t=${Date.now()}`);
+        const usersRes = await fetch(`${FIREBASE_DB_URL}/users.json`);
         const usersData = await usersRes.json();
 
         let rawList = [];
@@ -1367,10 +1373,10 @@
       renderSummaryTable(list);
     }
 
-    // 🌟 3. EXAM RANK LIST
+    // 3. EXAM RANK LIST (സ്മാർട്ട് ഇംഗ്ലീഷ് കീ + മലയാളം മാച്ചിംഗ്)
     async function loadExamDropdownList() {
       try {
-        const res = await fetch(`${FIREBASE_DB_URL}/exams.json?_t=${Date.now()}`);
+        const res = await fetch(`${FIREBASE_DB_URL}/exams.json`);
         const data = await res.json();
         const select = document.getElementById('examDropdownSelect');
 
@@ -1386,6 +1392,9 @@
           const opt = document.createElement('option');
           opt.value = title;
           opt.innerText = title;
+          if (ex.KEY || ex.key) {
+            opt.setAttribute('data-key', ex.KEY || ex.key);
+          }
           select.appendChild(opt);
         });
       } catch (err) {
@@ -1394,7 +1403,11 @@
     }
 
     async function fetchSelectedExamDetails() {
-      const examTitle = document.getElementById('examDropdownSelect').value;
+      const select = document.getElementById('examDropdownSelect');
+      const examTitle = select.value;
+      const selectedOption = select.options[select.selectedIndex];
+      const examKeyAttr = selectedOption ? (selectedOption.getAttribute('data-key') || '') : '';
+
       const tbody = document.getElementById('examRankTableBody');
       const overview = document.getElementById('examOverviewBox');
       const downloadBtn = document.getElementById('downloadRankPdfBtn');
@@ -1406,61 +1419,43 @@
         return;
       }
 
-      tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-400">ലൈവ് ranks & ranks നോഡുകൾ സംയോജിപ്പിച്ചു ശേഖരിക്കുന്നു...</td></tr>';
-      const cleanKey = cleanTitle(examTitle);
+      tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-400">റാങ്ക് ലിസ്റ്റ് ശേഖരിക്കുന്നു...</td></tr>';
+      
+      const searchKeys = [];
+      if (examKeyAttr) searchKeys.push(cleanTitle(examKeyAttr));
+      const cleanExamTitle = cleanTitle(examTitle);
+      if (!searchKeys.includes(cleanExamTitle)) searchKeys.push(cleanExamTitle);
 
       try {
-        const [liveRes, ranksRes] = await Promise.all([
-          fetch(`${FIREBASE_DB_URL}/live_ranks/${cleanKey}.json?_t=${Date.now()}`).then(r => r.json()).catch(() => null),
-          fetch(`${FIREBASE_DB_URL}/ranks/${cleanKey}.json?_t=${Date.now()}`).then(r => r.json()).catch(() => null)
-        ]);
+        let ranks = [];
 
-        const mergedMap = {};
+        for (const k of searchKeys) {
+          const [liveRes, ranksRes] = await Promise.all([
+            fetch(`${FIREBASE_DB_URL}/live_ranks/${k}.json`).then(r => r.json()).catch(() => null),
+            fetch(`${FIREBASE_DB_URL}/ranks/${k}.json`).then(r => r.json()).catch(() => null)
+          ]);
 
-        if (liveRes) {
-          const lList = Array.isArray(liveRes) ? liveRes : Object.values(liveRes);
-          lList.forEach(r => {
-            const p = extractPhone(r);
-            if (p) mergedMap[p] = { ...r, phone: p };
-          });
-        }
+          const mergedMap = {};
 
-        if (ranksRes) {
-          const rList = Array.isArray(ranksRes) ? ranksRes : Object.values(ranksRes);
-          rList.forEach(r => {
-            const p = extractPhone(r);
-            if (p && !mergedMap[p]) mergedMap[p] = { ...r, phone: p };
-          });
-        }
+          if (liveRes) {
+            const lList = Array.isArray(liveRes) ? liveRes : Object.values(liveRes);
+            lList.forEach(r => {
+              const p = extractPhone(r);
+              if (p) mergedMap[p] = { ...r, phone: p };
+            });
+          }
 
-        let ranks = Object.values(mergedMap);
+          if (ranksRes) {
+            const rList = Array.isArray(ranksRes) ? ranksRes : Object.values(ranksRes);
+            rList.forEach(r => {
+              const p = extractPhone(r);
+              if (p && !mergedMap[p]) mergedMap[p] = { ...r, phone: p };
+            });
+          }
 
-        if (ranks.length === 0) {
-          const histRes = await fetch(`${FIREBASE_DB_URL}/users_history.json?_t=${Date.now()}`);
-          const histData = await histRes.json();
-          if (histData) {
-            for (const [uPhone, uExams] of Object.entries(histData)) {
-              if (uExams && typeof uExams === 'object') {
-                for (const examItem of Object.values(uExams)) {
-                  const itemTitle = cleanTitle(examItem.title || examItem.Title || '');
-                  if (itemTitle === cleanKey || itemTitle.includes(cleanKey) || cleanKey.includes(itemTitle)) {
-                    const p10 = uPhone.slice(-10);
-                    if (!mergedMap[p10]) {
-                      mergedMap[p10] = {
-                        phone: p10,
-                        name: examItem.userName || examItem.name || 'വിദ്യാർത്ഥി',
-                        score: parseCandidateScore(examItem),
-                        correct: parseCandidateCorrect(examItem),
-                        wrong: parseCandidateWrong(examItem),
-                        date: examItem.date || examItem.Date || '-'
-                      };
-                    }
-                    break;
-                  }
-                }
-              }
-            }
+          if (Object.keys(mergedMap).length > 0) {
             ranks = Object.values(mergedMap);
+            break;
           }
         }
 
@@ -1474,24 +1469,6 @@
           tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-500">ഈ പരീക്ഷയിൽ ഇതുവരെ ആരും പങ്കെടുത്തിട്ടില്ല.</td></tr>';
           return;
         }
-
-        await Promise.all(ranks.map(async (r) => {
-          if (parseCandidateCorrect(r) === '-' || parseCandidateWrong(r) === '-') {
-            try {
-              const ures = await fetch(`${FIREBASE_DB_URL}/users_history/${r.phone}.json`);
-              const udata = await ures.json();
-              if (udata) {
-                const histList = Object.values(udata);
-                const matched = histList.find(h => cleanTitle(h.title) === cleanKey || cleanTitle(h.title).includes(cleanKey) || cleanKey.includes(cleanTitle(h.title)));
-                if (matched) {
-                  if (parseCandidateCorrect(r) === '-') r.correct = parseCandidateCorrect(matched);
-                  if (parseCandidateWrong(r) === '-') r.wrong = parseCandidateWrong(matched);
-                  if (!r.date || r.date === '-') r.date = matched.date || '-';
-                }
-              }
-            } catch (e) {}
-          }
-        }));
 
         ranks.sort((a, b) => parseCandidateScore(b) - parseCandidateScore(a));
 
@@ -1613,7 +1590,7 @@
       html2pdf().set(opt).from(element).save();
     }
 
-    // 🌟 4. STUDENT SEARCH
+    // 🌟 4. STUDENT SEARCH (Targeted Single-Node Fetch)
     async function searchStudentDetails() {
       const rawInput = document.getElementById('studentSearchInput').value.trim();
 
@@ -1667,11 +1644,8 @@
           return;
         }
 
-        const [histRes, liveRanksRes, ranksRes] = await Promise.all([
-          fetch(`${FIREBASE_DB_URL}/users_history/${targetPhone}.json?_t=${Date.now()}`).then(r => r.json()).catch(() => null),
-          fetch(`${FIREBASE_DB_URL}/live_ranks.json?_t=${Date.now()}`).then(r => r.json()).catch(() => null),
-          fetch(`${FIREBASE_DB_URL}/ranks.json?_t=${Date.now()}`).then(r => r.json()).catch(() => null)
-        ]);
+        // 🔥 മുഴുവൻ users_history-ക്ക് പകരം ആ കുട്ടിയുടെ നോഡ് മാത്രം ഡൗൺലോഡ് ചെയ്യുന്നു
+        const histRes = await fetch(`${FIREBASE_DB_URL}/users_history/${targetPhone}.json`).then(r => r.json()).catch(() => null);
 
         let rawAttemptsList = [];
 
@@ -1679,24 +1653,6 @@
           Object.values(histRes).forEach(h => {
             if (h && (h.title || h.Title)) rawAttemptsList.push(h);
           });
-        }
-
-        if (liveRanksRes) {
-          for (const [eKey, examRanks] of Object.entries(liveRanksRes)) {
-            if (examRanks && typeof examRanks === 'object') {
-              const entry = examRanks[targetPhone] || Object.values(examRanks).find(r => extractPhone(r) === targetPhone);
-              if (entry) rawAttemptsList.push({ ...entry, title: entry.title || eKey.replace(/_/g, ' ') });
-            }
-          }
-        }
-
-        if (ranksRes) {
-          for (const [eKey, examRanks] of Object.entries(ranksRes)) {
-            if (examRanks && typeof examRanks === 'object') {
-              const entry = examRanks[targetPhone] || Object.values(examRanks).find(r => extractPhone(r) === targetPhone);
-              if (entry) rawAttemptsList.push({ ...entry, title: entry.title || eKey.replace(/_/g, ' ') });
-            }
-          }
         }
 
         const uniqueAttemptsMap = new Map();
@@ -1885,7 +1841,7 @@
           <td class="py-1 px-1.5 border-r border-slate-200 font-bold text-slate-900 text-[10px] truncate">
             ${h.title || h.Title || 'Exam'}${badgeText}
           </td>
-          <td class="py-1 px-1 border-r border-slate-200 text-center font-mono font-bold text-emerald-800 text-[10px]">${scoreNum}</td>
+          <td class="py-1 px-1 border-r border-slate-200 text-center font-mono font-bold text-emerald-800 text-[9.5px]">${scoreNum}</td>
           <td class="py-1 px-1 border-r border-slate-200 text-center font-mono text-emerald-700 text-[10px]">${correctNum}</td>
           <td class="py-1 px-1 border-r border-slate-200 text-center font-mono text-rose-700 text-[10px]">${wrongNum}</td>
           <td class="py-1 px-1 border-r border-slate-200 text-center font-mono font-bold text-teal-700 text-[10px]">${scoreAccuracy}%</td>
@@ -1907,10 +1863,10 @@
       html2pdf().set(opt).from(element).save();
     }
 
-    // 🌟 5. REPORTED QUESTIONS
+    // 5. REPORTED QUESTIONS
     async function loadReportedQuestions() {
       try {
-        const res = await fetch(`${FIREBASE_DB_URL}/reported_questions.json?_t=${Date.now()}`);
+        const res = await fetch(`${FIREBASE_DB_URL}/reported_questions.json`);
         const data = await res.json();
 
         if (data) {
