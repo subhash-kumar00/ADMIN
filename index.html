@@ -111,14 +111,21 @@
             <span>SK PSC അഡ്മിൻ കൺട്രോൾ പാനൽ</span>
             <span class="text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded font-mono font-bold">ALL-IN-ONE STUDIO</span>
           </h1>
-          <p class="text-[11px] text-slate-400">വളർച്ചാ അനലിറ്റിക്സും എക്സാം & JSON മാനേജ്‌‌മെന്റും</p>
+          <p class="text-[11px] text-slate-400">വളർച്ചാ അനലിറ്റിക്സും എക്സാം & ഡൗട്ട് മാനേജ്‌‌മെന്റും</p>
         </div>
       </div>
       
-      <div class="flex items-center space-x-3">
-        <button onclick="openReportModal()" id="reportedNotificationBtn" class="relative bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/40 text-rose-400 px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 shadow cursor-pointer">
+      <div class="flex items-center space-x-2.5 sm:space-x-3">
+        <!-- 🌟 വിദ്യാർത്ഥി സംശയങ്ങൾ നോട്ടിഫിക്കേഷൻ ബട്ടൺ -->
+        <button onclick="switchTab('studentChatDesk')" id="chatNotificationBtn" class="relative bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 shadow cursor-pointer">
+          <span class="text-sm">💬</span>
+          <span class="hidden sm:inline">ഡൗട്ട് ചാറ്റ്</span>
+          <span id="badgeChatCount" class="hidden bg-rose-600 text-white font-black text-[10px] px-2 py-0.2 rounded-full pulse-red font-mono">0</span>
+        </button>
+
+        <button onclick="openReportModal()" id="reportedNotificationBtn" class="relative bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/40 text-rose-400 px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 shadow cursor-pointer">
           <span class="text-sm">🚨</span>
-          <span class="hidden sm:inline">ചോദ്യ റിപ്പോർട്ടുകൾ</span>
+          <span class="hidden sm:inline">ചോദ്യങ്ങൾ</span>
           <span id="badgeReportCount" class="bg-rose-600 text-white font-black text-[10px] px-2 py-0.5 rounded-full pulse-red font-mono">0</span>
         </button>
 
@@ -147,8 +154,8 @@
         <span id="statAvailableExams" class="text-2xl font-black text-cyan-400 font-mono">...</span>
       </div>
       <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow">
-        <span class="text-[11px] text-slate-400 block font-semibold">പരിഹരിക്കാനുള്ള ചോദ്യങ്ങൾ</span>
-        <span id="statReportedQCount" class="text-2xl font-black text-rose-400 font-mono">0</span>
+        <span class="text-[11px] text-slate-400 block font-semibold">പുതിയ സംശയങ്ങൾ (Doubts)</span>
+        <span id="statPendingChatCount" class="text-2xl font-black text-emerald-400 font-mono">0</span>
       </div>
     </div>
 
@@ -160,7 +167,13 @@
       </button>
       <button onclick="switchTab('publishManager')" id="tabBtnPublish" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap cursor-pointer">
         <span>📢</span>
-        <span>പരീക്ഷാ പബ്ലിഷർ & JSON അപ്‌ലോഡർ</span>
+        <span>പരീക്ഷാ പബ്ലിഷർ & ബ്ലിങ്ക് മെസ്സേജ്</span>
+      </button>
+      <!-- 🌟 പുതിയ ടാബ്: ഡൗട്ട് ചാറ്റ് മാനേജർ -->
+      <button onclick="switchTab('studentChatDesk')" id="tabBtnChat" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap cursor-pointer relative">
+        <span>💬</span>
+        <span>സ്റ്റുഡന്റ് ഡൗട്ട് ചാറ്റ്</span>
+        <span id="tabChatDot" class="hidden w-2 h-2 rounded-full bg-rose-500 absolute top-1.5 right-1.5 animate-ping"></span>
       </button>
       <button onclick="switchTab('examWise')" id="tabBtnExam" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap cursor-pointer">
         <span>🏆</span>
@@ -244,17 +257,48 @@
     <!-- 1. PUBLISH MANAGER & ALL-IN-ONE EXAM CREATOR -->
     <div id="sectionPublishManager" class="hidden bg-slate-900 border border-emerald-500/30 rounded-3xl p-5 sm:p-7 space-y-6 shadow-2xl">
       
-      <!-- ഹോം പേജ് നോട്ടീസ് കൺട്രോളർ -->
+      <!-- 🌟 കൺട്രോളർ 1: ഹോം പേജ് റെഡ് ബ്ലിങ്ക് മെസ്സേജ് കൺട്രോളർ -->
+      <div class="bg-slate-950 border-2 border-rose-500/40 p-4 sm:p-5 rounded-2xl space-y-3 shadow-lg">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div class="flex items-center space-x-2">
+            <span class="w-3 h-3 rounded-full bg-rose-500 animate-ping"></span>
+            <h4 class="text-xs sm:text-sm font-bold text-white">
+              ഹോം പേജ് റെഡ് ബ്ലിങ്ക് മെസ്സേജ് കൺട്രോളർ (Latest Alert)
+            </h4>
+          </div>
+          <span class="text-[10px] text-slate-500 font-mono">portal_config/blink_message</span>
+        </div>
+        <p class="text-[11px] text-slate-400">
+          ഹോം പേജിന്റെ മുകളിൽ ചുവപ്പ് നിറത്തിൽ ബ്ലിങ്ക് ചെയ്തു കാണിക്കേണ്ട മെസ്സേജ് നൽകുക. മെസ്സേജ് താല്പര്യമില്ലെങ്കിൽ 'ഹൈഡ്' ചെയ്യാം.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-2.5">
+          <input type="text" id="adminBlinkMessageInput" placeholder="ഉദാ: 2027 LDC & LGS EXAMS COMMING SOON" class="flex-1 bg-slate-900 border border-rose-500/30 rounded-xl px-4 py-2.5 text-xs text-rose-300 font-bold focus:outline-none focus:border-rose-400 tracking-wide uppercase">
+          <div class="flex items-center space-x-2">
+            <button onclick="setBlinkDefaultMessage()" class="px-3.5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold rounded-xl text-xs transition cursor-pointer whitespace-nowrap">
+              ഡിഫോൾട്ട്
+            </button>
+            <button onclick="hideBlinkMessage()" class="px-3.5 py-2.5 bg-rose-950/60 border border-rose-500/30 hover:bg-rose-900 text-rose-300 font-bold rounded-xl text-xs transition cursor-pointer whitespace-nowrap">
+              ഹൈഡ് (Hide)
+            </button>
+            <button onclick="saveBlinkMessage()" id="btnSaveBlink" class="px-5 py-2.5 bg-gradient-to-r from-rose-500 to-amber-500 hover:from-rose-600 text-slate-950 font-black rounded-xl text-xs transition shadow flex items-center justify-center space-x-1.5 whitespace-nowrap cursor-pointer">
+              <span>💾</span>
+              <span>സേവ് ചെയ്യുക</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- കൺട്രോളർ 2: ഹോം പേജ് സാധാരണ നോട്ടീസ് ബോർഡ് കൺട്രോളർ -->
       <div class="bg-slate-950 border border-slate-800 p-4 sm:p-5 rounded-2xl space-y-3">
         <div class="flex items-center justify-between">
           <h4 class="text-xs sm:text-sm font-bold text-white flex items-center space-x-2">
             <span>📢</span>
-            <span>ഹോം പേജ് നോട്ടീസ് മെസ്സേജ് കൺട്രോളർ</span>
+            <span>ഹോം പേജ് സാധാരണ നോട്ടീസ് ബോർഡ് കൺട്രോളർ</span>
           </h4>
           <span class="text-[10px] text-slate-500 font-mono">portal_config/notice</span>
         </div>
         <div class="flex flex-col gap-2.5">
-          <textarea id="adminNoticeInput" rows="2" placeholder="ഹോം പേജിൽ കാണിക്കേണ്ട പ്രധാന നോട്ടീസ് ടൈപ്പ് ചെയ്യുക..." class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 custom-scroll resize-y leading-relaxed font-sans"></textarea>
+          <textarea id="adminNoticeInput" rows="2" placeholder="ഹോം പേജ് നോട്ടീസ് ബോർഡിൽ കാണിക്കേണ്ട അറിയിപ്പ് ടൈപ്പ് ചെയ്യുക..." class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 custom-scroll resize-y leading-relaxed font-sans"></textarea>
           <div class="flex justify-end gap-2.5">
             <button onclick="clearNoticeMessage()" class="px-4 py-2 bg-rose-950/60 border border-rose-500/30 hover:bg-rose-900 text-rose-300 font-bold rounded-xl text-xs transition cursor-pointer">
               ക്ലിയർ
@@ -267,7 +311,7 @@
         </div>
       </div>
 
-      <!-- 🌟 ഓൾ-ഇൻ-വൺ എക്സാം & ചോദ്യങ്ങൾ അപ്‌ലോഡർ (All-in-One Exam & Questions Creator) -->
+      <!-- ഓൾ-ഇൻ-വൺ എക്സാം & ചോദ്യങ്ങൾ അപ്‌ലോഡർ -->
       <div class="bg-slate-950 border-2 border-cyan-500/40 p-4 sm:p-6 rounded-3xl space-y-4 shadow-xl">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
@@ -284,7 +328,6 @@
         </div>
 
         <form id="addNewExamForm" onsubmit="createNewExamInFirebase(event)" class="hidden pt-4 border-t border-slate-800 space-y-5 text-xs">
-          
           <!-- Row 1: Basic Info & Folders -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
             <div>
@@ -316,7 +359,7 @@
             </div>
           </div>
 
-          <!-- Row 2: Links (Common HTML Link + Google Docs PDF Link) -->
+          <!-- Row 2: Links -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-900/60 p-3.5 rounded-2xl border border-slate-800">
             <div>
               <div class="flex items-center justify-between mb-1">
@@ -362,7 +405,7 @@
             </div>
           </div>
 
-          <!-- Row 4: 🌟 QUESTIONS JSON UPLOAD / PASTE AREA -->
+          <!-- Row 4: QUESTIONS JSON UPLOAD / PASTE AREA -->
           <div class="bg-slate-900 border border-cyan-500/30 p-4 rounded-2xl space-y-3">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-2.5">
               <div>
@@ -375,7 +418,7 @@
 
               <div class="flex items-center space-x-2">
                 <label class="text-[10px] text-slate-400 font-mono">Firebase Questions Node:</label>
-                <input type="text" id="firebaseQuestionsNodeInput" value="questions" placeholder="questions" class="bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-emerald-400 font-mono w-32 focus:outline-none focus:border-emerald-500" title="ഫയർബേസിൽ ചോദ്യങ്ങൾ സേവ് ചെയ്യുന്ന ഫോൾഡർ (ഉദാ: questions അല്ലെങ്കിൽ ROOT)">
+                <input type="text" id="firebaseQuestionsNodeInput" value="questions" placeholder="questions" class="bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-emerald-400 font-mono w-32 focus:outline-none focus:border-emerald-500" title="ഫയർബേസിൽ ചോദ്യങ്ങൾ സേവ് ചെയ്യുന്ന ഫോൾഡർ">
               </div>
             </div>
 
@@ -445,7 +488,77 @@
       </div>
     </div>
 
-    <!-- 2. EXAM RANK LIST -->
+    <!-- 🌟 2. പുതിയ ടാബ്: STUDENT DOUBT CHAT DESK (വിദ്യാർത്ഥി സംശയങ്ങളും മറുപടികളും) -->
+    <div id="sectionStudentChatDesk" class="hidden bg-slate-900 border border-emerald-500/30 rounded-3xl p-5 sm:p-7 space-y-5 shadow-2xl">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="text-xl">💬</span>
+            <h3 class="text-base sm:text-lg font-black text-white">വിദ്യാർത്ഥികളുടെ സംശയങ്ങൾ & മെന്റർ റിപ്ലൈ ഡെസ്ക്</h3>
+          </div>
+          <p class="text-xs text-slate-400 mt-0.5">ഹോം പേജിൽ നിന്ന് കുട്ടികൾ ചോദിക്കുന്ന സംശയങ്ങൾക്ക് ഇവിടെനിന്ന് നേരിട്ട് മറുപടി നൽകാം. (24 മണിക്കൂർ വാലിഡിറ്റി)</p>
+        </div>
+        <div class="flex items-center space-x-2">
+          <button onclick="loadStudentChatsAdmin(true)" class="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl transition shadow flex items-center space-x-1 cursor-pointer">
+            <span>🔄</span>
+            <span>ചാറ്റ് പുതുക്കുക</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ചാറ്റ് ലേഔട്ട്: ഇടത് വശത്ത് കുട്ടികളുടെ ലിസ്റ്റ് | വലത് വശത്ത് ചാറ്റ് വിൻഡോ -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 min-h-[500px]">
+        
+        <!-- Left Column: Student Chat List (4 cols) -->
+        <div class="lg:col-span-5 bg-slate-950 border border-slate-800 rounded-2xl p-3 flex flex-col space-y-2">
+          <div class="p-2 border-b border-slate-800/80">
+            <input type="text" id="chatSearchInput" oninput="filterChatStudentsList()" placeholder="കുട്ടിയുടെ പേരോ നമ്പറോ തിരയുക..." class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+          </div>
+          
+          <div id="chatStudentsListArea" class="flex-1 overflow-y-auto custom-scroll space-y-1.5 pr-1 max-h-[460px]">
+            <p class="text-xs text-slate-500 text-center py-10">ചാറ്റുകൾ ശേഖരിക്കുന്നു...</p>
+          </div>
+        </div>
+
+        <!-- Right Column: Active Conversation Area (7 cols) -->
+        <div class="lg:col-span-7 bg-slate-950 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between space-y-3">
+          
+          <!-- Chat Header -->
+          <div id="activeChatHeader" class="border-b border-slate-800 pb-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-black text-sm border border-emerald-500/30">
+                👤
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-white" id="activeChatStudentName">വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക</h4>
+                <p class="text-xs font-mono text-slate-400" id="activeChatStudentPhone">-</p>
+              </div>
+            </div>
+            <span class="text-[10px] text-amber-400/90 font-mono bg-amber-950/40 px-2 py-0.5 rounded border border-amber-500/30">⏳ 24 Hours Active</span>
+          </div>
+
+          <!-- Messages Stream Box -->
+          <div id="activeChatMessagesBox" class="flex-1 overflow-y-auto custom-scroll bg-slate-900/60 border border-slate-800/80 rounded-2xl p-4 space-y-3 max-h-[360px] min-h-[300px]">
+            <div class="text-center py-16 text-slate-500 text-xs">
+              ഇടതുവശത്ത് നിന്ന് ഒരു വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക.
+            </div>
+          </div>
+
+          <!-- Reply Input Box -->
+          <form id="adminReplyForm" onsubmit="sendAdminReply(event)" class="flex items-center space-x-2 pt-1">
+            <input type="text" id="adminReplyInput" disabled placeholder="മറുപടി ഇവിടെ ടൈപ്പ് ചെയ്യുക..." class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-emerald-500 disabled:opacity-40">
+            <button type="submit" id="adminReplyBtn" disabled class="px-5 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 text-slate-950 font-black rounded-xl text-xs transition shadow cursor-pointer whitespace-nowrap disabled:opacity-40 flex items-center space-x-1">
+              <span>മറുപടി നൽകുക</span>
+              <span>➤</span>
+            </button>
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 3. EXAM RANK LIST -->
     <div id="sectionExamWise" class="hidden bg-slate-900 border border-emerald-500/30 rounded-3xl p-5 sm:p-7 space-y-5 shadow-2xl">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
         <div>
@@ -502,7 +615,7 @@
       </div>
     </div>
 
-    <!-- 3. STUDENT REPORT -->
+    <!-- 4. STUDENT REPORT -->
     <div id="sectionStudentWise" class="hidden bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-7 space-y-5 shadow-2xl">
       <div class="flex items-center justify-between border-b border-slate-800 pb-3">
         <div class="flex items-center space-x-2">
@@ -566,7 +679,7 @@
       </div>
     </div>
 
-    <!-- 4. ALL CANDIDATES SUMMARY -->
+    <!-- 5. ALL CANDIDATES SUMMARY -->
     <div id="sectionSummaryWise" class="hidden bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 space-y-4 shadow-xl">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-800 pb-3">
         <div class="flex items-center space-x-2">
@@ -745,6 +858,7 @@
     const FIREBASE_DB_URL = "https://sk-psc-portal-default-rtdb.asia-southeast1.firebasedatabase.app";
     const ADMIN_SECRET_PIN = "1234";
     const GITHUB_LOGO_URL = "https://raw.githubusercontent.com/subhash-kumar00/PSC-EXAMS/main/logo.png";
+    const TWENTY_FOUR_HOURS_MS = 24 * 60 * 60 * 1000;
 
     document.getElementById('pdfLogoStudent').src = GITHUB_LOGO_URL;
     document.getElementById('pdfLogoRank').src = GITHUB_LOGO_URL;
@@ -764,6 +878,11 @@
     let categoryDoughnutChartInstance = null;
     let currentActiveTimeframe = 'daily';
 
+    // 🌟 Chat Desk Global Variables
+    let allStudentChatsCache = [];
+    let activeChatStudent = null;
+    let chatRefreshTimer = null;
+
     document.getElementById('adminPinInput').addEventListener('keyup', (e) => {
       if (e.key === 'Enter') verifyPin();
     });
@@ -776,7 +895,6 @@
       return String(str || '').replace(/[\s\-_,.:;()\/\\|\[\]+&]+/g, '').toLowerCase();
     }
 
-    // 🌟 ഗൂഗിൾ ഡോക്സ് / ഡ്രൈവ് ലിങ്ക് നേരിട്ട് PDF ഡൗൺലോഡ് ലിങ്കാക്കി മാറ്റുന്ന ഫംഗ്ഷൻ
     function convertGoogleDocToPdfLink(inputId) {
       const inputEl = document.getElementById(inputId);
       if (!inputEl) return;
@@ -785,23 +903,18 @@
         alert("ആദ്യം ഗൂഗിൾ ഡോക്സ് അല്ലെങ്കിൽ ഡ്രൈവ് ലിങ്ക് ബോക്സിൽ പേസ്റ്റ് ചെയ്യുക.");
         return;
       }
-
-      // Google Docs Link -> /export?format=pdf
       const docMatch = url.match(/docs\.google\.com\/document\/d\/([a-zA-Z0-9_-]+)/);
       if (docMatch && docMatch[1]) {
         inputEl.value = `https://docs.google.com/document/d/${docMatch[1]}/export?format=pdf`;
         alert("✅ ഗൂഗിൾ ഡോക്സ് ലിങ്ക് നേരിട്ട് PDF ഡൗൺലോഡ് ആകുന്ന ലിങ്കാക്കി മാറ്റി!");
         return;
       }
-
-      // Google Drive File Link -> Direct view/download
       const driveMatch = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
       if (driveMatch && driveMatch[1]) {
         inputEl.value = `https://drive.google.com/uc?export=download&id=${driveMatch[1]}`;
         alert("✅ ഗൂഗിൾ ഡ്രൈവ് ലിങ്ക് Direct PDF Download ലിങ്കാക്കി മാറ്റി!");
         return;
       }
-
       alert("ലിങ്ക് അതേപടി നിലനിർത്തിയിട്ടുണ്ട്.");
     }
 
@@ -822,7 +935,6 @@
       this.dataset.manuallyEdited = 'true';
     });
 
-    // 🌟 ചോദ്യങ്ങളുടെ .json ഫയൽ തിരഞ്ഞെടുക്കുമ്പോൾ വായിച്ച് വാലിഡേറ്റ് ചെയ്യുന്നു
     function handleQuestionsFileSelect(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -918,7 +1030,6 @@
       if (entered === ADMIN_SECRET_PIN) {
         document.getElementById('pinLockModal').classList.add('hidden');
         
-        // Restore saved Common HTML URL & Firebase Questions Node
         const savedCommonUrl = localStorage.getItem('sk_common_exam_url');
         if (savedCommonUrl) {
           document.getElementById('newExFileUrl').value = savedCommonUrl;
@@ -933,6 +1044,13 @@
         loadPublishManagerData();
         loadExamDropdownList();
         loadReportedQuestions();
+        loadStudentChatsAdmin(false);
+
+        // Auto polling for new student chats
+        setInterval(() => {
+          loadStudentChatsAdmin(false);
+        }, 12000);
+
       } else {
         alert("തെറ്റായ PIN നമ്പർ! ദയവായി വീണ്ടും ശ്രമിക്കുക.");
         document.getElementById('adminPinInput').value = "";
@@ -942,21 +1060,24 @@
     function switchTab(tab) {
       document.getElementById('sectionAnalyticsDashboard').classList.add('hidden');
       document.getElementById('sectionPublishManager').classList.add('hidden');
+      document.getElementById('sectionStudentChatDesk').classList.add('hidden');
       document.getElementById('sectionExamWise').classList.add('hidden');
       document.getElementById('sectionStudentWise').classList.add('hidden');
       document.getElementById('sectionSummaryWise').classList.add('hidden');
 
       const btnA = document.getElementById('tabBtnAnalytics');
       const btnP = document.getElementById('tabBtnPublish');
+      const btnC = document.getElementById('tabBtnChat');
       const btnE = document.getElementById('tabBtnExam');
       const btnS = document.getElementById('tabBtnStudent');
       const btnSm = document.getElementById('tabBtnSummary');
 
       const activeClass = "px-4 py-2 rounded-xl font-bold bg-emerald-500 text-slate-950 transition flex items-center space-x-1.5 shadow whitespace-nowrap cursor-pointer";
-      const inactiveClass = "px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap cursor-pointer";
+      const inactiveClass = "px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap cursor-pointer relative";
 
       btnA.className = inactiveClass;
       btnP.className = inactiveClass;
+      btnC.className = inactiveClass;
       btnE.className = inactiveClass;
       btnS.className = inactiveClass;
       btnSm.className = inactiveClass;
@@ -967,6 +1088,10 @@
       } else if (tab === 'publishManager') {
         document.getElementById('sectionPublishManager').classList.remove('hidden');
         btnP.className = activeClass;
+      } else if (tab === 'studentChatDesk') {
+        document.getElementById('sectionStudentChatDesk').classList.remove('hidden');
+        btnC.className = activeClass;
+        loadStudentChatsAdmin(true);
       } else if (tab === 'examWise') {
         document.getElementById('sectionExamWise').classList.remove('hidden');
         btnE.className = activeClass;
@@ -1288,7 +1413,6 @@
       btn.innerText = form.classList.contains('hidden') ? '➕ പുതിയ പരീക്ഷ & ചോദ്യങ്ങൾ ചേർക്കുക' : '✕ ഫോം മടക്കുക';
     }
 
-    // 🌟 ഓൾ-ഇൻ-വൺ ഫംഗ്ഷൻ: Exam Details + Folder + PDF Link + Questions JSON ഒരുമിച്ച് ഫയർബേസിലേക്ക് സേവ് ചെയ്യുന്നു
     async function createNewExamInFirebase(e) {
       e.preventDefault();
       const title = document.getElementById('newExTitle').value.trim();
@@ -1318,7 +1442,6 @@
         }
       }
 
-      // Save Common HTML URL & Questions Node in localStorage for future convenience
       localStorage.setItem('sk_common_exam_url', fileUrl);
       localStorage.setItem('sk_firebase_q_node', qNodeName);
 
@@ -1366,7 +1489,6 @@
           })
         ];
 
-        // 🌟 ചോദ്യങ്ങളുടെ JSON ഉണ്ടെങ്കിൽ അതും ഒരേ സമയം ഫയർബേസിലേക്ക് അപ്‌ലോഡ് ചെയ്യുന്നു
         if (parsedQuestionsData) {
           const targetQuestionsUrl = (qNodeName.toUpperCase() === 'ROOT')
             ? `${FIREBASE_DB_URL}/${customKey}.json`
@@ -1389,7 +1511,6 @@
 
         alert(`🎉 "${title}" പരീക്ഷയും ${parsedQuestionsData ? questions + ' ചോദ്യങ്ങളും' : ''} ${mainFolder} ഫോൾഡറിലേക്ക് വിജയകരമായി ചേർത്തു!`);
         
-        // Reset form except common URL
         document.getElementById('newExTitle').value = '';
         document.getElementById('newExTopics').value = '';
         document.getElementById('newExPdfUrl').value = '';
@@ -1409,7 +1530,7 @@
       }
     }
 
-    // 1. PUBLISH MANAGER & FOLDER CONTROLLER
+    // 1. PUBLISH MANAGER & CONFIG CONTROLLER
     async function loadPublishManagerData() {
       const tbody = document.getElementById('publishTableBody');
       tbody.innerHTML = '<tr><td colspan="8" class="p-6 text-center text-slate-400">ഫയർബേസിൽ നിന്നും വിവരങ്ങൾ ശേഖരിക്കുന്നു...</td></tr>';
@@ -1424,13 +1545,20 @@
           document.getElementById('adminNoticeInput').value = configRes.notice;
         }
 
+        // 🌟 റെഡ് ബ്ലിങ്ക് മെസ്സേജ് ലോഡ് ചെയ്യുന്നു
+        if (configRes && configRes.blink_message !== undefined) {
+          document.getElementById('adminBlinkMessageInput').value = configRes.blink_message;
+        } else {
+          document.getElementById('adminBlinkMessageInput').value = "2027 LDC & LGS EXAMS COMMING SOON";
+        }
+
         adminControlsCache = (configRes && configRes.exam_controls) ? configRes.exam_controls : {};
 
         let list = examsRes ? (Array.isArray(examsRes) ? examsRes : Object.values(examsRes)) : [];
         list = list.filter(item => item !== null && item !== undefined);
+        rawExamsArrayDb = list;
         rawExamsArrayFromDb = list;
 
-        // Auto-detect common exam HTML link from existing exams if not saved yet
         if (!localStorage.getItem('sk_common_exam_url') && list.length > 0) {
           const lastExamWithUrl = [...list].reverse().find(x => x.FILEURL || x.fileUrl);
           if (lastExamWithUrl) {
@@ -1456,6 +1584,40 @@
       } catch (err) {
         tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-rose-400 font-bold">എറർ: ${err.toString()}</td></tr>`;
       }
+    }
+
+    // 🌟 ബ്ലിങ്ക് മെസ്സേജ് സേവ് ചെയ്യൽ
+    async function saveBlinkMessage() {
+      const val = document.getElementById('adminBlinkMessageInput').value.trim();
+      const btn = document.getElementById('btnSaveBlink');
+      btn.innerText = "സേവ് ചെയ്യുന്നു...";
+      btn.disabled = true;
+
+      try {
+        await fetch(`${FIREBASE_DB_URL}/portal_config/blink_message.json`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(val)
+        });
+        sessionStorage.removeItem('sk_cache_time');
+        sessionStorage.removeItem('sk_cached_config');
+        alert("✅ ഹോം പേജ് ബ്ലിങ്ക് മെസ്സേജ് അപ്ഡേറ്റ് ചെയ്തു!");
+      } catch(e) {
+        alert("സേവ് ചെയ്യുന്നതിൽ തടസ്സം: " + e.toString());
+      } finally {
+        btn.innerText = "💾 സേവ് ചെയ്യുക";
+        btn.disabled = false;
+      }
+    }
+
+    function setBlinkDefaultMessage() {
+      document.getElementById('adminBlinkMessageInput').value = "2027 LDC & LGS EXAMS COMMING SOON";
+    }
+
+    async function hideBlinkMessage() {
+      if (!confirm("ഹോം പേജിൽ നിന്ന് റെഡ് ബ്ലിങ്ക് ബാനർ ഒഴിവാക്കണമെന്നുറപ്പാണോ?")) return;
+      document.getElementById('adminBlinkMessageInput').value = "HIDE";
+      await saveBlinkMessage();
     }
 
     function getExamEffectiveMainFolder(ex, savedCtrl) {
@@ -1526,7 +1688,7 @@
             </div>
           </td>
           <td class="p-3 text-center">
-            <select id="status_${key}" class="bg-slate-950 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-white cursor-pointer">
+            <select id="status_${key}" class="bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white cursor-pointer">
               <option value="NORMAL" ${currentStatus === 'NORMAL' ? 'selected' : ''}>സാധാരണ</option>
               <option value="LATEST" ${currentStatus === 'LATEST' ? 'selected' : ''}>🔥 LATEST</option>
             </select>
@@ -1607,7 +1769,6 @@
         })
       ];
 
-      // Update exam node in /exams/{dbIndex} as well so pdfUrl & MAIN_FOLDER stay synced
       if (dbIndex !== undefined && rawExamsArrayFromDb[dbIndex]) {
         rawExamsArrayFromDb[dbIndex].MAIN_FOLDER = mf;
         rawExamsArrayFromDb[dbIndex].pdfUrl = pdf;
@@ -1710,6 +1871,275 @@
         return matchFolder && matchSearch;
       });
       renderPublishTable(filtered);
+    }
+
+    // 🌟 2. STUDENT DOUBT CHAT DESK FUNCTIONS
+    async function loadStudentChatsAdmin(forceRender = false) {
+      try {
+        const res = await fetch(`${FIREBASE_DB_URL}/student_chats.json`);
+        const data = await res.json();
+        const now = Date.now();
+
+        let chatList = [];
+        let totalUnread = 0;
+
+        if (data && typeof data === 'object') {
+          for (const [phone, chatObj] of Object.entries(data)) {
+            if (!chatObj) continue;
+
+            // 24 മണിക്കൂർ ഫിൽട്ടർ
+            let validMessages = {};
+            let hasValidMsgs = false;
+
+            if (chatObj.messages && typeof chatObj.messages === 'object') {
+              for (const [mKey, mVal] of Object.entries(chatObj.messages)) {
+                if (mVal && mVal.timestamp && (now - Number(mVal.timestamp) <= TWENTY_FOUR_HOURS_MS)) {
+                  validMessages[mKey] = mVal;
+                  hasValidMsgs = true;
+                } else {
+                  // 24 മണിക്കൂർ കഴിഞ്ഞവ ബാക്ക്ഗ്രൗണ്ടിൽ ഫയർബേസിൽ നിന്ന് നീക്കം ചെയ്യുന്നു
+                  fetch(`${FIREBASE_DB_URL}/student_chats/${phone}/messages/${mKey}.json`, { method: 'DELETE' }).catch(() => null);
+                }
+              }
+            }
+
+            if (hasValidMsgs) {
+              if (chatObj.unreadByAdmin) totalUnread += 1;
+              chatList.push({
+                phone: phone,
+                studentName: chatObj.studentName || 'വിദ്യാർത്ഥി',
+                lastMessage: chatObj.lastMessage || 'സംശയം ചോദിച്ചിട്ടുണ്ട്',
+                lastUpdated: chatObj.lastUpdated || now,
+                unreadByAdmin: chatObj.unreadByAdmin || false,
+                messages: validMessages
+              });
+            }
+          }
+        }
+
+        allStudentChatsCache = chatList.sort((a, b) => (b.lastUpdated || 0) - (a.lastUpdated || 0));
+
+        // Badges update
+        const badgeChatCount = document.getElementById('badgeChatCount');
+        const tabChatDot = document.getElementById('tabChatDot');
+        const statPendingChatCount = document.getElementById('statPendingChatCount');
+
+        statPendingChatCount.innerText = totalUnread;
+        badgeChatCount.innerText = totalUnread;
+
+        if (totalUnread > 0) {
+          badgeChatCount.classList.remove('hidden');
+          tabChatDot.classList.remove('hidden');
+          document.getElementById('chatNotificationBtn').classList.add('pulse-red');
+        } else {
+          badgeChatCount.classList.add('hidden');
+          tabChatDot.classList.add('hidden');
+          document.getElementById('chatNotificationBtn').classList.remove('pulse-red');
+        }
+
+        renderChatStudentsList(allStudentChatsCache);
+
+        // സജീവമായി തുറന്നിരിക്കുന്ന വിദ്യാർത്ഥിയുടെ ചാറ്റ് വിൻഡോ പുതുക്കുന്നു
+        if (activeChatStudent) {
+          const updatedActive = allStudentChatsCache.find(c => c.phone === activeChatStudent.phone);
+          if (updatedActive) {
+            activeChatStudent = updatedActive;
+            renderActiveConversation(activeChatStudent, false);
+          }
+        }
+
+      } catch (err) {
+        console.log("Chat admin fetch error:", err);
+      }
+    }
+
+    function renderChatStudentsList(list) {
+      const container = document.getElementById('chatStudentsListArea');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (!list || list.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-10 space-y-1.5">
+            <span class="text-2xl">🎉</span>
+            <p class="text-xs text-slate-400 font-bold">നിലവിൽ സംശയങ്ങൾ ഒന്നും വന്നിട്ടില്ല!</p>
+            <p class="text-[10px] text-slate-500">24 മണിക്കൂറിലെ സന്ദേശങ്ങൾ ഇവിടെ കാണാം.</p>
+          </div>
+        `;
+        return;
+      }
+
+      list.forEach(item => {
+        const isActive = activeChatStudent && (activeChatStudent.phone === item.phone);
+        const card = document.createElement('div');
+        
+        let borderClass = isActive
+          ? 'bg-emerald-950/70 border-emerald-400 ring-1 ring-emerald-400'
+          : (item.unreadByAdmin ? 'bg-slate-900 border-rose-500/60 hover:border-rose-400' : 'bg-slate-900/80 border-slate-800 hover:border-slate-700');
+
+        card.className = `p-3 rounded-2xl border cursor-pointer transition flex items-center justify-between space-x-2 ${borderClass}`;
+        card.onclick = () => selectStudentForChat(item.phone);
+
+        const unreadMarkup = item.unreadByAdmin
+          ? `<span class="bg-rose-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full pulse-red shadow">NEW</span>`
+          : '';
+
+        card.innerHTML = `
+          <div class="flex items-center space-x-2.5 min-w-0">
+            <div class="w-8 h-8 rounded-xl ${isActive ? 'bg-emerald-500 text-slate-950 font-black' : 'bg-slate-950 text-emerald-400'} flex items-center justify-center text-xs font-bold flex-shrink-0">
+              👤
+            </div>
+            <div class="min-w-0">
+              <h5 class="text-xs font-bold text-white truncate">${item.studentName}</h5>
+              <p class="text-[11px] text-slate-400 truncate mt-0.5">${item.lastMessage}</p>
+            </div>
+          </div>
+          <div class="flex flex-col items-end flex-shrink-0">
+            ${unreadMarkup}
+            <span class="text-[9px] font-mono text-slate-500 mt-1">${item.phone.slice(-4)}</span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function filterChatStudentsList() {
+      const q = document.getElementById('chatSearchInput').value.trim().toLowerCase();
+      const numQ = q.replace(/\D/g, '');
+
+      const filtered = allStudentChatsCache.filter(c => {
+        if (!q) return true;
+        const name = (c.studentName || '').toLowerCase();
+        const p = c.phone || '';
+        return name.includes(q) || (numQ && p.includes(numQ));
+      });
+
+      renderChatStudentsList(filtered);
+    }
+
+    async function selectStudentForChat(phone) {
+      const matched = allStudentChatsCache.find(c => c.phone === phone);
+      if (!matched) return;
+
+      activeChatStudent = matched;
+      renderChatStudentsList(allStudentChatsCache);
+      renderActiveConversation(matched, true);
+
+      // അഡ്മിൻ കണ്ടതായി അടയാളപ്പെടുത്തുന്നു (Mark as read)
+      if (matched.unreadByAdmin) {
+        matched.unreadByAdmin = false;
+        fetch(`${FIREBASE_DB_URL}/student_chats/${phone}.json`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ unreadByAdmin: false })
+        }).catch(() => null);
+
+        const currentUnread = allStudentChatsCache.filter(c => c.unreadByAdmin).length;
+        document.getElementById('badgeChatCount').innerText = currentUnread;
+        document.getElementById('statPendingChatCount').innerText = currentUnread;
+        if (currentUnread === 0) {
+          document.getElementById('badgeChatCount').classList.add('hidden');
+          document.getElementById('tabChatDot').classList.add('hidden');
+          document.getElementById('chatNotificationBtn').classList.remove('pulse-red');
+        }
+      }
+    }
+
+    function renderActiveConversation(studentChatObj, autoScroll = true) {
+      document.getElementById('activeChatStudentName').innerText = studentChatObj.studentName;
+      document.getElementById('activeChatStudentPhone').innerText = `+91 ${studentChatObj.phone}`;
+
+      const replyInput = document.getElementById('adminReplyInput');
+      const replyBtn = document.getElementById('adminReplyBtn');
+      replyInput.disabled = false;
+      replyBtn.disabled = false;
+      replyInput.placeholder = `${studentChatObj.studentName} എന്ന വിദ്യാർത്ഥിക്ക് മറുപടി നൽകുക...`;
+
+      const box = document.getElementById('activeChatMessagesBox');
+      const msgList = Object.values(studentChatObj.messages || {}).filter(m => m !== null);
+      msgList.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+
+      if (msgList.length === 0) {
+        box.innerHTML = `<p class="text-xs text-slate-500 text-center py-10">ഈ വിദ്യാർത്ഥിയുടെ സന്ദേശങ്ങൾ ലഭ്യമല്ല.</p>`;
+        return;
+      }
+
+      let html = '';
+      msgList.forEach(m => {
+        const isAdmin = m.sender === 'admin';
+        const alignClass = isAdmin ? 'justify-end' : 'justify-start';
+        const bubbleStyle = isAdmin
+          ? 'bg-emerald-500 text-slate-950 font-semibold rounded-2xl rounded-tr-xs shadow-md'
+          : 'bg-slate-800 border border-slate-700 text-slate-200 rounded-2xl rounded-tl-xs shadow';
+        const senderLabel = isAdmin
+          ? `<span class="text-[9px] font-black text-slate-900/80 block mb-0.5 text-right">👨‍🏫 നിങ്ങൾ (SK PSC)</span>`
+          : `<span class="text-[10px] font-bold text-emerald-400 block mb-0.5">👤 ${studentChatObj.studentName}</span>`;
+
+        html += `
+          <div class="flex ${alignClass}">
+            <div class="max-w-[82%] px-3.5 py-2.5 text-xs ${bubbleStyle}">
+              ${senderLabel}
+              <p class="whitespace-pre-line leading-relaxed">${m.text || ''}</p>
+              <span class="block text-[9px] ${isAdmin ? 'text-slate-900/70 font-bold' : 'text-slate-400 font-mono'} text-right mt-1">${m.timeStr || ''}</span>
+            </div>
+          </div>
+        `;
+      });
+
+      box.innerHTML = html;
+      if (autoScroll) box.scrollTop = box.scrollHeight;
+    }
+
+    async function sendAdminReply(e) {
+      e.preventDefault();
+      if (!activeChatStudent) return;
+
+      const input = document.getElementById('adminReplyInput');
+      const btn = document.getElementById('adminReplyBtn');
+      const text = input.value.trim();
+      if (!text) return;
+
+      btn.disabled = true;
+      btn.innerText = "അയക്കുന്നു...";
+
+      const cleanPhone = activeChatStudent.phone;
+      const now = new Date();
+      const timeStr = now.toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+
+      const msgObj = {
+        sender: 'admin',
+        text: text,
+        timestamp: Date.now(),
+        timeStr: timeStr
+      };
+
+      try {
+        await fetch(`${FIREBASE_DB_URL}/student_chats/${cleanPhone}/messages.json`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(msgObj)
+        });
+
+        await fetch(`${FIREBASE_DB_URL}/student_chats/${cleanPhone}.json`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            lastMessage: `Admin: ${text}`,
+            lastUpdated: Date.now(),
+            unreadByStudent: true,
+            unreadByAdmin: false
+          })
+        });
+
+        input.value = '';
+        await loadStudentChatsAdmin(false);
+
+      } catch (err) {
+        alert("മറുപടി അയക്കുന്നതിൽ തടസ്സം നേരിട്ടു: " + err.toString());
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span>മറുപടി നൽകുക</span><span>➤</span>`;
+      }
     }
 
     // 2. DASHBOARD DATA
