@@ -77,6 +77,102 @@
     </div>
   </div>
 
+  <!-- 🌟 എക്സാം എഡിറ്റ് ചെയ്യാനുള്ള MODAL (Edit Exam Modal) -->
+  <div id="editExamModal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-slate-900 border-2 border-cyan-500/50 rounded-3xl max-w-3xl w-full p-5 sm:p-6 shadow-2xl space-y-4 flex flex-col max-h-[90vh]">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center space-x-2">
+          <span class="w-8 h-8 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-base">✏️</span>
+          <div>
+            <h3 class="text-base font-bold text-white" id="editModalHeaderTitle">പരീക്ഷാ വിവരങ്ങൾ എഡിറ്റ് ചെയ്യുക</h3>
+            <p class="text-[11px] text-slate-400">പരീക്ഷയുടെ വിവരങ്ങളിലോ ചോദ്യങ്ങളിലോ വന്ന തെറ്റുകൾ തിരുത്താം.</p>
+          </div>
+        </div>
+        <button onclick="closeEditExamModal()" class="text-slate-400 hover:text-white text-xl font-bold p-1 bg-slate-800 rounded-xl w-8 h-8 flex items-center justify-center cursor-pointer">✕</button>
+      </div>
+
+      <form id="editExamForm" onsubmit="submitUpdatedExam(event)" class="flex-1 overflow-y-auto custom-scroll space-y-4 pr-1 text-xs">
+        <input type="hidden" id="editExDbIndex">
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div>
+            <label class="block text-[11px] text-slate-300 font-bold mb-1">പരീക്ഷയുടെ പേര് (TITLE) *</label>
+            <input type="text" id="editExTitle" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-cyan-500">
+          </div>
+          <div>
+            <label class="block text-[11px] text-emerald-400 font-bold mb-1">പ്രധാന ഫോൾഡർ *</label>
+            <select id="editExMainFolder" class="w-full bg-slate-950 border border-emerald-500/40 rounded-xl px-3 py-2 text-emerald-300 font-bold focus:outline-none focus:border-emerald-500">
+              <option value="LDC">🏛️ LDC (എൽ.ഡി.സി)</option>
+              <option value="LGS">🛡️ LGS (എൽ.ജി.എസ്)</option>
+              <option value="DEGREE">🎓 Degree Level (ഡിഗ്രി)</option>
+              <option value="LDC, LGS">🏛️+🛡️ LDC & LGS (രണ്ടിലും)</option>
+              <option value="ALL">🌟 എല്ലാം (All Combined)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] text-slate-300 font-bold mb-1">വിഷയം (CATEGORY) *</label>
+            <input type="text" id="editExCategory" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-cyan-500">
+          </div>
+          <div>
+            <label class="block text-[11px] text-cyan-400 font-bold mb-1">യൂണിക് കീ (KEY) *</label>
+            <input type="text" id="editExKey" required class="w-full bg-slate-950 border border-cyan-500/40 rounded-xl px-3 py-2 text-cyan-300 font-mono font-bold focus:outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-950/80 p-3 rounded-2xl border border-slate-800">
+          <div>
+            <label class="block text-[11px] text-amber-400 font-bold mb-1">എക്സാം HTML ഫയൽ (FILEURL)</label>
+            <input type="text" id="editExFileUrl" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono focus:outline-none focus:border-emerald-500">
+          </div>
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <label class="text-[11px] text-emerald-400 font-bold">Google Docs PDF ലിങ്ക് (pdfUrl)</label>
+              <button type="button" onclick="convertGoogleDocToPdfLink('editExPdfUrl')" class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/30">
+                🔄 Direct PDF ആക്കുക
+              </button>
+            </div>
+            <input type="text" id="editExPdfUrl" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono focus:outline-none focus:border-emerald-500">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-[11px] text-slate-400 font-semibold mb-1">പ്രധാന ടോപ്പിക്കുകൾ</label>
+            <input type="text" id="editExTopics" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500">
+          </div>
+          <div>
+            <label class="block text-[11px] text-slate-400 font-semibold mb-1">ചോദ്യങ്ങൾ (QUESTIONS)</label>
+            <input type="number" id="editExQuestions" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono focus:outline-none focus:border-emerald-500">
+          </div>
+          <div>
+            <label class="block text-[11px] text-slate-400 font-semibold mb-1">സമയം (TIME)</label>
+            <input type="text" id="editExTime" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500">
+          </div>
+        </div>
+
+        <!-- ചോദ്യങ്ങളുടെ JSON എഡിറ്റ് ചെയ്യാനുള്ള ബോക്സ് -->
+        <div class="bg-slate-950 p-3.5 rounded-2xl border border-cyan-500/30 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] text-cyan-400 font-bold flex items-center space-x-1">
+              <span>📝</span>
+              <span>ചോദ്യങ്ങൾ എഡിറ്റ് ചെയ്യുക (quiz_contents-ൽ നിന്നുള്ള JSON)</span>
+            </span>
+            <span id="editJsonStatusBadge" class="text-[10px] font-mono text-slate-400">ലോഡ് ചെയ്യുന്നു...</span>
+          </div>
+          <textarea id="editExQuestionsJson" rows="7" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-emerald-300 font-mono focus:outline-none focus:border-cyan-500 custom-scroll"></textarea>
+          <span class="text-[10px] text-slate-500 block">ചോദ്യങ്ങളിലോ ഓപ്ഷനുകളിലോ ഉത്തരങ്ങളിലോ മാറ്റം വരുത്തി താഴെയുള്ള ബട്ടൺ അമർത്താം.</span>
+        </div>
+
+        <div class="pt-2 border-t border-slate-800 flex justify-end space-x-2.5">
+          <button type="button" onclick="closeEditExamModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold rounded-xl cursor-pointer">റദ്ദാക്കുക</button>
+          <button type="submit" id="btnSaveEditedExam" class="px-6 py-2 bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-slate-950 font-black rounded-xl shadow cursor-pointer">
+            💾 മാറ്റങ്ങൾ സേവ് ചെയ്യുക
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- ചോദ്യ റിപ്പോർട്ടുകൾ Modal -->
   <div id="reportedQuestionsModal" class="fixed inset-0 bg-slate-950/80 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
     <div class="bg-slate-900 border border-rose-500/40 p-5 sm:p-6 rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl">
@@ -116,7 +212,6 @@
       </div>
       
       <div class="flex items-center space-x-2.5 sm:space-x-3">
-        <!-- 🌟 വിദ്യാർത്ഥി സംശയങ്ങൾ നോട്ടിഫിക്കേഷൻ ബട്ടൺ -->
         <button onclick="switchTab('studentChatDesk')" id="chatNotificationBtn" class="relative bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 shadow cursor-pointer">
           <span class="text-sm">💬</span>
           <span class="hidden sm:inline">ഡൗട്ട് ചാറ്റ്</span>
@@ -169,7 +264,6 @@
         <span>📢</span>
         <span>പരീക്ഷാ പബ്ലിഷർ & ബ്ലിങ്ക് മെസ്സേജ്</span>
       </button>
-      <!-- 🌟 പുതിയ ടാബ്: ഡൗട്ട് ചാറ്റ് മാനേജർ -->
       <button onclick="switchTab('studentChatDesk')" id="tabBtnChat" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap cursor-pointer relative">
         <span>💬</span>
         <span>സ്റ്റുഡന്റ് ഡൗട്ട് ചാറ്റ്</span>
@@ -257,7 +351,7 @@
     <!-- 1. PUBLISH MANAGER & ALL-IN-ONE EXAM CREATOR -->
     <div id="sectionPublishManager" class="hidden bg-slate-900 border border-emerald-500/30 rounded-3xl p-5 sm:p-7 space-y-6 shadow-2xl">
       
-      <!-- 🌟 കൺട്രോളർ 1: ഹോം പേജ് റെഡ് ബ്ലിങ്ക് മെസ്സേജ് കൺട്രോളർ -->
+      <!-- റെഡ് ബ്ലിങ്ക് മെസ്സേജ് കൺട്രോളർ -->
       <div class="bg-slate-950 border-2 border-rose-500/40 p-4 sm:p-5 rounded-2xl space-y-3 shadow-lg">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div class="flex items-center space-x-2">
@@ -288,7 +382,7 @@
         </div>
       </div>
 
-      <!-- കൺട്രോളർ 2: ഹോം പേജ് സാധാരണ നോട്ടീസ് ബോർഡ് കൺട്രോളർ -->
+      <!-- നോട്ടീസ് ബോർഡ് കൺട്രോളർ -->
       <div class="bg-slate-950 border border-slate-800 p-4 sm:p-5 rounded-2xl space-y-3">
         <div class="flex items-center justify-between">
           <h4 class="text-xs sm:text-sm font-bold text-white flex items-center space-x-2">
@@ -315,12 +409,12 @@
       <div class="bg-slate-950 border-2 border-cyan-500/40 p-4 sm:p-6 rounded-3xl space-y-4 shadow-xl">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <span class="text-[10px] font-black uppercase tracking-wider bg-cyan-500/20 text-cyan-300 px-2.5 py-0.5 rounded-full border border-cyan-500/30">NO MORE MANUAL JSON FILES</span>
+            <span class="text-[10px] font-black uppercase tracking-wider bg-cyan-500/20 text-cyan-300 px-2.5 py-0.5 rounded-full border border-cyan-500/30">ALL-IN-ONE DIRECT SYNC</span>
             <h4 class="text-sm sm:text-base font-black text-white flex items-center space-x-2 mt-1">
               <span>⚡</span>
-              <span>ഓൾ-ഇൻ-വൺ എക്സാം ക്രിയേറ്റർ (Exam Details + Questions JSON + PDF)</span>
+              <span>പുതിയ പരീക്ഷയും ചോദ്യങ്ങളും ഫയർബേസിലേക്ക് ചേർക്കുക</span>
             </h4>
-            <p class="text-[11px] text-slate-400">രണ്ട് JSON ഫയലുകൾ ഉണ്ടാക്കുന്ന സമയം ലാഭിക്കാം! ഇവിടെ വിവരങ്ങളും ചോദ്യങ്ങളുടെ JSON-ഉം നൽകിയാൽ ഫയർബേസിലേക്ക് തനിയെ ആഡ് ആകും.</p>
+            <p class="text-[11px] text-slate-400">വിവരങ്ങളും ചോദ്യങ്ങളുടെ JSON-ഉം നൽകി ഒരൊറ്റ ക്ലിക്കിൽ <strong class="text-emerald-400">quiz_contents</strong> ഫോൾഡറിലേക്ക് അപ്‌ലോഡ് ചെയ്യാം.</p>
           </div>
           <button onclick="toggleNewExamForm()" id="toggleAddExamBtn" class="px-4 py-2.5 bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-slate-950 font-black rounded-xl text-xs transition shadow-lg whitespace-nowrap cursor-pointer">
             ➕ പുതിയ പരീക്ഷ & ചോദ്യങ്ങൾ ചേർക്കുക
@@ -328,7 +422,6 @@
         </div>
 
         <form id="addNewExamForm" onsubmit="createNewExamInFirebase(event)" class="hidden pt-4 border-t border-slate-800 space-y-5 text-xs">
-          <!-- Row 1: Basic Info & Folders -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
             <div>
               <label class="block text-[11px] text-slate-300 font-bold mb-1">1. പരീക്ഷയുടെ പേര് (TITLE) *</label>
@@ -336,7 +429,7 @@
             </div>
 
             <div>
-              <label class="block text-[11px] text-emerald-400 font-bold mb-1">2. പ്രധാന ഫോൾഡർ (LDC/LGS/Degree) *</label>
+              <label class="block text-[11px] text-emerald-400 font-bold mb-1">2. പ്രധാന ഫോൾഡർ *</label>
               <select id="newExMainFolder" class="w-full bg-slate-900 border border-emerald-500/50 rounded-xl px-3 py-2.5 text-emerald-300 font-bold focus:outline-none focus:border-emerald-500 cursor-pointer">
                 <option value="LDC">🏛️ LDC (എൽ.ഡി.സി)</option>
                 <option value="LGS">🛡️ LGS (എൽ.ജി.എസ്)</option>
@@ -347,7 +440,7 @@
             </div>
 
             <div>
-              <label class="block text-[11px] text-slate-300 font-bold mb-1">3. വിഷയം / സബ്ജക്റ്റ് ഫോൾഡർ (CATEGORY) *</label>
+              <label class="block text-[11px] text-slate-300 font-bold mb-1">3. വിഷയം (CATEGORY) *</label>
               <input type="text" id="newExCategory" list="existingCategoriesList" required placeholder="ഉദാ: കേരള ചരിത്രം" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-emerald-500">
               <datalist id="existingCategoriesList"></datalist>
             </div>
@@ -355,71 +448,54 @@
             <div>
               <label class="block text-[11px] text-cyan-400 font-bold mb-1">4. യൂണിക് ഇംഗ്ലീഷ് കീ (KEY) *</label>
               <input type="text" id="newExKey" required placeholder="ഉദാ: exam_51" class="w-full bg-slate-900 border border-cyan-500/40 rounded-xl px-3 py-2.5 text-cyan-300 font-mono font-bold focus:outline-none focus:border-cyan-400">
-              <span class="text-[10px] text-slate-500 block mt-0.5">ചോദ്യങ്ങളും റാങ്ക് ലിസ്റ്റും ഈ കീയിലാണ് സേവ് ആവുക.</span>
+              <span class="text-[10px] text-slate-500 block mt-0.5">ചോദ്യങ്ങൾ quiz_contents-ൽ ഈ കീയിലാണ് സേവ് ആവുക.</span>
             </div>
           </div>
 
-          <!-- Row 2: Links -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-900/60 p-3.5 rounded-2xl border border-slate-800">
             <div>
-              <div class="flex items-center justify-between mb-1">
-                <label class="text-[11px] text-amber-400 font-bold">5. കോമൺ എക്സാം HTML ലിങ്ക് (FILEURL) *</label>
-                <span class="text-[10px] text-emerald-400 font-mono">✓ തനിയെ ഓർത്തുവെക്കും</span>
-              </div>
-              <input type="text" id="newExFileUrl" required placeholder="ഉദാ: exam.html അഥവാ നിങ്ങളുടെ കോമൺ HTML ലിങ്ക്" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-emerald-500 font-mono">
-              <span class="text-[10px] text-slate-400 block mt-1">നിങ്ങളുടെ കോമൺ എക്സാം ഫോർമാറ്റ് HTML ഫയലിന്റെ പേര് ഒരു തവണ നൽകിയാൽ മതി.</span>
+              <label class="block text-[11px] text-amber-400 font-bold mb-1">5. കോമൺ എക്സാം HTML ലിങ്ക് (FILEURL) *</label>
+              <input type="text" id="newExFileUrl" value="quiz.html" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-emerald-500 font-mono">
             </div>
 
             <div>
               <div class="flex items-center justify-between mb-1">
-                <label class="text-[11px] text-emerald-400 font-bold">6. ഗൂഗിൾ ഡോക്സ് / ഡ്രൈവ് ഒറിജിനൽ PDF ലിങ്ക് (pdfUrl)</label>
-                <button type="button" onclick="convertGoogleDocToPdfLink('newExPdfUrl')" class="text-[10px] bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/30 transition cursor-pointer">
-                  🔄 Direct PDF ലിങ്കാക്കി മാറ്റുക
+                <label class="text-[11px] text-emerald-400 font-bold">6. Google Docs PDF ലിങ്ക് (pdfUrl)</label>
+                <button type="button" onclick="convertGoogleDocToPdfLink('newExPdfUrl')" class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/30">
+                  🔄 Direct PDF ലിങ്കാക്കുക
                 </button>
               </div>
-              <input type="text" id="newExPdfUrl" placeholder="Google Docs / Drive Share Link ഇവിടെ പേസ്റ്റ് ചെയ്യുക..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-emerald-500 font-mono">
-              <span class="text-[10px] text-slate-400 block mt-1">പാസ് മാർക്ക് നേടുന്നവർക്ക് നേരിട്ട് PDF ഡൗൺലോഡ് ചെയ്യാൻ ഗൂഗിൾ ഡോക്സ് ലിങ്ക് പേസ്റ്റ് ചെയ്ത് മുകളിലെ ബട്ടൺ അമർത്തുക.</span>
+              <input type="text" id="newExPdfUrl" placeholder="Google Docs Share Link ഇവിടെ പേസ്റ്റ് ചെയ്യുക..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-emerald-500 font-mono">
             </div>
           </div>
 
-          <!-- Row 3: Topics, Questions Count, Time, Schedule -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
             <div>
-              <label class="block text-[11px] text-slate-400 font-semibold mb-1">പ്രധാന ടോപ്പിക്കുകൾ (TOPICS)</label>
+              <label class="block text-[11px] text-slate-400 font-semibold mb-1">പ്രധാന ടോപ്പിക്കുകൾ</label>
               <input type="text" id="newExTopics" placeholder="ഉദാ: നവോത്ഥാനം, പ്രധാന വർഷങ്ങൾ" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500">
             </div>
-
             <div>
-              <label class="block text-[11px] text-slate-400 font-semibold mb-1">ചോദ്യങ്ങളുടെ എണ്ണം (QUESTIONS)</label>
-              <input type="number" id="newExQuestions" value="25" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-emerald-400 font-bold focus:outline-none focus:border-emerald-500 font-mono">
+              <label class="block text-[11px] text-slate-400 font-semibold mb-1">ചോദ്യങ്ങളുടെ എണ്ണം</label>
+              <input type="number" id="newExQuestions" value="25" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-emerald-400 font-bold font-mono">
             </div>
-
             <div>
-              <label class="block text-[11px] text-slate-400 font-semibold mb-1">സമയം (TIME)</label>
-              <input type="text" id="newExTime" value="20 മിനിറ്റ്" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500">
+              <label class="block text-[11px] text-slate-400 font-semibold mb-1">സമയം</label>
+              <input type="text" id="newExTime" value="20 മിനിറ്റ്" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white">
             </div>
-
             <div>
               <label class="block text-[11px] text-slate-400 font-semibold mb-1">ഷെഡ്യൂൾ സമയം (Optional)</label>
-              <input type="datetime-local" id="newExReleaseDate" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-cyan-300 font-mono focus:outline-none focus:border-emerald-500">
+              <input type="datetime-local" id="newExReleaseDate" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-cyan-300 font-mono">
             </div>
           </div>
 
-          <!-- Row 4: QUESTIONS JSON UPLOAD / PASTE AREA -->
+          <!-- QUESTIONS JSON UPLOAD / PASTE AREA -->
           <div class="bg-slate-900 border border-cyan-500/30 p-4 rounded-2xl space-y-3">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-2.5">
-              <div>
-                <h5 class="text-xs font-black text-cyan-400 flex items-center space-x-1.5">
-                  <span>📝</span>
-                  <span>7. ചോദ്യങ്ങളുടെ JSON ഇവിടെ നൽകുക (Questions JSON Upload / Paste)</span>
-                </h5>
-                <p class="text-[11px] text-slate-400">നിങ്ങളുടെ ചോദ്യങ്ങളുടെ `.json` ഫയൽ തിരഞ്ഞെടുക്കുക അല്ലെങ്കിൽ താഴെ ബോക്സിൽ പേസ്റ്റ് ചെയ്യുക.</p>
-              </div>
-
-              <div class="flex items-center space-x-2">
-                <label class="text-[10px] text-slate-400 font-mono">Firebase Questions Node:</label>
-                <input type="text" id="firebaseQuestionsNodeInput" value="quiz_contents" placeholder="quiz_contents" class="bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-emerald-400 font-mono w-36 focus:outline-none focus:border-emerald-500" title="ഫയർബേസിൽ ചോദ്യങ്ങൾ സേവ് ചെയ്യുന്ന ഫോൾഡർ">
-              </div>
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+              <h5 class="text-xs font-black text-cyan-400 flex items-center space-x-1.5">
+                <span>📝</span>
+                <span>7. ചോദ്യങ്ങളുടെ JSON നൽകുക (Questions JSON Upload / Paste)</span>
+              </h5>
+              <span class="text-[10px] text-emerald-400 font-mono">Target: quiz_contents/KEY.json</span>
             </div>
 
             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
@@ -429,31 +505,27 @@
               </span>
             </div>
 
-            <textarea id="newExQuestionsJson" rows="5" oninput="validateQuestionsJsonLive()" placeholder='[&#10;  {&#10;    "question": "കേരളത്തിലെ ആദ്യത്തെ മുഖ്യമന്ത്രി ആര്?",&#10;    "options": ["ഇ.എം.എസ്", "പട്ടം താണുപിള്ള", "സി. അച്യുതമേനോൻ", "ആർ. ശങ്കർ"],&#10;    "answer": 0&#10;  }&#10;]' class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-emerald-300 font-mono focus:outline-none focus:border-cyan-500 custom-scroll"></textarea>
+            <textarea id="newExQuestionsJson" rows="6" oninput="validateQuestionsJsonLive()" placeholder='[&#10;  {&#10;    "q": "ഇന്ത്യൻ ഭരണഘടനയുടെ ആമുഖം തയ്യാറാക്കിയത് ആര്?",&#10;    "options": ["ജവഹർലാൽ നെഹ്റു", "ബി.ആർ. അംബേദ്കർ", "രാജേന്ദ്ര പ്രസാദ്", "കെ.എം. മുൻഷി"],&#10;    "ans": 0,&#10;    "exp": "1946 ഡിസംബർ 13-ന് നെഹ്റു അവതരിപ്പിച്ച ലക്ഷ്യപ്രമേയമാണ് ആമുഖമായത്."&#10;  }&#10;]' class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-emerald-300 font-mono focus:outline-none focus:border-cyan-500 custom-scroll"></textarea>
           </div>
 
           <div class="flex justify-end space-x-3 pt-2">
-            <button type="button" onclick="toggleNewExamForm()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl text-xs transition cursor-pointer">
-              റദ്ദാക്കുക
-            </button>
-            <button type="submit" id="btnCreateExam" class="px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black rounded-xl text-xs sm:text-sm transition shadow-lg cursor-pointer">
+            <button type="button" onclick="toggleNewExamForm()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl text-xs transition cursor-pointer">റദ്ദാക്കുക</button>
+            <button type="submit" id="btnCreateExam" class="px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 text-slate-950 font-black rounded-xl text-xs sm:text-sm transition shadow-lg cursor-pointer">
               🚀 പരീക്ഷയും ചോദ്യങ്ങളും ഫയർബേസിലേക്ക് സേവ് ചെയ്യുക
             </button>
           </div>
         </form>
       </div>
 
-      <!-- പരീക്ഷാ പബ്ലിഷിംഗ് & ഫോൾഡർ ടേബിൾ -->
+      <!-- 🌟 ഫുൾ വ്യൂ ഉള്ള വിശാലമായ പരീക്ഷാ ടേബിൾ (Full Width View Table) -->
       <div class="space-y-3">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-2">
           <div>
-            <h3 class="text-sm sm:text-base font-bold text-white flex items-center space-x-2">
+            <h3 class="text-sm font-bold text-white flex items-center space-x-2">
               <span>🗂️</span>
-              <span>നിലവിലുള്ള പരീക്ഷകളുടെ ഫോൾഡർ (LDC/LGS/Degree), PDF & പബ്ലിഷിംഗ് കൺട്രോളർ</span>
+              <span>നിലവിലുള്ള പരീക്ഷകളുടെ ലിസ്റ്റ് & എഡിറ്റിംഗ്</span>
             </h3>
-            <p class="text-xs text-slate-400">
-              ഏത് പരീക്ഷയും ഏത് ഫോൾഡറിലേക്ക് മാറ്റാനും, PDF ലിങ്ക് ചേർക്കാനും, ഷെഡ്യൂൾ ചെയ്യാനും ഇവിടെ നിന്ന് സാധിക്കും.
-            </p>
+            <p class="text-xs text-slate-400">ഏതെങ്കിലും പരീക്ഷയിലെ വിവരങ്ങളോ ചോദ്യങ്ങളോ മാറ്റാൻ <strong>✏️ Edit</strong> ബട്ടൺ അമർത്താം.</p>
           </div>
           <div class="flex items-center space-x-2">
             <select id="filterMainFolderSelect" onchange="filterPublishExams()" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-emerald-400 font-bold focus:outline-none focus:border-emerald-500 cursor-pointer">
@@ -466,18 +538,19 @@
           </div>
         </div>
 
-        <div class="overflow-x-auto custom-scroll border border-slate-800 rounded-2xl">
-          <table class="w-full text-left text-xs text-slate-300" style="table-layout: auto;">
-            <thead class="bg-slate-950 text-slate-400 uppercase text-[10px] border-b border-slate-800">
+        <!-- 🌟 min-w-[950px] നൽകി ഫുൾ വ്യൂ ഉറപ്പാക്കിയ ടേബിൾ കണ്ടെയ്നർ -->
+        <div class="overflow-x-auto custom-scroll border border-slate-800 rounded-2xl shadow-inner">
+          <table class="w-full text-left text-xs text-slate-300 min-w-[950px]">
+            <thead class="bg-slate-950 text-slate-400 uppercase text-[10px] border-b border-slate-800 sticky top-0">
               <tr>
-                <th class="p-3">#</th>
-                <th class="p-3">പരീക്ഷയുടെ പേര് & വിഷയം</th>
-                <th class="p-3 text-center">ഫോൾഡർ (LDC/LGS/Degree)</th>
-                <th class="p-3 text-center">PDF ലിങ്ക് (Pass Mark)</th>
+                <th class="p-3 text-center w-12">#</th>
+                <th class="p-3">പരീക്ഷയുടെ പേര് & കീ</th>
+                <th class="p-3 text-center">ഫോൾഡർ</th>
+                <th class="p-3 text-center">PDF ലിങ്ക്</th>
                 <th class="p-3 text-center">ബാഡ്ജ്</th>
                 <th class="p-3 text-center">ഷെഡ്യൂൾ സമയം</th>
-                <th class="p-3 text-center">പബ്ലിഷ് കൺട്രോൾ</th>
-                <th class="p-3 text-center">സേവ്</th>
+                <th class="p-3 text-center">പബ്ലിഷ്</th>
+                <th class="p-3 text-center w-28">ആക്ഷൻ</th>
               </tr>
             </thead>
             <tbody id="publishTableBody" class="divide-y divide-slate-800/60 bg-slate-900/60">
@@ -486,9 +559,10 @@
           </table>
         </div>
       </div>
+
     </div>
 
-    <!-- 🌟 2. പുതിയ ടാബ്: STUDENT DOUBT CHAT DESK (വിദ്യാർത്ഥി സംശയങ്ങളും മറുപടികളും) -->
+    <!-- 2. STUDENT DOUBT CHAT DESK -->
     <div id="sectionStudentChatDesk" class="hidden bg-slate-900 border border-emerald-500/30 rounded-3xl p-5 sm:p-7 space-y-5 shadow-2xl">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
         <div>
@@ -506,29 +580,20 @@
         </div>
       </div>
 
-      <!-- ചാറ്റ് ലേഔട്ട്: ഇടത് വശത്ത് കുട്ടികളുടെ ലിസ്റ്റ് | വലത് വശത്ത് ചാറ്റ് വിൻഡോ -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 min-h-[500px]">
-        
-        <!-- Left Column: Student Chat List (4 cols) -->
         <div class="lg:col-span-5 bg-slate-950 border border-slate-800 rounded-2xl p-3 flex flex-col space-y-2">
           <div class="p-2 border-b border-slate-800/80">
             <input type="text" id="chatSearchInput" oninput="filterChatStudentsList()" placeholder="കുട്ടിയുടെ പേരോ നമ്പറോ തിരയുക..." class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
           </div>
-          
           <div id="chatStudentsListArea" class="flex-1 overflow-y-auto custom-scroll space-y-1.5 pr-1 max-h-[460px]">
             <p class="text-xs text-slate-500 text-center py-10">ചാറ്റുകൾ ശേഖരിക്കുന്നു...</p>
           </div>
         </div>
 
-        <!-- Right Column: Active Conversation Area (7 cols) -->
         <div class="lg:col-span-7 bg-slate-950 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between space-y-3">
-          
-          <!-- Chat Header -->
           <div id="activeChatHeader" class="border-b border-slate-800 pb-3 flex items-center justify-between">
             <div class="flex items-center space-x-3">
-              <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-black text-sm border border-emerald-500/30">
-                👤
-              </div>
+              <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-black text-sm border border-emerald-500/30">👤</div>
               <div>
                 <h4 class="text-sm font-bold text-white" id="activeChatStudentName">വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക</h4>
                 <p class="text-xs font-mono text-slate-400" id="activeChatStudentPhone">-</p>
@@ -537,14 +602,10 @@
             <span class="text-[10px] text-amber-400/90 font-mono bg-amber-950/40 px-2 py-0.5 rounded border border-amber-500/30">⏳ 24 Hours Active</span>
           </div>
 
-          <!-- Messages Stream Box -->
           <div id="activeChatMessagesBox" class="flex-1 overflow-y-auto custom-scroll bg-slate-900/60 border border-slate-800/80 rounded-2xl p-4 space-y-3 max-h-[360px] min-h-[300px]">
-            <div class="text-center py-16 text-slate-500 text-xs">
-              ഇടതുവശത്ത് നിന്ന് ഒരു വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക.
-            </div>
+            <div class="text-center py-16 text-slate-500 text-xs">ഇടതുവശത്ത് നിന്ന് ഒരു വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക.</div>
           </div>
 
-          <!-- Reply Input Box -->
           <form id="adminReplyForm" onsubmit="sendAdminReply(event)" class="flex items-center space-x-2 pt-1">
             <input type="text" id="adminReplyInput" disabled placeholder="മറുപടി ഇവിടെ ടൈപ്പ് ചെയ്യുക..." class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-emerald-500 disabled:opacity-40">
             <button type="submit" id="adminReplyBtn" disabled class="px-5 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 text-slate-950 font-black rounded-xl text-xs transition shadow cursor-pointer whitespace-nowrap disabled:opacity-40 flex items-center space-x-1">
@@ -552,9 +613,7 @@
               <span>➤</span>
             </button>
           </form>
-
         </div>
-
       </div>
     </div>
 
@@ -878,10 +937,8 @@
     let categoryDoughnutChartInstance = null;
     let currentActiveTimeframe = 'daily';
 
-    // 🌟 Chat Desk Global Variables
     let allStudentChatsCache = [];
     let activeChatStudent = null;
-    let chatRefreshTimer = null;
 
     document.getElementById('adminPinInput').addEventListener('keyup', (e) => {
       if (e.key === 'Enter') verifyPin();
@@ -906,16 +963,15 @@
       const docMatch = url.match(/docs\.google\.com\/document\/d\/([a-zA-Z0-9_-]+)/);
       if (docMatch && docMatch[1]) {
         inputEl.value = `https://docs.google.com/document/d/${docMatch[1]}/export?format=pdf`;
-        alert("✅ ഗൂഗിൾ ഡോക്സ് ലിങ്ക് നേരിട്ട് PDF ഡൗൺലോഡ് ആകുന്ന ലിങ്കാക്കി മാറ്റി!");
+        alert("✅ Direct PDF Download ലിങ്കാക്കി മാറ്റി!");
         return;
       }
       const driveMatch = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
       if (driveMatch && driveMatch[1]) {
         inputEl.value = `https://drive.google.com/uc?export=download&id=${driveMatch[1]}`;
-        alert("✅ ഗൂഗിൾ ഡ്രൈവ് ലിങ്ക് Direct PDF Download ലിങ്കാക്കി മാറ്റി!");
+        alert("✅ Direct PDF Download ലിങ്കാക്കി മാറ്റി!");
         return;
       }
-      alert("ലിങ്ക് അതേപടി നിലനിർത്തിയിട്ടുണ്ട്.");
     }
 
     function autoFillExamKey() {
@@ -923,11 +979,7 @@
       const keyInput = document.getElementById('newExKey');
       if (!keyInput.dataset.manuallyEdited) {
         const numMatch = titleVal.match(/\d+/);
-        if (numMatch) {
-          keyInput.value = `exam_${numMatch[0]}_${Date.now().toString().slice(-3)}`;
-        } else {
-          keyInput.value = `exam_${rawExamsArrayFromDb.length + 1}`;
-        }
+        keyInput.value = numMatch ? `exam_${numMatch[0]}_${Date.now().toString().slice(-3)}` : `exam_${rawExamsArrayFromDb.length + 1}`;
       }
     }
 
@@ -962,7 +1014,7 @@
         let qArray = Array.isArray(parsed) ? parsed : (parsed.questions || Object.values(parsed));
         if (Array.isArray(qArray) && qArray.length > 0) {
           qCountInput.value = qArray.length;
-          badge.innerText = `✅ JSON ശരിയാണ് (${qArray.length} ചോദ്യങ്ങൾ കണ്ടെത്തി)`;
+          badge.innerText = `✅ JSON ശരിയാണ് (${qArray.length} ചോദ്യങ്ങൾ)`;
           badge.className = "text-[11px] font-mono text-emerald-400 bg-emerald-950/60 px-3 py-1 rounded-lg border border-emerald-500/40 font-bold";
           return parsed;
         } else {
@@ -971,7 +1023,7 @@
           return parsed;
         }
       } catch (err) {
-        badge.innerText = "❌ JSON ഫോർമാറ്റ് തെറ്റാണ്! പരിശോധിക്കുക";
+        badge.innerText = "❌ JSON ഫോർമാറ്റ് തെറ്റാണ്!";
         badge.className = "text-[11px] font-mono text-rose-400 bg-rose-950/60 px-3 py-1 rounded-lg border border-rose-500/40 font-bold";
         return false;
       }
@@ -987,42 +1039,29 @@
     function extractName(obj) {
       if (!obj) return 'വിദ്യാർത്ഥി';
       let val = obj.Official_Name || obj.officialName || obj.official_name || obj.name || obj.Name || obj.studentName;
-      if (val && String(val).trim()) return String(val).trim();
-      return 'വിദ്യാർത്ഥി';
+      return (val && String(val).trim()) ? String(val).trim() : 'വിദ്യാർത്ഥി';
     }
 
     function maskPhoneNumber(phone) {
       if (!phone) return '-';
       const clean = String(phone).replace(/\D/g, '');
-      if (clean.length >= 10) {
-        const last10 = clean.slice(-10);
-        return `${last10.substring(0, 3)}••••${last10.substring(7)}`;
-      }
-      return phone;
+      return clean.length >= 10 ? `${clean.slice(-10).substring(0, 3)}••••${clean.slice(-10).substring(7)}` : phone;
     }
 
     function parseCandidateScore(item) {
       if (!item) return 0;
-      const val = item.score ?? item.Score ?? item.mark ?? item.marks ?? item.Mark ?? item.Marks ?? item.totalScore ?? item.total_score ?? item.Total_Score ?? item.analyticsScore ?? item.points ?? item.Total ?? item.total;
-      if (val !== undefined && val !== null && val !== '') {
-        const num = parseFloat(val);
-        return isNaN(num) ? 0 : num;
-      }
-      return 0;
+      const val = item.score ?? item.Score ?? item.mark ?? item.marks ?? item.Mark ?? item.Marks ?? item.totalScore ?? item.total_score;
+      return val !== undefined && val !== null && val !== '' ? parseFloat(val) || 0 : 0;
     }
 
     function parseCandidateCorrect(item) {
-      if (!item) return '-';
-      const val = item.correct ?? item.Correct ?? item.right ?? item.Right ?? item.count_correct ?? item.countCorrect ?? item.rightAnswers ?? item.correctAnswers;
-      if (val !== undefined && val !== null && val !== '') return val;
-      return '-';
+      const val = item.correct ?? item.Correct ?? item.right ?? item.Right ?? item.count_correct;
+      return (val !== undefined && val !== null && val !== '') ? val : '-';
     }
 
     function parseCandidateWrong(item) {
-      if (!item) return '-';
-      const val = item.wrong ?? item.Wrong ?? item.incorrect ?? item.Incorrect ?? item.count_wrong ?? item.countWrong ?? item.wrongAnswers ?? item.incorrectAnswers;
-      if (val !== undefined && val !== null && val !== '') return val;
-      return '-';
+      const val = item.wrong ?? item.Wrong ?? item.incorrect ?? item.Incorrect ?? item.count_wrong;
+      return (val !== undefined && val !== null && val !== '') ? val : '-';
     }
 
     function verifyPin() {
@@ -1030,13 +1069,12 @@
       if (entered === ADMIN_SECRET_PIN) {
         document.getElementById('pinLockModal').classList.add('hidden');
         
+        // 🌟 പഴയ തെറ്റായ localStorage key ഒഴിവാക്കുന്നു
+        localStorage.removeItem('sk_firebase_q_node');
+
         const savedCommonUrl = localStorage.getItem('sk_common_exam_url');
         if (savedCommonUrl) {
           document.getElementById('newExFileUrl').value = savedCommonUrl;
-        }
-        const savedQNode = localStorage.getItem('sk_firebase_q_node');
-        if (savedQNode) {
-          document.getElementById('firebaseQuestionsNodeInput').value = savedQNode;
         }
 
         loadAnalyticsData();
@@ -1046,61 +1084,41 @@
         loadReportedQuestions();
         loadStudentChatsAdmin(false);
 
-        // Auto polling for new student chats
-        setInterval(() => {
-          loadStudentChatsAdmin(false);
-        }, 12000);
-
+        setInterval(() => { loadStudentChatsAdmin(false); }, 12000);
       } else {
-        alert("തെറ്റായ PIN നമ്പർ! ദയവായി വീണ്ടും ശ്രമിക്കുക.");
+        alert("തെറ്റായ PIN നമ്പർ!");
         document.getElementById('adminPinInput').value = "";
       }
     }
 
     function switchTab(tab) {
-      document.getElementById('sectionAnalyticsDashboard').classList.add('hidden');
-      document.getElementById('sectionPublishManager').classList.add('hidden');
-      document.getElementById('sectionStudentChatDesk').classList.add('hidden');
-      document.getElementById('sectionExamWise').classList.add('hidden');
-      document.getElementById('sectionStudentWise').classList.add('hidden');
-      document.getElementById('sectionSummaryWise').classList.add('hidden');
+      ['sectionAnalyticsDashboard', 'sectionPublishManager', 'sectionStudentChatDesk', 'sectionExamWise', 'sectionStudentWise', 'sectionSummaryWise'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+      });
 
-      const btnA = document.getElementById('tabBtnAnalytics');
-      const btnP = document.getElementById('tabBtnPublish');
-      const btnC = document.getElementById('tabBtnChat');
-      const btnE = document.getElementById('tabBtnExam');
-      const btnS = document.getElementById('tabBtnStudent');
-      const btnSm = document.getElementById('tabBtnSummary');
+      const btnMap = {
+        analyticsDashboard: 'tabBtnAnalytics',
+        publishManager: 'tabBtnPublish',
+        studentChatDesk: 'tabBtnChat',
+        examWise: 'tabBtnExam',
+        studentWise: 'tabBtnStudent',
+        summaryWise: 'tabBtnSummary'
+      };
 
-      const activeClass = "px-4 py-2 rounded-xl font-bold bg-emerald-500 text-slate-950 transition flex items-center space-x-1.5 shadow whitespace-nowrap cursor-pointer";
-      const inactiveClass = "px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap cursor-pointer relative";
+      Object.values(btnMap).forEach(btnId => {
+        const b = document.getElementById(btnId);
+        if (b) b.className = "px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition border border-slate-800 whitespace-nowrap cursor-pointer relative";
+      });
 
-      btnA.className = inactiveClass;
-      btnP.className = inactiveClass;
-      btnC.className = inactiveClass;
-      btnE.className = inactiveClass;
-      btnS.className = inactiveClass;
-      btnSm.className = inactiveClass;
+      if (tab === 'analyticsDashboard') document.getElementById('sectionAnalyticsDashboard').classList.remove('hidden');
+      if (tab === 'publishManager') document.getElementById('sectionPublishManager').classList.remove('hidden');
+      if (tab === 'studentChatDesk') { document.getElementById('sectionStudentChatDesk').classList.remove('hidden'); loadStudentChatsAdmin(true); }
+      if (tab === 'examWise') document.getElementById('sectionExamWise').classList.remove('hidden');
+      if (tab === 'studentWise') document.getElementById('sectionStudentWise').classList.remove('hidden');
+      if (tab === 'summaryWise') document.getElementById('sectionSummaryWise').classList.remove('hidden');
 
-      if (tab === 'analyticsDashboard') {
-        document.getElementById('sectionAnalyticsDashboard').classList.remove('hidden');
-        btnA.className = activeClass;
-      } else if (tab === 'publishManager') {
-        document.getElementById('sectionPublishManager').classList.remove('hidden');
-        btnP.className = activeClass;
-      } else if (tab === 'studentChatDesk') {
-        document.getElementById('sectionStudentChatDesk').classList.remove('hidden');
-        btnC.className = activeClass;
-        loadStudentChatsAdmin(true);
-      } else if (tab === 'examWise') {
-        document.getElementById('sectionExamWise').classList.remove('hidden');
-        btnE.className = activeClass;
-      } else if (tab === 'studentWise') {
-        document.getElementById('sectionStudentWise').classList.remove('hidden');
-        btnS.className = activeClass;
-      } else if (tab === 'summaryWise') {
-        document.getElementById('sectionSummaryWise').classList.remove('hidden');
-        btnSm.className = activeClass;
+      if (btnMap[tab]) {
+        document.getElementById(btnMap[tab]).className = "px-4 py-2 rounded-xl font-bold bg-emerald-500 text-slate-950 transition flex items-center space-x-1.5 shadow whitespace-nowrap cursor-pointer";
       }
     }
 
@@ -1123,10 +1141,8 @@
             const cKey = cleanTitle(t);
             const rawK = cleanTitle(e.KEY || e.key || '');
             const cat = e.CATEGORY || e.category || 'പൊതുവിജ്ഞാനം';
-            
             examCategoryLookup[cKey] = cat;
             if (rawK) examCategoryLookup[rawK] = cat;
-
             examsLookupMap[cKey] = { title: t, key: e.KEY || e.key || '' };
             if (rawK) examsLookupMap[rawK] = { title: t, key: e.KEY || e.key || '' };
           });
@@ -1134,15 +1150,14 @@
 
         rawTimelineData = [];
         categoryStatsMap = {};
-
         const pool = [];
+
         const processNode = (nodeObj) => {
           if (!nodeObj || typeof nodeObj !== 'object') return;
           for (const [examKey, entries] of Object.entries(nodeObj)) {
             if (entries && typeof entries === 'object') {
               for (const item of Object.values(entries)) {
-                if (!item) continue;
-                pool.push({ ...item, examKey: examKey });
+                if (item) pool.push({ ...item, examKey: examKey });
               }
             }
           }
@@ -1153,28 +1168,14 @@
 
         pool.forEach(test => {
           let dateStr = String(test.date || test.Date || '').trim();
-          let parsedDate = null;
-
-          if (test.timestamp) {
-            parsedDate = new Date(test.timestamp);
-          } else if (dateStr) {
-            const parts = dateStr.split(' ')[0].split('/');
-            if (parts.length === 3) {
-              parsedDate = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
-            } else {
-              parsedDate = new Date(dateStr);
-            }
-          }
-
+          let parsedDate = test.timestamp ? new Date(test.timestamp) : (dateStr ? new Date(dateStr) : null);
           if (parsedDate && !isNaN(parsedDate.getTime())) {
-            const isoDate = parsedDate.toISOString().split('T')[0];
             rawTimelineData.push({
-              date: isoDate,
+              date: parsedDate.toISOString().split('T')[0],
               timestamp: parsedDate.getTime(),
               title: test.title || test.Title || test.examKey || 'Exam'
             });
           }
-
           const cTitle = cleanTitle(test.title || test.Title || test.examKey || '');
           const cat = examCategoryLookup[cTitle] || 'പൊതുവിജ്ഞാനം';
           categoryStatsMap[cat] = (categoryStatsMap[cat] || 0) + 1;
@@ -1183,7 +1184,6 @@
         updateGrowthChart(currentActiveTimeframe);
         renderCategoryDoughnut();
         calculateInsights();
-
       } catch (err) {
         console.error("Analytics Load Error:", err);
       }
@@ -1197,117 +1197,73 @@
       const sevenDaysAgo = new Date();
       sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
       const recentAttempts = rawTimelineData.filter(d => d.timestamp >= sevenDaysAgo.getTime());
-      const dailyAvg = (recentAttempts.length / 7).toFixed(1);
-      document.getElementById('statWeeklyDailyAvg').innerText = dailyAvg;
+      document.getElementById('statWeeklyDailyAvg').innerText = (recentAttempts.length / 7).toFixed(1);
 
       const dayFrequency = {};
-      rawTimelineData.forEach(d => {
-        dayFrequency[d.date] = (dayFrequency[d.date] || 0) + 1;
-      });
-
-      let peakDay = "None";
-      let maxCount = 0;
+      rawTimelineData.forEach(d => { dayFrequency[d.date] = (dayFrequency[d.date] || 0) + 1; });
+      let peakDay = "None", maxCount = 0;
       for (const [d, count] of Object.entries(dayFrequency)) {
-        if (count > maxCount) {
-          maxCount = count;
-          peakDay = `${d} (${count} പേർ)`;
-        }
+        if (count > maxCount) { maxCount = count; peakDay = `${d} (${count} പേർ)`; }
       }
       document.getElementById('statPeakDay').innerText = peakDay;
     }
 
     function updateGrowthChart(timeframe) {
       currentActiveTimeframe = timeframe;
-
       const btnD = document.getElementById('btnFilterDaily');
       const btnW = document.getElementById('btnFilterWeekly');
       const btnM = document.getElementById('btnFilterMonthly');
 
-      btnD.className = "px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition cursor-pointer";
-      btnW.className = "px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition cursor-pointer";
-      btnM.className = "px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition cursor-pointer";
+      [btnD, btnW, btnM].forEach(b => b.className = "px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition cursor-pointer");
 
-      let labels = [];
-      let counts = [];
-
+      let labels = [], counts = [];
       if (timeframe === 'daily') {
         btnD.className = "px-3 py-1.5 rounded-lg font-bold bg-emerald-500 text-slate-950 transition cursor-pointer";
-
         const dateMap = {};
         for (let i = 13; i >= 0; i--) {
           const d = new Date();
           d.setDate(d.getDate() - i);
           const iso = d.toISOString().split('T')[0];
-          const displayLabel = `${d.getDate()}/${d.getMonth() + 1}`;
-          dateMap[iso] = { label: displayLabel, count: 0 };
+          dateMap[iso] = { label: `${d.getDate()}/${d.getMonth() + 1}`, count: 0 };
         }
-
-        rawTimelineData.forEach(item => {
-          if (dateMap[item.date]) {
-            dateMap[item.date].count += 1;
-          }
-        });
-
+        rawTimelineData.forEach(item => { if (dateMap[item.date]) dateMap[item.date].count += 1; });
         labels = Object.values(dateMap).map(v => v.label);
         counts = Object.values(dateMap).map(v => v.count);
-
       } else if (timeframe === 'weekly') {
         btnW.className = "px-3 py-1.5 rounded-lg font-bold bg-emerald-500 text-slate-950 transition cursor-pointer";
-
         const weekMap = {};
-        for (let i = 5; i >= 0; i--) {
-          const wName = `Week -${i}`;
-          weekMap[wName] = 0;
-        }
-
+        for (let i = 5; i >= 0; i--) { weekMap[`Week -${i}`] = 0; }
         const now = Date.now();
         rawTimelineData.forEach(item => {
           const diffDays = Math.floor((now - item.timestamp) / (1000 * 60 * 60 * 24));
           const weekIndex = Math.floor(diffDays / 7);
-          if (weekIndex >= 0 && weekIndex <= 5) {
-            const key = `Week -${weekIndex}`;
-            if (weekMap[key] !== undefined) weekMap[key] += 1;
-          }
+          if (weekIndex >= 0 && weekIndex <= 5) weekMap[`Week -${weekIndex}`] += 1;
         });
-
         labels = Object.keys(weekMap).reverse();
         counts = Object.values(weekMap).reverse();
-
       } else if (timeframe === 'monthly') {
         btnM.className = "px-3 py-1.5 rounded-lg font-bold bg-emerald-500 text-slate-950 transition cursor-pointer";
-
         const monthMap = {};
         const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
         for (let i = 5; i >= 0; i--) {
           const d = new Date();
           d.setMonth(d.getMonth() - i);
-          const mKey = `${months[d.getMonth()]} ${d.getFullYear()}`;
-          monthMap[mKey] = 0;
+          monthMap[`${months[d.getMonth()]} ${d.getFullYear()}`] = 0;
         }
-
         rawTimelineData.forEach(item => {
           const d = new Date(item.timestamp);
           const mKey = `${months[d.getMonth()]} ${d.getFullYear()}`;
-          if (monthMap[mKey] !== undefined) {
-            monthMap[mKey] += 1;
-          }
+          if (monthMap[mKey] !== undefined) monthMap[mKey] += 1;
         });
-
         labels = Object.keys(monthMap);
         counts = Object.values(monthMap);
       }
-
       renderLineChart(labels, counts, timeframe);
     }
 
     function renderLineChart(labels, counts, timeframe) {
       const ctx = document.getElementById('growthLineChart').getContext('2d');
-
-      if (growthLineChartInstance) {
-        growthLineChartInstance.destroy();
-      }
-
+      if (growthLineChartInstance) growthLineChartInstance.destroy();
       const gradient = ctx.createLinearGradient(0, 0, 0, 300);
       gradient.addColorStop(0, 'rgba(16, 185, 129, 0.4)');
       gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
@@ -1317,7 +1273,6 @@
         data: {
           labels: labels,
           datasets: [{
-            label: 'പരീക്ഷാർത്ഥികളുടെ എണ്ണം',
             data: counts,
             borderColor: '#10b981',
             backgroundColor: gradient,
@@ -1325,35 +1280,16 @@
             fill: true,
             tension: 0.35,
             pointBackgroundColor: '#10b981',
-            pointRadius: 4,
-            pointHoverRadius: 6
+            pointRadius: 4
           }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              backgroundColor: '#0f172a',
-              titleColor: '#10b981',
-              bodyColor: '#f8fafc',
-              borderColor: '#334155',
-              borderWidth: 1,
-              padding: 10,
-              displayColors: false
-            }
-          },
+          plugins: { legend: { display: false } },
           scales: {
-            x: {
-              grid: { color: 'rgba(51, 65, 85, 0.3)' },
-              ticks: { color: '#94a3b8', font: { size: 10 } }
-            },
-            y: {
-              beginAtZero: true,
-              grid: { color: 'rgba(51, 65, 85, 0.3)' },
-              ticks: { color: '#94a3b8', font: { size: 10 } }
-            }
+            x: { grid: { color: 'rgba(51, 65, 85, 0.3)' }, ticks: { color: '#94a3b8' } },
+            y: { beginAtZero: true, grid: { color: 'rgba(51, 65, 85, 0.3)' }, ticks: { color: '#94a3b8' } }
           }
         }
       });
@@ -1361,28 +1297,16 @@
 
     function renderCategoryDoughnut() {
       const ctx = document.getElementById('categoryDoughnutChart').getContext('2d');
-
-      if (categoryDoughnutChartInstance) {
-        categoryDoughnutChartInstance.destroy();
-      }
-
+      if (categoryDoughnutChartInstance) categoryDoughnutChartInstance.destroy();
       const labels = Object.keys(categoryStatsMap);
       const data = Object.values(categoryStatsMap);
-
-      if (labels.length === 0) {
-        labels.push("ഡാറ്റ ലഭ്യമല്ല");
-        data.push(1);
-      }
-
       categoryDoughnutChartInstance = new Chart(ctx, {
         type: 'doughnut',
         data: {
-          labels: labels,
+          labels: labels.length ? labels : ["ഡാറ്റ ലഭ്യമല്ല"],
           datasets: [{
-            data: data,
-            backgroundColor: [
-              '#10b981', '#06b6d4', '#3b82f6', '#8b5cf6', '#f43f5e', '#f59e0b', '#14b8a6'
-            ],
+            data: data.length ? data : [1],
+            backgroundColor: ['#10b981', '#06b6d4', '#3b82f6', '#8b5cf6', '#f43f5e', '#f59e0b', '#14b8a6'],
             borderWidth: 2,
             borderColor: '#0f172a'
           }]
@@ -1390,29 +1314,22 @@
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              position: 'right',
-              labels: { color: '#cbd5e1', font: { size: 10 }, boxWidth: 12 }
-            }
-          },
+          plugins: { legend: { position: 'right', labels: { color: '#cbd5e1', font: { size: 10 } } } },
           cutout: '65%'
         }
       });
     }
 
     function sortExamsNewestFirst(exams) {
-      if (!Array.isArray(exams)) return [];
-      return exams.slice().reverse();
+      return Array.isArray(exams) ? exams.slice().reverse() : [];
     }
 
     function toggleNewExamForm() {
       const form = document.getElementById('addNewExamForm');
-      const btn = document.getElementById('toggleAddExamBtn');
       form.classList.toggle('hidden');
-      btn.innerText = form.classList.contains('hidden') ? '➕ പുതിയ പരീക്ഷ & ചോദ്യങ്ങൾ ചേർക്കുക' : '✕ ഫോം മടക്കുക';
     }
 
+    // 🌟 പുതിയ പരീക്ഷയും ചോദ്യങ്ങളും quiz_contents-ലേക്ക് സേവ് ചെയ്യുന്നു
     async function createNewExamInFirebase(e) {
       e.preventDefault();
       const title = document.getElementById('newExTitle').value.trim();
@@ -1426,10 +1343,9 @@
       const customKey = document.getElementById('newExKey').value.trim();
       const relDate = document.getElementById('newExReleaseDate').value.trim();
       const rawQuestionsJson = document.getElementById('newExQuestionsJson').value.trim();
-      const qNodeName = document.getElementById('firebaseQuestionsNodeInput').value.trim() || 'questions';
 
       if (!title || !category || !fileUrl || !customKey) {
-        alert("ദയവായി പരീക്ഷയുടെ പേര്, വിഷയം, കീ, കോമൺ HTML ലിങ്ക് എന്നിവ നൽകുക.");
+        alert("ദയവായി പരീക്ഷയുടെ പേര്, വിഷയം, കീ, ഫയൽ ലിങ്ക് എന്നിവ നൽകുക.");
         return;
       }
 
@@ -1437,20 +1353,18 @@
       if (rawQuestionsJson) {
         parsedQuestionsData = validateQuestionsJsonLive();
         if (parsedQuestionsData === false) {
-          alert("നിങ്ങൾ നൽകിയ ചോദ്യങ്ങളുടെ JSON ഫോർമാറ്റിൽ തെറ്റുണ്ട്! ദയവായി ബ്രാക്കറ്റുകളും കോമകളും പരിശോധിക്കുക.");
+          alert("ചോദ്യങ്ങളുടെ JSON ഫോർമാറ്റിൽ തെറ്റുണ്ട്! പരിശോധിക്കുക.");
           return;
         }
       }
 
       localStorage.setItem('sk_common_exam_url', fileUrl);
-      localStorage.setItem('sk_firebase_q_node', qNodeName);
 
       const btn = document.getElementById('btnCreateExam');
       btn.innerText = "ഫയർബേസിലേക്ക് അപ്‌ലോഡ് ചെയ്യുന്നു...";
       btn.disabled = true;
 
       const cleanControlKey = cleanTitle(title);
-
       const newExamEntry = {
         TITLE: title,
         CATEGORY: category,
@@ -1474,9 +1388,19 @@
       };
 
       try {
-        const updatedExamsList = [...rawExamsArrayFromDb, newExamEntry];
+        // 🌟 1. ചോദ്യങ്ങൾ നേരിട്ട് quiz_contents/KEY.json ലേക്ക് അപ്‌ലോഡ് ചെയ്യുന്നു
+        if (parsedQuestionsData) {
+          const qRes = await fetch(`${FIREBASE_DB_URL}/quiz_contents/${customKey}.json`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(parsedQuestionsData)
+          });
+          if (!qRes.ok) throw new Error("ചോദ്യങ്ങൾ quiz_contents-ലേക്ക് അപ്‌ലോഡ് ചെയ്യാൻ കഴിഞ്ഞില്ല.");
+        }
 
-        const promises = [
+        // 🌟 2. പരീക്ഷയുടെ ലിസ്റ്റും കൺട്രോളും സേവ് ചെയ്യുന്നു
+        const updatedExamsList = [...rawExamsArrayFromDb, newExamEntry];
+        await Promise.all([
           fetch(`${FIREBASE_DB_URL}/exams.json`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -1487,41 +1411,14 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(controlPayload)
           })
-        ];
-
-        if (parsedQuestionsData) {
-          const targetQuestionsUrl = (qNodeName.toUpperCase() === 'ROOT')
-            ? `${FIREBASE_DB_URL}/${customKey}.json`
-            : `${FIREBASE_DB_URL}/${qNodeName}/${customKey}.json`;
-
-          promises.push(
-            fetch(targetQuestionsUrl, {
-              method: 'PUT',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(parsedQuestionsData)
-            })
-          );
-        }
-
-        await Promise.all(promises);
+        ]);
 
         sessionStorage.removeItem('sk_cache_time');
         sessionStorage.removeItem('sk_cached_exams');
         sessionStorage.removeItem('sk_cached_config');
 
-        alert(`🎉 "${title}" പരീക്ഷയും ${parsedQuestionsData ? questions + ' ചോദ്യങ്ങളും' : ''} ${mainFolder} ഫോൾഡറിലേക്ക് വിജയകരമായി ചേർത്തു!`);
-        
-        document.getElementById('newExTitle').value = '';
-        document.getElementById('newExTopics').value = '';
-        document.getElementById('newExPdfUrl').value = '';
-        document.getElementById('newExQuestionsJson').value = '';
-        document.getElementById('questionsJsonFileInput').value = '';
-        delete document.getElementById('newExKey').dataset.manuallyEdited;
-        validateQuestionsJsonLive();
-
-        toggleNewExamForm();
-        await loadPublishManagerData();
-        await loadExamDropdownList();
+        alert(`🎉 "${title}" പരീക്ഷയും ചോദ്യങ്ങളും quiz_contents ഫോൾഡറിലേക്ക് വിജയകരമായി ചേർത്തു!`);
+        location.reload();
       } catch (err) {
         alert("പരീക്ഷ ചേർക്കുന്നതിൽ തടസ്സം നേരിട്ടു: " + err.toString());
       } finally {
@@ -1530,7 +1427,6 @@
       }
     }
 
-    // 1. PUBLISH MANAGER & CONFIG CONTROLLER
     async function loadPublishManagerData() {
       const tbody = document.getElementById('publishTableBody');
       tbody.innerHTML = '<tr><td colspan="8" class="p-6 text-center text-slate-400">ഫയർബേസിൽ നിന്നും വിവരങ്ങൾ ശേഖരിക്കുന്നു...</td></tr>';
@@ -1541,11 +1437,7 @@
           fetch(`${FIREBASE_DB_URL}/portal_config.json`).then(r => r.json()).catch(() => ({}))
         ]);
 
-        if (configRes && configRes.notice) {
-          document.getElementById('adminNoticeInput').value = configRes.notice;
-        }
-
-        // 🌟 റെഡ് ബ്ലിങ്ക് മെസ്സേജ് ലോഡ് ചെയ്യുന്നു
+        if (configRes && configRes.notice) document.getElementById('adminNoticeInput').value = configRes.notice;
         if (configRes && configRes.blink_message !== undefined) {
           document.getElementById('adminBlinkMessageInput').value = configRes.blink_message;
         } else {
@@ -1553,20 +1445,9 @@
         }
 
         adminControlsCache = (configRes && configRes.exam_controls) ? configRes.exam_controls : {};
-
         let list = examsRes ? (Array.isArray(examsRes) ? examsRes : Object.values(examsRes)) : [];
         list = list.filter(item => item !== null && item !== undefined);
-        rawExamsArrayDb = list;
         rawExamsArrayFromDb = list;
-
-        if (!localStorage.getItem('sk_common_exam_url') && list.length > 0) {
-          const lastExamWithUrl = [...list].reverse().find(x => x.FILEURL || x.fileUrl);
-          if (lastExamWithUrl) {
-            const detectedUrl = lastExamWithUrl.FILEURL || lastExamWithUrl.fileUrl;
-            document.getElementById('newExFileUrl').value = detectedUrl;
-            localStorage.setItem('sk_common_exam_url', detectedUrl);
-          }
-        }
 
         const catSet = new Set();
         list.forEach((item, index) => {
@@ -1575,9 +1456,7 @@
           if (c) catSet.add(String(c).trim());
         });
         const datalist = document.getElementById('existingCategoriesList');
-        if (datalist) {
-          datalist.innerHTML = Array.from(catSet).map(c => `<option value="${c}">`).join('');
-        }
+        if (datalist) datalist.innerHTML = Array.from(catSet).map(c => `<option value="${c}">`).join('');
 
         publishExamsList = sortExamsNewestFirst(list);
         renderPublishTable(publishExamsList);
@@ -1586,7 +1465,6 @@
       }
     }
 
-    // 🌟 ബ്ലിങ്ക് മെസ്സേജ് സേവ് ചെയ്യൽ
     async function saveBlinkMessage() {
       const val = document.getElementById('adminBlinkMessageInput').value.trim();
       const btn = document.getElementById('btnSaveBlink');
@@ -1599,11 +1477,10 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(val)
         });
-        sessionStorage.removeItem('sk_cache_time');
-        sessionStorage.removeItem('sk_cached_config');
+        sessionStorage.clear();
         alert("✅ ഹോം പേജ് ബ്ലിങ്ക് മെസ്സേജ് അപ്ഡേറ്റ് ചെയ്തു!");
       } catch(e) {
-        alert("സേവ് ചെയ്യുന്നതിൽ തടസ്സം: " + e.toString());
+        alert("എറർ: " + e.toString());
       } finally {
         btn.innerText = "💾 സേവ് ചെയ്യുക";
         btn.disabled = false;
@@ -1615,7 +1492,7 @@
     }
 
     async function hideBlinkMessage() {
-      if (!confirm("ഹോം പേജിൽ നിന്ന് റെഡ് ബ്ലിങ്ക് ബാനർ ഒഴിവാക്കണമെന്നുറപ്പാണോ?")) return;
+      if (!confirm("റെഡ് ബ്ലിങ്ക് ബാനർ ഒഴിവാക്കണമെന്നുറപ്പാണോ?")) return;
       document.getElementById('adminBlinkMessageInput').value = "HIDE";
       await saveBlinkMessage();
     }
@@ -1630,6 +1507,7 @@
       return 'LDC';
     }
 
+    // 🌟 വിശാലമായ ഫുൾ വ്യൂ നൽകുന്ന ടേബിൾ റെൻഡറിംഗ്
     function renderPublishTable(list) {
       const tbody = document.getElementById('publishTableBody');
       tbody.innerHTML = '';
@@ -1645,10 +1523,11 @@
 
         const title = ex.TITLE || ex.title || `Exam ${idx + 1}`;
         const category = ex.CATEGORY || ex.category || 'പൊതുവിജ്ഞാനം';
-        const key = cleanTitle(title);
+        const examKey = ex.KEY || ex.key || cleanTitle(title);
+        const cleanCtrlKey = cleanTitle(title);
         const dbIndex = ex._dbIndex;
 
-        const savedCtrl = adminControlsCache[key] || {};
+        const savedCtrl = adminControlsCache[cleanCtrlKey] || {};
         const currentStatus = savedCtrl.status || (ex.BADGE === 'LATEST' ? 'LATEST' : 'NORMAL');
         const currentMainFolder = getExamEffectiveMainFolder(ex, savedCtrl);
         const currentPdfUrl = savedCtrl.pdfUrl || ex.pdfUrl || ex.pdfurl || '';
@@ -1660,47 +1539,50 @@
         }
 
         const publishActionBtn = isPublished
-          ? `<button onclick="toggleExamPublish('${key}', false, this)" class="px-2.5 py-1 bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 border border-rose-500/40 text-[10px] font-bold rounded-lg transition shadow cursor-pointer">🔒 Unpublish</button>`
-          : `<button onclick="toggleExamPublish('${key}', true, this)" class="px-2.5 py-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-[10px] font-black rounded-lg transition shadow cursor-pointer">🚀 Publish</button>`;
+          ? `<button onclick="toggleExamPublish('${cleanCtrlKey}', false, this)" class="px-2.5 py-1 bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 border border-rose-500/40 text-[10px] font-bold rounded-lg transition shadow cursor-pointer whitespace-nowrap">🔒 Unpublish</button>`
+          : `<button onclick="toggleExamPublish('${cleanCtrlKey}', true, this)" class="px-2.5 py-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-[10px] font-black rounded-lg transition shadow cursor-pointer whitespace-nowrap">🚀 Publish</button>`;
 
         tr.innerHTML = `
-          <td class="p-3 font-mono text-slate-500">${idx + 1}</td>
-          <td class="p-3">
-            <div class="font-bold text-white">${title}</div>
+          <td class="p-3 font-mono text-slate-500 text-center">${idx + 1}</td>
+          <td class="p-3 min-w-[200px]">
+            <div class="font-bold text-white text-xs sm:text-sm line-clamp-1">${title}</div>
             <div class="flex items-center space-x-1.5 mt-1">
-              <span class="text-[10px] text-slate-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">📁 ${category}</span>
-              ${ex.KEY || ex.key ? `<span class="text-[10px] text-cyan-400 font-mono bg-slate-950 px-1.5 py-0.5 rounded border border-slate-800">🔑 ${ex.KEY || ex.key}</span>` : ''}
+              <span class="text-[10px] text-slate-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800 whitespace-nowrap">📁 ${category}</span>
+              <span class="text-[10px] text-cyan-400 font-mono bg-slate-950 px-1.5 py-0.5 rounded border border-slate-800 whitespace-nowrap">🔑 ${examKey}</span>
             </div>
           </td>
-          <td class="p-3 text-center">
-            <select id="folder_${key}" class="bg-slate-950 border border-emerald-500/40 rounded-lg px-2 py-1.5 text-xs text-emerald-300 font-bold focus:outline-none focus:border-emerald-400 cursor-pointer">
+          <td class="p-3 text-center whitespace-nowrap">
+            <select id="folder_${cleanCtrlKey}" class="bg-slate-950 border border-emerald-500/40 rounded-lg px-2 py-1.5 text-xs text-emerald-300 font-bold focus:outline-none focus:border-emerald-400 cursor-pointer">
               <option value="LDC" ${currentMainFolder === 'LDC' ? 'selected' : ''}>🏛️ LDC</option>
               <option value="LGS" ${currentMainFolder === 'LGS' ? 'selected' : ''}>🛡️ LGS</option>
-              <option value="DEGREE" ${currentMainFolder === 'DEGREE' ? 'selected' : ''}>🎓 Degree Level</option>
-              <option value="LDC, LGS" ${currentMainFolder === 'LDC, LGS' ? 'selected' : ''}>🏛️+🛡️ LDC & LGS</option>
-              <option value="ALL" ${currentMainFolder === 'ALL' ? 'selected' : ''}>🌟 എല്ലാം (All)</option>
+              <option value="DEGREE" ${currentMainFolder === 'DEGREE' ? 'selected' : ''}>🎓 Degree</option>
+              <option value="LDC, LGS" ${currentMainFolder === 'LDC, LGS' ? 'selected' : ''}>🏛️+🛡️ Both</option>
+              <option value="ALL" ${currentMainFolder === 'ALL' ? 'selected' : ''}>🌟 All</option>
             </select>
           </td>
-          <td class="p-3 text-center">
-            <div class="flex items-center space-x-1">
-              <input type="text" id="pdf_${key}" value="${currentPdfUrl}" placeholder="PDF Link..." class="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-[11px] text-slate-200 font-mono w-28 focus:outline-none focus:border-emerald-500">
-              <button type="button" onclick="convertGoogleDocToPdfLink('pdf_${key}')" class="px-1.5 py-1 bg-slate-800 hover:bg-slate-700 text-emerald-400 rounded text-[10px] cursor-pointer" title="ഗൂഗിൾ ഡോക്സ് ലിങ്ക് Direct PDF ആക്കി മാറ്റുക">🔄</button>
+          <td class="p-3 text-center whitespace-nowrap">
+            <div class="flex items-center justify-center space-x-1">
+              <input type="text" id="pdf_${cleanCtrlKey}" value="${currentPdfUrl}" placeholder="PDF Link..." class="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-[11px] text-slate-200 font-mono w-28 focus:outline-none focus:border-emerald-500">
+              <button type="button" onclick="convertGoogleDocToPdfLink('pdf_${cleanCtrlKey}')" class="px-1.5 py-1 bg-slate-800 hover:bg-slate-700 text-emerald-400 rounded text-[10px] cursor-pointer" title="Direct PDF ആക്കുക">🔄</button>
             </div>
           </td>
-          <td class="p-3 text-center">
-            <select id="status_${key}" class="bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white cursor-pointer">
+          <td class="p-3 text-center whitespace-nowrap">
+            <select id="status_${cleanCtrlKey}" class="bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white cursor-pointer">
               <option value="NORMAL" ${currentStatus === 'NORMAL' ? 'selected' : ''}>സാധാരണ</option>
               <option value="LATEST" ${currentStatus === 'LATEST' ? 'selected' : ''}>🔥 LATEST</option>
             </select>
           </td>
-          <td class="p-3 text-center">
-            <input type="datetime-local" id="date_${key}" value="${currentDateVal}" class="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-[11px] text-cyan-300 font-mono focus:outline-none focus:border-cyan-500">
+          <td class="p-3 text-center whitespace-nowrap">
+            <input type="datetime-local" id="date_${cleanCtrlKey}" value="${currentDateVal}" class="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-[11px] text-cyan-300 font-mono focus:outline-none">
           </td>
-          <td class="p-3 text-center">${publishActionBtn}</td>
-          <td class="p-3 text-center">
-            <div class="flex items-center justify-center space-x-1">
-              <button onclick="saveExamControl('${key}', ${dbIndex})" class="px-2.5 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-lg text-xs transition shadow cursor-pointer" title="ഫോൾഡറും PDF ലിങ്കും സേവ് ചെയ്യുക">💾</button>
-              <button onclick="clearExamLock('${key}')" class="px-2 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-400 rounded-lg text-xs cursor-pointer" title="സമയം ക്ലിയർ ചെയ്യുക">✕</button>
+          <td class="p-3 text-center whitespace-nowrap">${publishActionBtn}</td>
+          <td class="p-3 text-center whitespace-nowrap">
+            <div class="flex items-center justify-center space-x-1.5">
+              <button onclick="openEditExamModal(${dbIndex})" class="px-2.5 py-1.5 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 font-bold rounded-lg text-xs transition cursor-pointer flex items-center space-x-1" title="എഡിറ്റ് ചെയ്യുക">
+                <span>✏️</span>
+                <span>Edit</span>
+              </button>
+              <button onclick="saveExamControl('${cleanCtrlKey}', ${dbIndex})" class="px-2.5 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-lg text-xs transition shadow cursor-pointer" title="സേവ് ചെയ്യുക">💾</button>
             </div>
           </td>
         `;
@@ -1708,39 +1590,159 @@
       });
     }
 
+    // 🌟 എക്സാം എഡിറ്റ് ചെയ്യാനുള്ള MODAL തുറക്കുന്നു
+    async function openEditExamModal(dbIndex) {
+      const ex = rawExamsArrayFromDb[dbIndex];
+      if (!ex) return;
+
+      document.getElementById('editExamModal').classList.remove('hidden');
+      document.getElementById('editExDbIndex').value = dbIndex;
+      document.getElementById('editModalHeaderTitle').innerText = `"${ex.TITLE}" - എഡിറ്റ് ചെയ്യുക`;
+
+      document.getElementById('editExTitle').value = ex.TITLE || '';
+      document.getElementById('editExMainFolder').value = ex.MAIN_FOLDER || 'LDC';
+      document.getElementById('editExCategory').value = ex.CATEGORY || 'പൊതുവിജ്ഞാനം';
+      document.getElementById('editExKey').value = ex.KEY || ex.key || '';
+      document.getElementById('editExFileUrl').value = ex.FILEURL || ex.fileUrl || 'quiz.html';
+      document.getElementById('editExPdfUrl').value = ex.pdfUrl || '';
+      document.getElementById('editExTopics').value = ex.TOPICS || '';
+      document.getElementById('editExQuestions').value = ex.QUESTIONS || 25;
+      document.getElementById('editExTime').value = ex.TIME || '20 മിനിറ്റ്';
+
+      const keyVal = ex.KEY || ex.key;
+      const jsonArea = document.getElementById('editExQuestionsJson');
+      const badge = document.getElementById('editJsonStatusBadge');
+      jsonArea.value = '';
+      badge.innerText = "ചോദ്യങ്ങൾ ശേഖരിക്കുന്നു...";
+      badge.className = "text-[10px] font-mono text-cyan-400 animate-pulse";
+
+      try {
+        const qRes = await fetch(`${FIREBASE_DB_URL}/quiz_contents/${keyVal}.json`);
+        const qData = await qRes.json();
+        if (qData) {
+          jsonArea.value = JSON.stringify(qData, null, 2);
+          badge.innerText = "✅ ചോദ്യങ്ങൾ ഫയർബേസിൽ നിന്ന് ലോഡ് ചെയ്തു";
+          badge.className = "text-[10px] font-mono text-emerald-400 font-bold";
+        } else {
+          badge.innerText = "⚠️ quiz_contents-ൽ ചോദ്യങ്ങൾ കണ്ടെത്തിയില്ല";
+          badge.className = "text-[10px] font-mono text-amber-400";
+        }
+      } catch(err) {
+        badge.innerText = "❌ ചോദ്യങ്ങൾ ലോഡ് ചെയ്യാൻ കഴിഞ്ഞില്ല";
+        badge.className = "text-[10px] font-mono text-rose-400";
+      }
+    }
+
+    function closeEditExamModal() {
+      document.getElementById('editExamModal').classList.add('hidden');
+    }
+
+    // 🌟 എഡിറ്റ് ചെയ്ത പരീക്ഷയും ചോദ്യങ്ങളും സേവ് ചെയ്യുന്നു
+    async function submitUpdatedExam(e) {
+      e.preventDefault();
+      const dbIndex = document.getElementById('editExDbIndex').value;
+      if (dbIndex === undefined || dbIndex === null || !rawExamsArrayFromDb[dbIndex]) {
+        alert("എറർ: പരീക്ഷ കണ്ടെത്താനായില്ല.");
+        return;
+      }
+
+      const title = document.getElementById('editExTitle').value.trim();
+      const mainFolder = document.getElementById('editExMainFolder').value;
+      const category = document.getElementById('editExCategory').value.trim();
+      const fileUrl = document.getElementById('editExFileUrl').value.trim();
+      const pdfUrl = document.getElementById('editExPdfUrl').value.trim();
+      const keyVal = document.getElementById('editExKey').value.trim();
+      const topics = document.getElementById('editExTopics').value.trim();
+      const questions = Number(document.getElementById('editExQuestions').value) || 25;
+      const time = document.getElementById('editExTime').value.trim();
+      const rawQuestionsJson = document.getElementById('editExQuestionsJson').value.trim();
+
+      let parsedQuestions = null;
+      if (rawQuestionsJson) {
+        try {
+          parsedQuestions = JSON.parse(rawQuestionsJson);
+        } catch(err) {
+          alert("ചോദ്യങ്ങളുടെ JSON ഫോർമാറ്റിൽ തെറ്റുണ്ട്! ബ്രാക്കറ്റുകൾ പരിശോധിക്കുക.");
+          return;
+        }
+      }
+
+      const btn = document.getElementById('btnSaveEditedExam');
+      btn.innerText = "അപ്ഡേറ്റ് ചെയ്യുന്നു...";
+      btn.disabled = true;
+
+      const updatedExamObj = {
+        ...rawExamsArrayFromDb[dbIndex],
+        TITLE: title,
+        MAIN_FOLDER: mainFolder,
+        CATEGORY: category,
+        FILEURL: fileUrl,
+        pdfUrl: pdfUrl,
+        KEY: keyVal,
+        TOPICS: topics,
+        QUESTIONS: questions,
+        TIME: time
+      };
+
+      try {
+        const promises = [
+          fetch(`${FIREBASE_DB_URL}/exams/${dbIndex}.json`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedExamObj)
+          }),
+          fetch(`${FIREBASE_DB_URL}/portal_config/exam_controls/${cleanTitle(title)}.json`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mainFolder: mainFolder, pdfUrl: pdfUrl })
+          })
+        ];
+
+        if (parsedQuestions) {
+          promises.push(
+            fetch(`${FIREBASE_DB_URL}/quiz_contents/${keyVal}.json`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(parsedQuestions)
+            })
+          );
+        }
+
+        await Promise.all(promises);
+
+        sessionStorage.clear();
+        alert(`✅ "${title}" വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!`);
+        closeEditExamModal();
+        await loadPublishManagerData();
+      } catch(err) {
+        alert("അപ്ഡേറ്റ് ചെയ്യുന്നതിൽ തടസ്സം: " + err.toString());
+      } finally {
+        btn.innerText = "💾 മാറ്റങ്ങൾ സേവ് ചെയ്യുക";
+        btn.disabled = false;
+      }
+    }
+
     async function toggleExamPublish(key, publishState, btnElement) {
       btnElement.innerText = "മാറ്റുന്നു...";
       btnElement.disabled = true;
 
       const currentCtrl = adminControlsCache[key] || {};
-      const st = document.getElementById(`status_${key}`) ? document.getElementById(`status_${key}`).value : (currentCtrl.status || 'NORMAL');
-      const mf = document.getElementById(`folder_${key}`) ? document.getElementById(`folder_${key}`).value : (currentCtrl.mainFolder || 'LDC');
-      const pdf = document.getElementById(`pdf_${key}`) ? document.getElementById(`pdf_${key}`).value.trim() : (currentCtrl.pdfUrl || '');
-      const dt = document.getElementById(`date_${key}`) ? document.getElementById(`date_${key}`).value.trim() : (currentCtrl.releaseDate || '');
-
       const payload = {
         ...currentCtrl,
-        status: st,
-        mainFolder: mf,
-        pdfUrl: pdf,
-        releaseDate: dt,
         isPublished: publishState
       };
 
       try {
         await fetch(`${FIREBASE_DB_URL}/portal_config/exam_controls/${key}.json`, {
-          method: 'PUT',
+          method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
-
-        sessionStorage.removeItem('sk_cache_time');
-        sessionStorage.removeItem('sk_cached_config');
-
-        adminControlsCache[key] = payload;
+        sessionStorage.clear();
+        adminControlsCache[key] = { ...currentCtrl, isPublished: publishState };
         filterPublishExams();
       } catch (e) {
-        alert("പബ്ലിഷ് സ്റ്റാറ്റസ് മാറ്റുന്നതിൽ തടസ്സം നേരിട്ടു: " + e.toString());
+        alert("പരാജയപ്പെട്ടു: " + e.toString());
         btnElement.disabled = false;
       }
     }
@@ -1782,42 +1784,9 @@
       }
 
       await Promise.all(promises);
-
-      sessionStorage.removeItem('sk_cache_time');
-      sessionStorage.removeItem('sk_cached_exams');
-      sessionStorage.removeItem('sk_cached_config');
-
+      sessionStorage.clear();
       adminControlsCache[key] = payload;
-      alert(`✅ വിവരങ്ങളും PDF ലിങ്കും "${mf}" ഫോൾഡറിലേക്ക് സേവ് ചെയ്തു!`);
-      filterPublishExams();
-    }
-
-    async function clearExamLock(key) {
-      document.getElementById(`date_${key}`).value = "";
-      const st = document.getElementById(`status_${key}`).value;
-      const mf = document.getElementById(`folder_${key}`).value;
-      const pdf = document.getElementById(`pdf_${key}`).value.trim();
-      const currentCtrl = adminControlsCache[key] || {};
-
-      const payload = {
-        ...currentCtrl,
-        status: st,
-        mainFolder: mf,
-        pdfUrl: pdf,
-        releaseDate: ""
-      };
-
-      await fetch(`${FIREBASE_DB_URL}/portal_config/exam_controls/${key}.json`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      sessionStorage.removeItem('sk_cache_time');
-      sessionStorage.removeItem('sk_cached_config');
-
-      adminControlsCache[key] = payload;
-      alert('സമയം ഒഴിവാക്കി!');
+      alert(`✅ വിവരങ്ങൾ "${mf}" ഫോൾഡറിലേക്ക് സേവ് ചെയ്തു!`);
       filterPublishExams();
     }
 
@@ -1832,10 +1801,7 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(noticeVal)
       });
-
-      sessionStorage.removeItem('sk_cache_time');
-      sessionStorage.removeItem('sk_cached_config');
-
+      sessionStorage.clear();
       btn.innerText = "💾 നോട്ടീസ് സേവ് ചെയ്യുക";
       btn.disabled = false;
       alert("ഹോം പേജ് നോട്ടീസ് അപ്ഡേറ്റ് ചെയ്തു!");
@@ -1844,8 +1810,7 @@
     async function clearNoticeMessage() {
       if (!confirm("നോട്ടീസ് നീക്കം ചെയ്യണമെന്നുറപ്പാണോ?")) return;
       await fetch(`${FIREBASE_DB_URL}/portal_config/notice.json`, { method: 'DELETE' });
-      sessionStorage.removeItem('sk_cache_time');
-      sessionStorage.removeItem('sk_cached_config');
+      sessionStorage.clear();
       document.getElementById('adminNoticeInput').value = "";
       alert("നോട്ടീസ് നീക്കം ചെയ്തു!");
     }
@@ -1860,10 +1825,7 @@
         const savedCtrl = adminControlsCache[key] || {};
         const effectiveFolder = getExamEffectiveMainFolder(e, savedCtrl);
 
-        const matchFolder = (folderFilter === 'ALL_FILTER') || 
-                            effectiveFolder === 'ALL' || 
-                            effectiveFolder.includes(folderFilter);
-
+        const matchFolder = (folderFilter === 'ALL_FILTER') || effectiveFolder === 'ALL' || effectiveFolder.includes(folderFilter);
         const t = title.toLowerCase();
         const c = (e.CATEGORY || e.category || '').toLowerCase();
         const matchSearch = !q || t.includes(q) || c.includes(q);
@@ -1873,21 +1835,18 @@
       renderPublishTable(filtered);
     }
 
-    // 🌟 2. STUDENT DOUBT CHAT DESK FUNCTIONS
+    // 🌟 STUDENT DOUBT CHAT DESK
     async function loadStudentChatsAdmin(forceRender = false) {
       try {
         const res = await fetch(`${FIREBASE_DB_URL}/student_chats.json`);
         const data = await res.json();
         const now = Date.now();
-
         let chatList = [];
         let totalUnread = 0;
 
         if (data && typeof data === 'object') {
           for (const [phone, chatObj] of Object.entries(data)) {
             if (!chatObj) continue;
-
-            // 24 മണിക്കൂർ ഫിൽട്ടർ
             let validMessages = {};
             let hasValidMsgs = false;
 
@@ -1897,7 +1856,6 @@
                   validMessages[mKey] = mVal;
                   hasValidMsgs = true;
                 } else {
-                  // 24 മണിക്കൂർ കഴിഞ്ഞവ ബാക്ക്ഗ്രൗണ്ടിൽ ഫയർബേസിൽ നിന്ന് നീക്കം ചെയ്യുന്നു
                   fetch(`${FIREBASE_DB_URL}/student_chats/${phone}/messages/${mKey}.json`, { method: 'DELETE' }).catch(() => null);
                 }
               }
@@ -1919,7 +1877,6 @@
 
         allStudentChatsCache = chatList.sort((a, b) => (b.lastUpdated || 0) - (a.lastUpdated || 0));
 
-        // Badges update
         const badgeChatCount = document.getElementById('badgeChatCount');
         const tabChatDot = document.getElementById('tabChatDot');
         const statPendingChatCount = document.getElementById('statPendingChatCount');
@@ -1939,7 +1896,6 @@
 
         renderChatStudentsList(allStudentChatsCache);
 
-        // സജീവമായി തുറന്നിരിക്കുന്ന വിദ്യാർത്ഥിയുടെ ചാറ്റ് വിൻഡോ പുതുക്കുന്നു
         if (activeChatStudent) {
           const updatedActive = allStudentChatsCache.find(c => c.phone === activeChatStudent.phone);
           if (updatedActive) {
@@ -1947,9 +1903,8 @@
             renderActiveConversation(activeChatStudent, false);
           }
         }
-
       } catch (err) {
-        console.log("Chat admin fetch error:", err);
+        console.log("Chat fetch error:", err);
       }
     }
 
@@ -1972,7 +1927,6 @@
       list.forEach(item => {
         const isActive = activeChatStudent && (activeChatStudent.phone === item.phone);
         const card = document.createElement('div');
-        
         let borderClass = isActive
           ? 'bg-emerald-950/70 border-emerald-400 ring-1 ring-emerald-400'
           : (item.unreadByAdmin ? 'bg-slate-900 border-rose-500/60 hover:border-rose-400' : 'bg-slate-900/80 border-slate-800 hover:border-slate-700');
@@ -2006,14 +1960,12 @@
     function filterChatStudentsList() {
       const q = document.getElementById('chatSearchInput').value.trim().toLowerCase();
       const numQ = q.replace(/\D/g, '');
-
       const filtered = allStudentChatsCache.filter(c => {
         if (!q) return true;
         const name = (c.studentName || '').toLowerCase();
         const p = c.phone || '';
         return name.includes(q) || (numQ && p.includes(numQ));
       });
-
       renderChatStudentsList(filtered);
     }
 
@@ -2025,7 +1977,6 @@
       renderChatStudentsList(allStudentChatsCache);
       renderActiveConversation(matched, true);
 
-      // അഡ്മിൻ കണ്ടതായി അടയാളപ്പെടുത്തുന്നു (Mark as read)
       if (matched.unreadByAdmin) {
         matched.unreadByAdmin = false;
         fetch(`${FIREBASE_DB_URL}/student_chats/${phone}.json`, {
@@ -2060,7 +2011,7 @@
       msgList.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
 
       if (msgList.length === 0) {
-        box.innerHTML = `<p class="text-xs text-slate-500 text-center py-10">ഈ വിദ്യാർത്ഥിയുടെ സന്ദേശങ്ങൾ ലഭ്യമല്ല.</p>`;
+        box.innerHTML = `<p class="text-xs text-slate-500 text-center py-10">സന്ദേശങ്ങൾ ലഭ്യമല്ല.</p>`;
         return;
       }
 
@@ -2133,7 +2084,6 @@
 
         input.value = '';
         await loadStudentChatsAdmin(false);
-
       } catch (err) {
         alert("മറുപടി അയക്കുന്നതിൽ തടസ്സം നേരിട്ടു: " + err.toString());
       } finally {
@@ -2147,43 +2097,20 @@
       try {
         const usersRes = await fetch(`${FIREBASE_DB_URL}/users.json`);
         const usersData = await usersRes.json();
-
-        let rawList = [];
-        if (usersData) {
-          if (Array.isArray(usersData)) {
-            rawList = usersData.filter(u => u !== null && u !== undefined);
-          } else {
-            rawList = Object.entries(usersData).map(([key, val]) => {
-              if (typeof val === 'object' && val !== null) {
-                return { key: key, ...val };
-              }
-              return { key: key, name: String(val) };
-            });
-          }
-        }
+        let rawList = usersData ? (Array.isArray(usersData) ? usersData.filter(u => u !== null) : Object.entries(usersData).map(([key, val]) => (typeof val === 'object' && val !== null ? { key, ...val } : { key, name: String(val) }))) : [];
 
         const phoneMap = {};
-
         rawList.forEach(item => {
           const phone = extractPhone(item);
           if (!phone) return;
-
           const currentName = extractName(item);
-          const currentExams = Number(item.Unique_Exams || item.Total_Attempts || item.totalExams || item.examsCount || 0);
-          const currentAvg = Number(item.First_Attempt_Avg || item.avgScore || item.averageScore || 0);
+          const currentExams = Number(item.Unique_Exams || item.Total_Attempts || 0);
+          const currentAvg = Number(item.First_Attempt_Avg || 0);
 
           if (!phoneMap[phone]) {
-            phoneMap[phone] = {
-              ...item,
-              phone: phone,
-              name: currentName,
-              totalExams: currentExams,
-              avgScore: currentAvg
-            };
+            phoneMap[phone] = { ...item, phone, name: currentName, totalExams: currentExams, avgScore: currentAvg };
           } else {
-            if (phoneMap[phone].name === 'വിദ്യാർത്ഥി' && currentName !== 'വിദ്യാർത്ഥി') {
-              phoneMap[phone].name = currentName;
-            }
+            if (phoneMap[phone].name === 'വിദ്യാർത്ഥി' && currentName !== 'വിദ്യാർത്ഥി') phoneMap[phone].name = currentName;
             if (currentExams > phoneMap[phone].totalExams) {
               phoneMap[phone].totalExams = currentExams;
               phoneMap[phone].avgScore = currentAvg;
@@ -2193,13 +2120,9 @@
 
         allCandidatesCache = Object.values(phoneMap);
         document.getElementById('statTotalStudents').innerText = allCandidatesCache.length;
-
         let totalAttempts = 0;
-        allCandidatesCache.forEach(c => {
-          totalAttempts += Number(c.totalExams || 0);
-        });
+        allCandidatesCache.forEach(c => totalAttempts += Number(c.totalExams || 0));
         document.getElementById('statTotalAttempts').innerText = totalAttempts;
-
         applySummaryFilterAndSort();
       } catch (err) {
         console.log("Dashboard fetch error:", err);
@@ -2209,30 +2132,21 @@
     function renderSummaryTable(list) {
       const tbody = document.getElementById('summaryTableBody');
       tbody.innerHTML = "";
-
       if (!list || list.length === 0) {
         tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-slate-500 font-bold">വിദ്യാർത്ഥികളെ കണ്ടെത്താൻ സാധിച്ചില്ല.</td></tr>';
         return;
       }
-
       list.forEach((item, index) => {
         const tr = document.createElement('tr');
         tr.className = "hover:bg-slate-800/40 transition";
-        const phone = item.phone || extractPhone(item);
-        const name = item.name || extractName(item);
-        const tests = Number(item.totalExams || item.Unique_Exams || 0);
-        const avg = Number(item.avgScore || item.First_Attempt_Avg || 0).toFixed(1);
-
         tr.innerHTML = `
           <td class="p-3 font-mono text-slate-500">${index + 1}</td>
-          <td class="p-3 font-bold text-white">${name}</td>
-          <td class="p-3 font-mono text-slate-400">${phone || '-'}</td>
-          <td class="p-3 text-center font-bold text-emerald-400 font-mono">${tests}</td>
-          <td class="p-3 text-center font-bold text-cyan-400 font-mono">${avg}</td>
+          <td class="p-3 font-bold text-white">${item.name || extractName(item)}</td>
+          <td class="p-3 font-mono text-slate-400">${item.phone || extractPhone(item) || '-'}</td>
+          <td class="p-3 text-center font-bold text-emerald-400 font-mono">${Number(item.totalExams || 0)}</td>
+          <td class="p-3 text-center font-bold text-cyan-400 font-mono">${Number(item.avgScore || 0).toFixed(1)}</td>
           <td class="p-3 text-center">
-            <button onclick="quickSelectStudent('${phone || name}')" class="px-3 py-1 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-lg border border-emerald-500/30 transition shadow-sm cursor-pointer">
-              ഹിസ്റ്ററി
-            </button>
+            <button onclick="quickSelectStudent('${item.phone || item.name}')" class="px-3 py-1 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-lg border border-emerald-500/30 transition cursor-pointer">ഹിസ്റ്ററി</button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -2253,30 +2167,22 @@
 
       let list = allCandidatesCache.filter(c => {
         if (!q) return true;
-        const name = String(c.name || extractName(c)).toLowerCase();
-        const phone = String(c.phone || extractPhone(c));
+        const name = String(c.name || '').toLowerCase();
+        const phone = String(c.phone || '');
         return name.includes(q) || (numQ.length > 0 && phone.includes(numQ));
       });
 
       list.sort((a, b) => {
-        const testsA = Number(a.totalExams || a.Unique_Exams || 0);
-        const testsB = Number(b.totalExams || b.Unique_Exams || 0);
-        const avgA = Number(a.avgScore || a.First_Attempt_Avg || 0);
-        const avgB = Number(b.avgScore || b.First_Attempt_Avg || 0);
-        const nameA = String(a.name || extractName(a) || '').toLowerCase();
-        const nameB = String(b.name || extractName(b) || '').toLowerCase();
-
+        const testsA = Number(a.totalExams || 0), testsB = Number(b.totalExams || 0);
+        const avgA = Number(a.avgScore || 0), avgB = Number(b.avgScore || 0);
         switch (sortType) {
           case 'exams_desc': return testsB - testsA;
           case 'exams_asc': return testsA - testsB;
           case 'avg_desc': return avgB - avgA;
           case 'avg_asc': return avgA - avgB;
-          case 'name_asc': return nameA > nameB ? 1 : (nameA < nameB ? -1 : 0);
-          case 'name_desc': return nameA < nameB ? 1 : (nameA > nameB ? -1 : 0);
           default: return testsB - testsA;
         }
       });
-
       renderSummaryTable(list);
     }
 
@@ -2286,26 +2192,20 @@
         const res = await fetch(`${FIREBASE_DB_URL}/exams.json`);
         const data = await res.json();
         const select = document.getElementById('examDropdownSelect');
-
         let list = data ? (Array.isArray(data) ? data : Object.values(data)) : [];
-        list = list.filter(item => item !== null && item !== undefined);
-
+        list = list.filter(item => item !== null);
         document.getElementById('statAvailableExams').innerText = list.length;
         select.innerHTML = '<option value="">പരീക്ഷ തിരഞ്ഞെടുക്കുക...</option>';
 
-        const sortedList = sortExamsNewestFirst(list);
-        sortedList.forEach(ex => {
-          const title = ex.TITLE || ex.title || 'Exam';
+        sortExamsNewestFirst(list).forEach(ex => {
           const opt = document.createElement('option');
-          opt.value = title;
-          opt.innerText = title;
-          if (ex.KEY || ex.key) {
-            opt.setAttribute('data-key', ex.KEY || ex.key);
-          }
+          opt.value = ex.TITLE || 'Exam';
+          opt.innerText = ex.TITLE || 'Exam';
+          if (ex.KEY || ex.key) opt.setAttribute('data-key', ex.KEY || ex.key);
           select.appendChild(opt);
         });
       } catch (err) {
-        console.log("Exam dropdown fetch error:", err);
+        console.log("Dropdown fetch error:", err);
       }
     }
 
@@ -2314,7 +2214,6 @@
       const examTitle = select.value;
       const selectedOption = select.options[select.selectedIndex];
       const examKeyAttr = selectedOption ? (selectedOption.getAttribute('data-key') || '') : '';
-
       const tbody = document.getElementById('examRankTableBody');
       const overview = document.getElementById('examOverviewBox');
       const downloadBtn = document.getElementById('downloadRankPdfBtn');
@@ -2322,12 +2221,11 @@
       if (!examTitle) {
         overview.classList.add('hidden');
         downloadBtn.classList.add('hidden');
-        tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-500">മുകളിൽ നിന്നും ഒരു പരീക്ഷ തിരഞ്ഞെടുക്കുക.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-500">പരീക്ഷ തിരഞ്ഞെടുക്കുക.</td></tr>';
         return;
       }
 
       tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-400">റാങ്ക് ലിസ്റ്റ് ശേഖരിക്കുന്നു...</td></tr>';
-      
       const searchKeys = [];
       if (examKeyAttr) searchKeys.push(cleanTitle(examKeyAttr));
       const cleanExamTitle = cleanTitle(examTitle);
@@ -2335,35 +2233,15 @@
 
       try {
         let ranks = [];
-
         for (const k of searchKeys) {
           const [liveRes, ranksRes] = await Promise.all([
             fetch(`${FIREBASE_DB_URL}/live_ranks/${k}.json`).then(r => r.json()).catch(() => null),
             fetch(`${FIREBASE_DB_URL}/ranks/${k}.json`).then(r => r.json()).catch(() => null)
           ]);
-
           const mergedMap = {};
-
-          if (liveRes) {
-            const lList = Array.isArray(liveRes) ? liveRes : Object.values(liveRes);
-            lList.forEach(r => {
-              const p = extractPhone(r);
-              if (p) mergedMap[p] = { ...r, phone: p };
-            });
-          }
-
-          if (ranksRes) {
-            const rList = Array.isArray(ranksRes) ? ranksRes : Object.values(ranksRes);
-            rList.forEach(r => {
-              const p = extractPhone(r);
-              if (p && !mergedMap[p]) mergedMap[p] = { ...r, phone: p };
-            });
-          }
-
-          if (Object.keys(mergedMap).length > 0) {
-            ranks = Object.values(mergedMap);
-            break;
-          }
+          if (liveRes) Object.values(liveRes).forEach(r => { const p = extractPhone(r); if (p) mergedMap[p] = { ...r, phone: p }; });
+          if (ranksRes) Object.values(ranksRes).forEach(r => { const p = extractPhone(r); if (p && !mergedMap[p]) mergedMap[p] = { ...r, phone: p }; });
+          if (Object.keys(mergedMap).length > 0) { ranks = Object.values(mergedMap); break; }
         }
 
         overview.classList.remove('hidden');
@@ -2373,23 +2251,18 @@
           document.getElementById('examPartCount').innerText = 0;
           document.getElementById('examHighestScore').innerText = "0.00";
           document.getElementById('examAverageScore').innerText = "0.00";
-          tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-500">ഈ പരീക്ഷയിൽ ഇതുവരെ ആരും പങ്കെടുത്തിട്ടില്ല.</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-500">ആരും പങ്കെടുത്തിട്ടില്ല.</td></tr>';
           return;
         }
 
         ranks.sort((a, b) => parseCandidateScore(b) - parseCandidateScore(a));
-
         let totalScore = 0;
-        let highest = ranks.length > 0 ? parseCandidateScore(ranks[0]) : 0;
+        let highest = parseCandidateScore(ranks[0]);
         ranks.forEach(r => totalScore += parseCandidateScore(r));
-        let avg = ranks.length > 0 ? (totalScore / ranks.length).toFixed(2) : "0.00";
+        let avg = (totalScore / ranks.length).toFixed(2);
 
         currentSelectedExamData = {
-          examTitle: examTitle,
-          totalParticipants: ranks.length,
-          highestScore: highest % 1 === 0 ? highest : highest.toFixed(2),
-          averageScore: avg,
-          rankList: ranks
+          examTitle, totalParticipants: ranks.length, highestScore: highest % 1 === 0 ? highest : highest.toFixed(2), averageScore: avg, rankList: ranks
         };
 
         document.getElementById('examPartCount').innerText = ranks.length;
@@ -2398,49 +2271,27 @@
 
         tbody.innerHTML = '';
         ranks.forEach((r, idx) => {
-          const tr = document.createElement('tr');
-          let rankBadge = `<span class="font-mono font-bold text-slate-400">${idx + 1}</span>`;
-          let rowBg = "";
-          if (idx === 0) {
-            rankBadge = `<span class="bg-amber-400 text-slate-950 font-black px-2.5 py-0.5 rounded-full text-[11px] shadow">🥇 1st</span>`;
-            rowBg = "bg-amber-950/20";
-          } else if (idx === 1) {
-            rankBadge = `<span class="bg-slate-200 text-slate-950 font-black px-2.5 py-0.5 rounded-full text-[11px] shadow">🥈 2nd</span>`;
-            rowBg = "bg-slate-800/30";
-          } else if (idx === 2) {
-            rankBadge = `<span class="bg-amber-700 text-white font-black px-2.5 py-0.5 rounded-full text-[11px] shadow">🥉 3rd</span>`;
-            rowBg = "bg-amber-900/15";
-          }
-
           const scoreVal = parseCandidateScore(r);
-          const formattedScore = scoreVal % 1 === 0 ? scoreVal : scoreVal.toFixed(2);
-          const rightVal = parseCandidateCorrect(r);
-          const wrongVal = parseCandidateWrong(r);
-
-          tr.className = `${rowBg} hover:bg-slate-800/40 transition`;
+          const tr = document.createElement('tr');
+          tr.className = "hover:bg-slate-800/40 transition";
           tr.innerHTML = `
-            <td class="p-3 text-center">${rankBadge}</td>
+            <td class="p-3 text-center font-mono font-bold">${idx + 1}</td>
             <td class="p-3 font-bold text-white">${extractName(r)}</td>
-            <td class="p-3 font-mono text-slate-400 tracking-wider">${maskPhoneNumber(extractPhone(r))}</td>
-            <td class="p-3 text-center font-mono font-bold text-emerald-400 text-sm">${formattedScore}</td>
-            <td class="p-3 text-center font-mono text-teal-300 font-semibold">${rightVal}</td>
-            <td class="p-3 text-center font-mono text-rose-400 font-semibold">${wrongVal}</td>
+            <td class="p-3 font-mono text-slate-400">${maskPhoneNumber(extractPhone(r))}</td>
+            <td class="p-3 text-center font-mono font-bold text-emerald-400">${scoreVal % 1 === 0 ? scoreVal : scoreVal.toFixed(2)}</td>
+            <td class="p-3 text-center font-mono text-teal-300 font-semibold">${parseCandidateCorrect(r)}</td>
+            <td class="p-3 text-center font-mono text-rose-400 font-semibold">${parseCandidateWrong(r)}</td>
             <td class="p-3 text-right font-mono text-slate-400 text-[11px]">${r.date || r.Date || '-'}</td>
           `;
           tbody.appendChild(tr);
         });
-
       } catch (err) {
-        tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-rose-400">റാങ്ക് ലിസ്റ്റ് ലോഡ് ചെയ്യാൻ കഴിഞ്ഞില്ല.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-rose-400">ലോഡ് ചെയ്യാൻ കഴിഞ്ഞില്ല.</td></tr>';
       }
     }
 
     function downloadExamRankListPDF() {
-      if (!currentSelectedExamData || !currentSelectedExamData.rankList) {
-        alert("റാങ്ക് ലിസ്റ്റ് ഡാറ്റ ലഭ്യമല്ല.");
-        return;
-      }
-
+      if (!currentSelectedExamData || !currentSelectedExamData.rankList) return;
       document.getElementById('pdfRankExamTitle').innerText = currentSelectedExamData.examTitle;
       document.getElementById('pdfRankPartCount').innerText = currentSelectedExamData.totalParticipants;
       document.getElementById('pdfRankTopScore').innerText = currentSelectedExamData.highestScore;
@@ -2448,63 +2299,32 @@
 
       const pdfTbody = document.getElementById('pdfRankTableBody');
       pdfTbody.innerHTML = '';
-
       currentSelectedExamData.rankList.forEach((r, idx) => {
         const row = document.createElement('tr');
-        let rankCol = `<span class="font-bold font-mono text-[10px]">${idx + 1}</span>`;
-        let rowStyle = "";
-        
-        if (idx === 0) {
-          rankCol = `<span style="background:#fef08a; color:#854d0e; font-weight:800; padding:1px 4px; border-radius:6px; font-size:9px;">🥇 1st</span>`;
-          rowStyle = "background-color: #fefce8;";
-        } else if (idx === 1) {
-          rankCol = `<span style="background:#f1f5f9; color:#334155; font-weight:800; padding:1px 4px; border-radius:6px; font-size:9px;">🥈 2nd</span>`;
-          rowStyle = "background-color: #f8fafc;";
-        } else if (idx === 2) {
-          rankCol = `<span style="background:#ffedd5; color:#9a3412; font-weight:800; padding:1px 4px; border-radius:6px; font-size:9px;">🥉 3rd</span>`;
-          rowStyle = "background-color: #fff7ed;";
-        }
-
-        const scoreVal = parseCandidateScore(r);
-        const formattedScore = scoreVal % 1 === 0 ? scoreVal : scoreVal.toFixed(2);
-        const rightVal = parseCandidateCorrect(r);
-        const wrongVal = parseCandidateWrong(r);
-
-        row.setAttribute("style", rowStyle);
         row.innerHTML = `
-          <td class="py-1 px-1 border-r border-slate-200 text-center">${rankCol}</td>
+          <td class="py-1 px-1 border-r border-slate-200 text-center font-bold font-mono text-[10px]">${idx + 1}</td>
           <td class="py-1 px-1.5 border-r border-slate-200 font-bold text-slate-900 text-[10px] truncate">${extractName(r)}</td>
           <td class="py-1 px-1 border-r border-slate-200 text-center font-mono text-slate-600 text-[10px]">${maskPhoneNumber(extractPhone(r))}</td>
-          <td class="py-1 px-1 border-r border-slate-200 text-center font-mono font-bold text-emerald-800 text-[10px]">${formattedScore}</td>
-          <td class="py-1 px-1 border-r border-slate-200 text-center font-mono text-emerald-700 font-semibold text-[10px]">${rightVal}</td>
-          <td class="py-1 px-1 text-center font-mono text-rose-700 font-semibold text-[10px]">${wrongVal}</td>
+          <td class="py-1 px-1 border-r border-slate-200 text-center font-mono font-bold text-emerald-800 text-[10px]">${parseCandidateScore(r)}</td>
+          <td class="py-1 px-1 border-r border-slate-200 text-center font-mono text-emerald-700 text-[10px]">${parseCandidateCorrect(r)}</td>
+          <td class="py-1 px-1 text-center font-mono text-rose-700 text-[10px]">${parseCandidateWrong(r)}</td>
         `;
         pdfTbody.appendChild(row);
       });
 
-      const element = document.getElementById('printableRankListCard');
-      const filenameClean = currentSelectedExamData.examTitle.replace(/[^\w\s\u0D00-\u0D7F]/gi, '_');
-
-      const opt = {
-        margin:       [8, 8, 8, 8],
-        filename:     `${filenameClean}_Official_RankList.pdf`,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak:    { mode: ['css', 'legacy'] }
-      };
-
-      html2pdf().set(opt).from(element).save();
+      html2pdf().set({
+        margin: [8, 8, 8, 8],
+        filename: `${currentSelectedExamData.examTitle}_RankList.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      }).from(document.getElementById('printableRankListCard')).save();
     }
 
     // 4. STUDENT SEARCH
     async function searchStudentDetails() {
       const rawInput = document.getElementById('studentSearchInput').value.trim();
-
-      if (!rawInput) {
-        alert("ദയവായി വിദ്യാർത്ഥിയുടെ പേരോ മൊബൈൽ നമ്പറോ നൽകുക.");
-        return;
-      }
+      if (!rawInput) return alert("പേരോ നമ്പറോ നൽകുക.");
 
       const btn = document.getElementById('btnSearchStudent');
       btn.innerText = "തിരയുന്നു...";
@@ -2512,173 +2332,67 @@
 
       const area = document.getElementById('searchResultArea');
       const tableBody = document.getElementById('studentHistoryTableBody');
-      tableBody.innerHTML = '<tr><td colspan="7" class="p-4 text-center text-slate-400">ഹിസ്റ്ററി ശേഖരിക്കുന്നു, ദയവായി കാത്തിരിക്കുക...</td></tr>';
+      tableBody.innerHTML = '<tr><td colspan="7" class="p-4 text-center text-slate-400">ഹിസ്റ്ററി ശേഖരിക്കുന്നു...</td></tr>';
       area.classList.remove('hidden');
 
       try {
-        if (allCandidatesCache.length === 0) {
-          await loadDashboardData();
-        }
-
+        if (allCandidatesCache.length === 0) await loadDashboardData();
         const cleanQ = rawInput.toLowerCase();
         const numQ = rawInput.replace(/\D/g, '');
 
-        let targetPhone = '';
-        let targetName = '';
-
+        let targetPhone = '', targetName = '';
         if (numQ.length >= 10) {
           targetPhone = numQ.slice(-10);
           const matched = allCandidatesCache.find(c => extractPhone(c).includes(targetPhone));
           targetName = matched ? extractName(matched) : "വിദ്യാർത്ഥി";
         } else {
-          const matched = allCandidatesCache.find(c => {
-            const n = String(c.name || extractName(c)).toLowerCase();
-            const p = extractPhone(c);
-            return n.includes(cleanQ) || (numQ.length > 0 && p.includes(numQ));
-          });
-
-          if (matched) {
-            targetName = extractName(matched);
-            const p = extractPhone(matched);
-            targetPhone = p.length >= 10 ? p.slice(-10) : p;
-          }
+          const matched = allCandidatesCache.find(c => String(c.name || '').toLowerCase().includes(cleanQ));
+          if (matched) { targetName = extractName(matched); targetPhone = extractPhone(matched); }
         }
 
         if (!targetPhone) {
-          tableBody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-rose-400 font-bold">വിദ്യാർത്ഥിയെ കണ്ടെത്താൻ സാധിച്ചില്ല! പേരോ നമ്പറോ കൃത്യമാണോ എന്ന് പരിശോധിക്കുക.</td></tr>';
+          tableBody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-rose-400 font-bold">കണ്ടെത്താൻ സാധിച്ചില്ല!</td></tr>';
           btn.innerText = "സമ്പൂർണ്ണ റിപ്പോർട്ട് കാണുക ›";
           btn.disabled = false;
           return;
         }
 
         const histRes = await fetch(`${FIREBASE_DB_URL}/users_history/${targetPhone}.json`).then(r => r.json()).catch(() => null);
-
-        let rawAttemptsList = [];
-
-        if (histRes) {
-          Object.values(histRes).forEach(h => {
-            if (h && (h.title || h.Title)) rawAttemptsList.push(h);
-          });
-        }
-
-        const uniqueAttemptsMap = new Map();
-
-        rawAttemptsList.forEach(item => {
-          const cleanT = cleanTitle(item.title || item.Title);
-          if (!cleanT) return;
-
-          const rawDateStr = String(item.date || item.Date || '');
-          let dateOnly = rawDateStr.split(' ')[0].split('T')[0].trim();
-          
-          let ts = item.timestamp || item.Timestamp;
-          if (!ts && rawDateStr) {
-            const parsedTime = new Date(rawDateStr).getTime();
-            if (!isNaN(parsedTime) && parsedTime !== 0) {
-              ts = parsedTime;
-            }
-          }
-
-          const scoreVal = parseCandidateScore(item).toFixed(2);
-          const uniqueKey = `${cleanT}_${dateOnly || 'nodate'}_${scoreVal}`;
-
-          if (!uniqueAttemptsMap.has(uniqueKey)) {
-            uniqueAttemptsMap.set(uniqueKey, item);
-          } else {
-            const existing = uniqueAttemptsMap.get(uniqueKey);
-            if (parseCandidateCorrect(existing) === '-' && parseCandidateCorrect(item) !== '-') {
-              uniqueAttemptsMap.set(uniqueKey, item);
-            }
-          }
-        });
-
-        let deduplicatedList = Array.from(uniqueAttemptsMap.values());
-
-        deduplicatedList.sort((a, b) => {
-          let tA = a.timestamp || new Date(a.date || a.Date || 0).getTime() || 0;
-          let tB = b.timestamp || new Date(b.date || b.Date || 0).getTime() || 0;
-          return tA - tB;
-        });
-
-        const examOccurrences = {};
-        deduplicatedList.forEach(item => {
-          const cleanT = cleanTitle(item.title || item.Title);
-          examOccurrences[cleanT] = (examOccurrences[cleanT] || 0) + 1;
-        });
-
-        const seenExams = {};
-        deduplicatedList.forEach(item => {
-          const cleanT = cleanTitle(item.title || item.Title);
-          if (!seenExams[cleanT]) {
-            seenExams[cleanT] = true;
-            item.isFirstAttempt = examOccurrences[cleanT] > 1;
-            item.isRepeat = false;
-          } else {
-            item.isFirstAttempt = false;
-            item.isRepeat = true;
-          }
-        });
-
-        deduplicatedList.sort((a, b) => {
-          let tA = a.timestamp || new Date(a.date || a.Date || 0).getTime() || 0;
-          let tB = b.timestamp || new Date(b.date || b.Date || 0).getTime() || 0;
-          return tB - tA;
-        });
-
-        currentStudentData = { name: targetName, phone: targetPhone, history: deduplicatedList };
-
+        let rawList = histRes ? Object.values(histRes).filter(h => h && h.title) : [];
+        
+        currentStudentData = { name: targetName, phone: targetPhone, history: rawList };
         document.getElementById('resStudentName').innerText = targetName;
         document.getElementById('resStudentPhone').innerText = `+91 ${targetPhone}`;
-        document.getElementById('resTotalTests').innerText = deduplicatedList.length;
+        document.getElementById('resTotalTests').innerText = rawList.length;
 
         let totScore = 0;
-        deduplicatedList.forEach(h => totScore += parseCandidateScore(h));
-        const avgScore = deduplicatedList.length > 0 ? (totScore / deduplicatedList.length).toFixed(2) : "0.00";
-        document.getElementById('resAvgScore').innerText = avgScore;
-        currentStudentData.avgScore = avgScore;
+        rawList.forEach(h => totScore += parseCandidateScore(h));
+        const avg = rawList.length ? (totScore / rawList.length).toFixed(2) : "0.00";
+        document.getElementById('resAvgScore').innerText = avg;
+        currentStudentData.avgScore = avg;
 
         tableBody.innerHTML = '';
-        if (deduplicatedList.length === 0) {
-          tableBody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-500">ഈ വിദ്യാർത്ഥി ഇതുവരെ പരീക്ഷകൾ ഒന്നും എഴുതിയിട്ടില്ല.</td></tr>';
-          btn.innerText = "സമ്പൂർണ്ണ റിപ്പോർട്ട് കാണുക ›";
-          btn.disabled = false;
+        if (rawList.length === 0) {
+          tableBody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-500">പരീക്ഷകൾ എഴുതിയിട്ടില്ല.</td></tr>';
           return;
         }
 
-        deduplicatedList.forEach((item, index) => {
+        rawList.forEach((item, index) => {
           const tr = document.createElement('tr');
           tr.className = "hover:bg-slate-800/30 transition border-b border-slate-800/40";
-
-          const correctNum = Number(parseCandidateCorrect(item)) || 0;
-          const wrongNum = Number(parseCandidateWrong(item)) || 0;
-          const scoreNum = parseCandidateScore(item);
-          const totalQ = item.totalQuestions || item.questions || (correctNum + wrongNum > 25 ? (correctNum + wrongNum) : 25);
-          let scoreAccuracy = Math.max(0, Math.round((scoreNum / totalQ) * 100));
-
-          let attemptBadge = '';
-          if (item.isFirstAttempt) {
-            attemptBadge = `<span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 px-2 py-0.5 rounded-full text-[10px] font-bold ml-2">🥇 First Attempt</span>`;
-          } else if (item.isRepeat) {
-            attemptBadge = `<span class="bg-slate-800 text-slate-400 border border-slate-700 px-2 py-0.5 rounded-full text-[10px] font-medium ml-2">Reattempt</span>`;
-          }
-
           tr.innerHTML = `
             <td class="p-3 font-mono text-slate-500">${index + 1}</td>
-            <td class="p-3 font-bold text-white flex items-center">
-              <span>${item.title || item.Title || 'Exam'}</span>
-              ${attemptBadge}
-            </td>
-            <td class="p-3 text-center font-mono font-bold text-emerald-400">${scoreNum}</td>
-            <td class="p-3 text-center font-mono text-teal-300 font-semibold">${correctNum}</td>
-            <td class="p-3 text-center font-mono text-rose-400 font-semibold">${wrongNum}</td>
-            <td class="p-3 text-center font-mono font-bold text-cyan-400">${scoreAccuracy}%</td>
-            <td class="p-3 text-right font-mono text-slate-400 text-[11px]">${item.date || item.Date || '-'}</td>
+            <td class="p-3 font-bold text-white">${item.title || 'Exam'}</td>
+            <td class="p-3 text-center font-mono font-bold text-emerald-400">${parseCandidateScore(item)}</td>
+            <td class="p-3 text-center font-mono text-teal-300 font-semibold">${parseCandidateCorrect(item)}</td>
+            <td class="p-3 text-center font-mono text-rose-400 font-semibold">${parseCandidateWrong(item)}</td>
+            <td class="p-3 text-center font-mono font-bold text-cyan-400">${Math.round((parseCandidateScore(item) / 25) * 100)}%</td>
+            <td class="p-3 text-right font-mono text-slate-400 text-[11px]">${item.date || '-'}</td>
           `;
           tableBody.appendChild(tr);
         });
-
       } catch (err) {
-        console.error("Search error:", err);
-        tableBody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-rose-400 font-bold">വിവരങ്ങൾ ശേഖരിക്കുന്നതിൽ തടസ്സം നേരിട്ടു.</td></tr>';
+        tableBody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-rose-400">തടസ്സം നേരിട്ടു.</td></tr>';
       } finally {
         btn.innerText = "സമ്പൂർണ്ണ റിപ്പോർട്ട് കാണുക ›";
         btn.disabled = false;
@@ -2687,86 +2401,35 @@
 
     function downloadStudentPDF() {
       if (!currentStudentData || !currentStudentData.history) return;
-
       document.getElementById('pdfStudentName').innerText = currentStudentData.name;
       document.getElementById('pdfStudentPhone').innerText = `+91 ${currentStudentData.phone}`;
       document.getElementById('pdfStudentTotalTests').innerText = currentStudentData.history.length;
       document.getElementById('pdfStudentAvgScore').innerText = `${currentStudentData.avgScore} Marks`;
       document.getElementById('pdfStudentReportDate').innerText = `Date: ${new Date().toLocaleDateString('en-GB')}`;
 
-      const avg = parseFloat(currentStudentData.avgScore || 0);
-      const tests = currentStudentData.history.length;
-
-      let emoji = "🎯";
-      let category = "PERFORMANCE ASSESSMENT";
-      let message = "";
-      let cardBgClass = "bg-emerald-50/80 border-emerald-200";
-
-      if (tests >= 5 && avg >= 18) {
-        emoji = "🏆";
-        category = "EXCELLENT PERFORMANCE (RANK LEADER)";
-        message = "അത്യുജ്ജ്വല പ്രകടനം! നിങ്ങൾ ലക്ഷ്യത്തിലേക്ക് വളരെ അടുത്താണ്. മോഡൽ പരീക്ഷകളിൽ കാത്തുസൂക്ഷിക്കുന്ന ഇതേ ഏകാഗ്രതയും കൃത്യതയും ഫൈനൽ പരീക്ഷയിലും ആവർത്തിക്കുക.";
-        cardBgClass = "bg-amber-50/90 border-amber-300";
-      } else if (avg >= 12) {
-        emoji = "📈";
-        category = "CONSISTENT PERFORMANCE (GOOD PROGRESS)";
-        message = "മികച്ച മുന്നേറ്റം! നെഗറ്റീവ് മാർക്കുകൾ ഒഴിവാക്കി സംശയമുള്ള ചോദ്യങ്ങൾ വീണ്ടും പഠിക്കുക. സ്ഥിരമായ പരിശീലനത്തിലൂടെ ആദ്യ റാങ്കുകളിലേക്ക് ഉയർന്നുവരാൻ സാധിക്കും.";
-        cardBgClass = "bg-emerald-50/90 border-emerald-300";
-      } else {
-        emoji = "💡";
-        category = "NEEDS IMPROVEMENT & PRACTICE";
-        message = "തുടർച്ചയായ പരിശീലനമാണ് വിജയത്തിന്റെ രഹസ്യം! മുൻ പരീക്ഷകളിലെ തെറ്റുകൾ പ്രത്യേകം നോട്ട് ചെയ്തു വെച്ച് ആവർത്തിച്ചു പരിശീലിക്കുക. കൂടുതൽ പരീക്ഷകളിൽ പങ്കെടുക്കുക.";
-        cardBgClass = "bg-blue-50/90 border-blue-200";
-      }
-
-      document.getElementById('pdfFeedbackEmoji').innerText = emoji;
-      document.getElementById('pdfFeedbackCategory').innerText = category;
-      document.getElementById('pdfFeedbackText').innerText = message;
-      document.getElementById('pdfFeedbackCard').className = `my-2 p-2.5 rounded-xl border flex items-start space-x-2.5 text-[11px] ${cardBgClass}`;
-
       const pdfTbody = document.getElementById('pdfStudentTableBody');
       pdfTbody.innerHTML = '';
-
       currentStudentData.history.forEach((h, idx) => {
-        const correctNum = Number(parseCandidateCorrect(h)) || 0;
-        const wrongNum = Number(parseCandidateWrong(h)) || 0;
-        const scoreNum = parseCandidateScore(h);
-        const totalQ = h.totalQuestions || h.questions || (correctNum + wrongNum > 25 ? (correctNum + wrongNum) : 25);
-        let scoreAccuracy = Math.max(0, Math.round((scoreNum / totalQ) * 100));
-
-        let badgeText = '';
-        if (h.isFirstAttempt) {
-          badgeText = ' (1st Attempt)';
-        } else if (h.isRepeat) {
-          badgeText = ' (Reattempt)';
-        }
-
         const row = document.createElement('tr');
         row.innerHTML = `
           <td class="py-1 px-1 border-r border-slate-200 text-center font-mono text-[9.5px]">${idx + 1}</td>
-          <td class="py-1 px-1.5 border-r border-slate-200 font-bold text-slate-900 text-[10px] truncate">
-            ${h.title || h.Title || 'Exam'}${badgeText}
-          </td>
-          <td class="py-1 px-1 border-r border-slate-200 text-center font-mono font-bold text-emerald-800 text-[9.5px]">${scoreNum}</td>
-          <td class="py-1 px-1 border-r border-slate-200 text-center font-mono text-emerald-700 text-[10px]">${correctNum}</td>
-          <td class="py-1 px-1 border-r border-slate-200 text-center font-mono text-rose-700 text-[10px]">${wrongNum}</td>
-          <td class="py-1 px-1 border-r border-slate-200 text-center font-mono font-bold text-teal-700 text-[10px]">${scoreAccuracy}%</td>
-          <td class="py-1 px-1 text-center text-slate-600 font-mono text-[9.5px] whitespace-nowrap">${h.date || h.Date || '-'}</td>
+          <td class="py-1 px-1.5 border-r border-slate-200 font-bold text-slate-900 text-[10px] truncate">${h.title || 'Exam'}</td>
+          <td class="py-1 px-1 border-r border-slate-200 text-center font-mono font-bold text-emerald-800 text-[9.5px]">${parseCandidateScore(h)}</td>
+          <td class="py-1 px-1 border-r border-slate-200 text-center font-mono text-emerald-700 text-[10px]">${parseCandidateCorrect(h)}</td>
+          <td class="py-1 px-1 border-r border-slate-200 text-center font-mono text-rose-700 text-[10px]">${parseCandidateWrong(h)}</td>
+          <td class="py-1 px-1 border-r border-slate-200 text-center font-mono font-bold text-teal-700 text-[10px]">${Math.round((parseCandidateScore(h) / 25) * 100)}%</td>
+          <td class="py-1 px-1 text-center text-slate-600 font-mono text-[9.5px]">${h.date || '-'}</td>
         `;
         pdfTbody.appendChild(row);
       });
 
-      const element = document.getElementById('printableStudentReportCard');
-      const opt = {
-        margin:       [6, 6, 6, 6],
-        filename:     `${currentStudentData.name}_${currentStudentData.phone}_SK_PSC.pdf`,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak:    { mode: ['css', 'legacy'] }
-      };
-
-      html2pdf().set(opt).from(element).save();
+      html2pdf().set({
+        margin: [6, 6, 6, 6],
+        filename: `${currentStudentData.name}_Report.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      }).from(document.getElementById('printableStudentReportCard')).save();
     }
 
     // 5. REPORTED QUESTIONS
@@ -2774,41 +2437,24 @@
       try {
         const res = await fetch(`${FIREBASE_DB_URL}/reported_questions.json`);
         const data = await res.json();
-
-        if (data) {
-          reportedQuestionsList = Object.entries(data)
-            .map(([id, val]) => ({ id, ...val }))
-            .filter(rep => !rep.status || rep.status !== 'solved');
-        } else {
-          reportedQuestionsList = [];
-        }
-
+        reportedQuestionsList = data ? Object.entries(data).map(([id, val]) => ({ id, ...val })).filter(rep => rep.status !== 'solved') : [];
         const count = reportedQuestionsList.length;
         document.getElementById('badgeReportCount').innerText = count;
         document.getElementById('statReportedQCount').innerText = count;
         document.getElementById('modalReportCountBadge').innerText = `${count} എണ്ണം`;
-
-        if (count > 0) {
-          document.getElementById('reportedNotificationBtn').classList.add('pulse-red');
-        } else {
-          document.getElementById('reportedNotificationBtn').classList.remove('pulse-red');
-        }
-      } catch (err) {
-        console.log("Report fetch error:", err);
-      }
+        if (count > 0) document.getElementById('reportedNotificationBtn').classList.add('pulse-red');
+        else document.getElementById('reportedNotificationBtn').classList.remove('pulse-red');
+      } catch (err) {}
     }
 
     async function solveQuestionById(id, btnElement) {
       btnElement.innerText = "പരിഹരിക്കുന്നു...";
       btnElement.disabled = true;
-
       try {
         await fetch(`${FIREBASE_DB_URL}/reported_questions/${id}.json`, { method: 'DELETE' });
         await loadReportedQuestions();
         openReportModal();
       } catch (err) {
-        alert("അപ്ഡേറ്റ് പരാജയപ്പെട്ടു: " + err.toString());
-        btnElement.innerText = "✓ Solve";
         btnElement.disabled = false;
       }
     }
@@ -2817,43 +2463,19 @@
       document.getElementById('reportedQuestionsModal').classList.remove('hidden');
       const listArea = document.getElementById('reportedListArea');
       listArea.innerHTML = '';
-
       if (reportedQuestionsList.length === 0) {
-        listArea.innerHTML = `
-          <div class="text-center py-10 space-y-2">
-            <span class="text-4xl">🎉</span>
-            <p class="text-xs text-slate-400 font-bold">നിലവിൽ സംശയങ്ങൾ ഒന്നും പരിഹരിക്കാനില്ല!</p>
-          </div>
-        `;
+        listArea.innerHTML = '<div class="text-center py-10"><p class="text-xs text-slate-400 font-bold">സംശയങ്ങൾ ഒന്നും പരിഹരിക്കാനില്ല!</p></div>';
         return;
       }
-
       reportedQuestionsList.forEach(rep => {
         const item = document.createElement('div');
-        item.className = "bg-slate-950 border border-slate-800 p-4 rounded-2xl space-y-2 hover:border-rose-500/40 transition flex flex-col justify-between";
+        item.className = "bg-slate-950 border border-slate-800 p-4 rounded-2xl space-y-2";
         item.innerHTML = `
           <div class="flex items-center justify-between">
-            <span class="text-[11px] bg-rose-500/20 text-rose-400 border border-rose-500/30 px-2.5 py-0.5 rounded-full font-bold">
-              ${rep.question || 'ചോദ്യം'}
-            </span>
-            <div class="flex items-center space-x-2">
-              <span class="text-[10px] text-slate-500 font-mono">${rep.date || ''}</span>
-              <button onclick="solveQuestionById('${rep.id}', this)" class="px-3 py-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-lg text-xs transition shadow flex items-center space-x-1 cursor-pointer">
-                <span>✓</span>
-                <span>Solve</span>
-              </button>
-            </div>
+            <span class="text-[11px] bg-rose-500/20 text-rose-400 px-2 py-0.5 rounded font-bold">${rep.question || 'ചോദ്യം'}</span>
+            <button onclick="solveQuestionById('${rep.id}', this)" class="px-3 py-1 bg-emerald-500 text-slate-950 font-black rounded-lg text-xs cursor-pointer">✓ Solve</button>
           </div>
-          <div>
-            <h4 class="text-xs font-bold text-white flex items-center space-x-1.5 mt-1">
-              <span>📖</span>
-              <span>പരീക്ഷ: ${rep.exam || 'മോഡൽ എക്സാം'}</span>
-            </h4>
-            <p class="text-xs text-slate-300 mt-2 bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 leading-relaxed">
-              <strong class="text-rose-400 font-semibold block text-[10px] uppercase">വിദ്യാർത്ഥിയുടെ സംശയം / കാരണം:</strong>
-              ${rep.reason || 'കാരണം രേഖപ്പെടുത്തിയിട്ടില്ല'}
-            </p>
-          </div>
+          <p class="text-xs text-slate-300 bg-slate-900 p-2.5 rounded-xl border border-slate-800">${rep.reason || 'കാരണം രേഖപ്പെടുത്തിയിട്ടില്ല'}</p>
         `;
         listArea.appendChild(item);
       });
