@@ -109,9 +109,9 @@
         <div>
           <h1 class="font-bold text-base text-white flex items-center space-x-2">
             <span>SK PSC അഡ്മിൻ കൺട്രോൾ പാനൽ</span>
-            <span class="text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded font-mono font-bold">OPTIMIZED SYNC</span>
+            <span class="text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded font-mono font-bold">ALL-IN-ONE STUDIO</span>
           </h1>
-          <p class="text-[11px] text-slate-400">വളർച്ചാ അനലിറ്റിക്സും മാനേജ്‌‌മെന്റും</p>
+          <p class="text-[11px] text-slate-400">വളർച്ചാ അനലിറ്റിക്സും എക്സാം & JSON മാനേജ്‌‌മെന്റും</p>
         </div>
       </div>
       
@@ -160,7 +160,7 @@
       </button>
       <button onclick="switchTab('publishManager')" id="tabBtnPublish" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap cursor-pointer">
         <span>📢</span>
-        <span>പരീക്ഷാ പബ്ലിഷർ</span>
+        <span>പരീക്ഷാ പബ്ലിഷർ & JSON അപ്‌ലോഡർ</span>
       </button>
       <button onclick="switchTab('examWise')" id="tabBtnExam" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap cursor-pointer">
         <span>🏆</span>
@@ -178,7 +178,6 @@
 
     <!-- 0. പോർട്ടൽ ഗ്രോത്ത് ചാർട്ട് & അനലിറ്റിക്സ് -->
     <div id="sectionAnalyticsDashboard" class="space-y-6">
-      
       <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-7 shadow-2xl space-y-5">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
           <div>
@@ -240,11 +239,12 @@
           </div>
         </div>
       </div>
-
     </div>
 
-    <!-- 1. PUBLISH MANAGER -->
+    <!-- 1. PUBLISH MANAGER & ALL-IN-ONE EXAM CREATOR -->
     <div id="sectionPublishManager" class="hidden bg-slate-900 border border-emerald-500/30 rounded-3xl p-5 sm:p-7 space-y-6 shadow-2xl">
+      
+      <!-- ഹോം പേജ് നോട്ടീസ് കൺട്രോളർ -->
       <div class="bg-slate-950 border border-slate-800 p-4 sm:p-5 rounded-2xl space-y-3">
         <div class="flex items-center justify-between">
           <h4 class="text-xs sm:text-sm font-bold text-white flex items-center space-x-2">
@@ -253,16 +253,13 @@
           </h4>
           <span class="text-[10px] text-slate-500 font-mono">portal_config/notice</span>
         </div>
-        <p class="text-[11px] text-slate-400">
-          Enter അടിച്ച് പുതിയ ലൈനിലേക്ക് മെസ്സേജ് മാറ്റാം[cite: 14].
-        </p>
         <div class="flex flex-col gap-2.5">
-          <textarea id="adminNoticeInput" rows="3" placeholder="ഹോം പേജിൽ കാണിക്കേണ്ട പ്രധാന നോട്ടീസ് ടൈപ്പ് ചെയ്യുക..." class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 custom-scroll resize-y leading-relaxed font-sans"></textarea>
+          <textarea id="adminNoticeInput" rows="2" placeholder="ഹോം പേജിൽ കാണിക്കേണ്ട പ്രധാന നോട്ടീസ് ടൈപ്പ് ചെയ്യുക..." class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 custom-scroll resize-y leading-relaxed font-sans"></textarea>
           <div class="flex justify-end gap-2.5">
-            <button onclick="clearNoticeMessage()" class="px-4 py-2.5 bg-rose-950/60 border border-rose-500/30 hover:bg-rose-900 text-rose-300 font-bold rounded-xl text-xs transition cursor-pointer">
+            <button onclick="clearNoticeMessage()" class="px-4 py-2 bg-rose-950/60 border border-rose-500/30 hover:bg-rose-900 text-rose-300 font-bold rounded-xl text-xs transition cursor-pointer">
               ക്ലിയർ
             </button>
-            <button onclick="saveNoticeMessage()" id="btnSaveNotice" class="px-6 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-xl text-xs transition shadow flex items-center justify-center space-x-1.5 whitespace-nowrap cursor-pointer">
+            <button onclick="saveNoticeMessage()" id="btnSaveNotice" class="px-5 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-xl text-xs transition shadow flex items-center justify-center space-x-1.5 whitespace-nowrap cursor-pointer">
               <span>💾</span>
               <span>നോട്ടീസ് സേവ് ചെയ്യുക</span>
             </button>
@@ -270,35 +267,178 @@
         </div>
       </div>
 
+      <!-- 🌟 ഓൾ-ഇൻ-വൺ എക്സാം & ചോദ്യങ്ങൾ അപ്‌ലോഡർ (All-in-One Exam & Questions Creator) -->
+      <div class="bg-slate-950 border-2 border-cyan-500/40 p-4 sm:p-6 rounded-3xl space-y-4 shadow-xl">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <span class="text-[10px] font-black uppercase tracking-wider bg-cyan-500/20 text-cyan-300 px-2.5 py-0.5 rounded-full border border-cyan-500/30">NO MORE MANUAL JSON FILES</span>
+            <h4 class="text-sm sm:text-base font-black text-white flex items-center space-x-2 mt-1">
+              <span>⚡</span>
+              <span>ഓൾ-ഇൻ-വൺ എക്സാം ക്രിയേറ്റർ (Exam Details + Questions JSON + PDF)</span>
+            </h4>
+            <p class="text-[11px] text-slate-400">രണ്ട് JSON ഫയലുകൾ ഉണ്ടാക്കുന്ന സമയം ലാഭിക്കാം! ഇവിടെ വിവരങ്ങളും ചോദ്യങ്ങളുടെ JSON-ഉം നൽകിയാൽ ഫയർബേസിലേക്ക് തനിയെ ആഡ് ആകും.</p>
+          </div>
+          <button onclick="toggleNewExamForm()" id="toggleAddExamBtn" class="px-4 py-2.5 bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-slate-950 font-black rounded-xl text-xs transition shadow-lg whitespace-nowrap cursor-pointer">
+            ➕ പുതിയ പരീക്ഷ & ചോദ്യങ്ങൾ ചേർക്കുക
+          </button>
+        </div>
+
+        <form id="addNewExamForm" onsubmit="createNewExamInFirebase(event)" class="hidden pt-4 border-t border-slate-800 space-y-5 text-xs">
+          
+          <!-- Row 1: Basic Info & Folders -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+            <div>
+              <label class="block text-[11px] text-slate-300 font-bold mb-1">1. പരീക്ഷയുടെ പേര് (TITLE) *</label>
+              <input type="text" id="newExTitle" oninput="autoFillExamKey()" required placeholder="ഉദാ: മോഡൽ എക്സാം - 51" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-emerald-500">
+            </div>
+
+            <div>
+              <label class="block text-[11px] text-emerald-400 font-bold mb-1">2. പ്രധാന ഫോൾഡർ (LDC/LGS/Degree) *</label>
+              <select id="newExMainFolder" class="w-full bg-slate-900 border border-emerald-500/50 rounded-xl px-3 py-2.5 text-emerald-300 font-bold focus:outline-none focus:border-emerald-500 cursor-pointer">
+                <option value="LDC">🏛️ LDC (എൽ.ഡി.സി)</option>
+                <option value="LGS">🛡️ LGS (എൽ.ജി.എസ്)</option>
+                <option value="DEGREE">🎓 Degree Level (ഡിഗ്രി)</option>
+                <option value="LDC, LGS">🏛️+🛡️ LDC & LGS (രണ്ടിലും)</option>
+                <option value="ALL">🌟 എല്ലാം (LDC, LGS & Degree)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-[11px] text-slate-300 font-bold mb-1">3. വിഷയം / സബ്ജക്റ്റ് ഫോൾഡർ (CATEGORY) *</label>
+              <input type="text" id="newExCategory" list="existingCategoriesList" required placeholder="ഉദാ: കേരള ചരിത്രം" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-emerald-500">
+              <datalist id="existingCategoriesList"></datalist>
+            </div>
+
+            <div>
+              <label class="block text-[11px] text-cyan-400 font-bold mb-1">4. യൂണിക് ഇംഗ്ലീഷ് കീ (KEY) *</label>
+              <input type="text" id="newExKey" required placeholder="ഉദാ: exam_51" class="w-full bg-slate-900 border border-cyan-500/40 rounded-xl px-3 py-2.5 text-cyan-300 font-mono font-bold focus:outline-none focus:border-cyan-400">
+              <span class="text-[10px] text-slate-500 block mt-0.5">ചോദ്യങ്ങളും റാങ്ക് ലിസ്റ്റും ഈ കീയിലാണ് സേവ് ആവുക.</span>
+            </div>
+          </div>
+
+          <!-- Row 2: Links (Common HTML Link + Google Docs PDF Link) -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-900/60 p-3.5 rounded-2xl border border-slate-800">
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <label class="text-[11px] text-amber-400 font-bold">5. കോമൺ എക്സാം HTML ലിങ്ക് (FILEURL) *</label>
+                <span class="text-[10px] text-emerald-400 font-mono">✓ തനിയെ ഓർത്തുവെക്കും</span>
+              </div>
+              <input type="text" id="newExFileUrl" required placeholder="ഉദാ: exam.html അഥവാ നിങ്ങളുടെ കോമൺ HTML ലിങ്ക്" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-emerald-500 font-mono">
+              <span class="text-[10px] text-slate-400 block mt-1">നിങ്ങളുടെ കോമൺ എക്സാം ഫോർമാറ്റ് HTML ഫയലിന്റെ പേര് ഒരു തവണ നൽകിയാൽ മതി.</span>
+            </div>
+
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <label class="text-[11px] text-emerald-400 font-bold">6. ഗൂഗിൾ ഡോക്സ് / ഡ്രൈവ് ഒറിജിനൽ PDF ലിങ്ക് (pdfUrl)</label>
+                <button type="button" onclick="convertGoogleDocToPdfLink('newExPdfUrl')" class="text-[10px] bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/30 transition cursor-pointer">
+                  🔄 Direct PDF ലിങ്കാക്കി മാറ്റുക
+                </button>
+              </div>
+              <input type="text" id="newExPdfUrl" placeholder="Google Docs / Drive Share Link ഇവിടെ പേസ്റ്റ് ചെയ്യുക..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-emerald-500 font-mono">
+              <span class="text-[10px] text-slate-400 block mt-1">പാസ് മാർക്ക് നേടുന്നവർക്ക് നേരിട്ട് PDF ഡൗൺലോഡ് ചെയ്യാൻ ഗൂഗിൾ ഡോക്സ് ലിങ്ക് പേസ്റ്റ് ചെയ്ത് മുകളിലെ ബട്ടൺ അമർത്തുക.</span>
+            </div>
+          </div>
+
+          <!-- Row 3: Topics, Questions Count, Time, Schedule -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+            <div>
+              <label class="block text-[11px] text-slate-400 font-semibold mb-1">പ്രധാന ടോപ്പിക്കുകൾ (TOPICS)</label>
+              <input type="text" id="newExTopics" placeholder="ഉദാ: നവോത്ഥാനം, പ്രധാന വർഷങ്ങൾ" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500">
+            </div>
+
+            <div>
+              <label class="block text-[11px] text-slate-400 font-semibold mb-1">ചോദ്യങ്ങളുടെ എണ്ണം (QUESTIONS)</label>
+              <input type="number" id="newExQuestions" value="25" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-emerald-400 font-bold focus:outline-none focus:border-emerald-500 font-mono">
+            </div>
+
+            <div>
+              <label class="block text-[11px] text-slate-400 font-semibold mb-1">സമയം (TIME)</label>
+              <input type="text" id="newExTime" value="20 മിനിറ്റ്" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500">
+            </div>
+
+            <div>
+              <label class="block text-[11px] text-slate-400 font-semibold mb-1">ഷെഡ്യൂൾ സമയം (Optional)</label>
+              <input type="datetime-local" id="newExReleaseDate" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-cyan-300 font-mono focus:outline-none focus:border-emerald-500">
+            </div>
+          </div>
+
+          <!-- Row 4: 🌟 QUESTIONS JSON UPLOAD / PASTE AREA -->
+          <div class="bg-slate-900 border border-cyan-500/30 p-4 rounded-2xl space-y-3">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-2.5">
+              <div>
+                <h5 class="text-xs font-black text-cyan-400 flex items-center space-x-1.5">
+                  <span>📝</span>
+                  <span>7. ചോദ്യങ്ങളുടെ JSON ഇവിടെ നൽകുക (Questions JSON Upload / Paste)</span>
+                </h5>
+                <p class="text-[11px] text-slate-400">നിങ്ങളുടെ ചോദ്യങ്ങളുടെ `.json` ഫയൽ തിരഞ്ഞെടുക്കുക അല്ലെങ്കിൽ താഴെ ബോക്സിൽ പേസ്റ്റ് ചെയ്യുക.</p>
+              </div>
+
+              <div class="flex items-center space-x-2">
+                <label class="text-[10px] text-slate-400 font-mono">Firebase Questions Node:</label>
+                <input type="text" id="firebaseQuestionsNodeInput" value="questions" placeholder="questions" class="bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-emerald-400 font-mono w-32 focus:outline-none focus:border-emerald-500" title="ഫയർബേസിൽ ചോദ്യങ്ങൾ സേവ് ചെയ്യുന്ന ഫോൾഡർ (ഉദാ: questions അല്ലെങ്കിൽ ROOT)">
+              </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <input type="file" id="questionsJsonFileInput" accept=".json" onchange="handleQuestionsFileSelect(event)" class="text-xs text-slate-300 file:mr-3 file:py-1.5 file:px-3.5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-cyan-500/20 file:text-cyan-300 hover:file:bg-cyan-500/30 cursor-pointer">
+              <span id="jsonValidationBadge" class="text-[11px] font-mono text-slate-400 bg-slate-950 px-3 py-1 rounded-lg border border-slate-800">
+                ചോദ്യങ്ങൾ നൽകിയിട്ടില്ല (Optional)
+              </span>
+            </div>
+
+            <textarea id="newExQuestionsJson" rows="5" oninput="validateQuestionsJsonLive()" placeholder='[&#10;  {&#10;    "question": "കേരളത്തിലെ ആദ്യത്തെ മുഖ്യമന്ത്രി ആര്?",&#10;    "options": ["ഇ.എം.എസ്", "പട്ടം താണുപിള്ള", "സി. അച്യുതമേനോൻ", "ആർ. ശങ്കർ"],&#10;    "answer": 0&#10;  }&#10;]' class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-emerald-300 font-mono focus:outline-none focus:border-cyan-500 custom-scroll"></textarea>
+          </div>
+
+          <div class="flex justify-end space-x-3 pt-2">
+            <button type="button" onclick="toggleNewExamForm()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl text-xs transition cursor-pointer">
+              റദ്ദാക്കുക
+            </button>
+            <button type="submit" id="btnCreateExam" class="px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black rounded-xl text-xs sm:text-sm transition shadow-lg cursor-pointer">
+              🚀 പരീക്ഷയും ചോദ്യങ്ങളും ഫയർബേസിലേക്ക് സേവ് ചെയ്യുക
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- പരീക്ഷാ പബ്ലിഷിംഗ് & ഫോൾഡർ ടേബിൾ -->
       <div class="space-y-3">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-2">
           <div>
             <h3 class="text-sm sm:text-base font-bold text-white flex items-center space-x-2">
-              <span>🚀</span>
-              <span>പരീക്ഷാ പബ്ലിഷിംഗ് & ഷെഡ്യൂളിംഗ് കൺട്രോളർ</span>
+              <span>🗂️</span>
+              <span>നിലവിലുള്ള പരീക്ഷകളുടെ ഫോൾഡർ (LDC/LGS/Degree), PDF & പബ്ലിഷിംഗ് കൺട്രോളർ</span>
             </h3>
             <p class="text-xs text-slate-400">
-              <strong>"Publish"</strong> കൊടുത്താൽ മാത്രമേ തീയതി നൽകിയില്ലെങ്കിലും ഹോം പേജിൽ പരീക്ഷ വരൂ[cite: 14]. <strong>"Unpublish"</strong> ആക്കിയാൽ എപ്പോഴും മറഞ്ഞിരിക്കും[cite: 14].
+              ഏത് പരീക്ഷയും ഏത് ഫോൾഡറിലേക്ക് മാറ്റാനും, PDF ലിങ്ക് ചേർക്കാനും, ഷെഡ്യൂൾ ചെയ്യാനും ഇവിടെ നിന്ന് സാധിക്കും.
             </p>
           </div>
-          <input type="text" id="searchPublishInput" oninput="filterPublishExams()" placeholder="പരീക്ഷ തിരയുക..." class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+          <div class="flex items-center space-x-2">
+            <select id="filterMainFolderSelect" onchange="filterPublishExams()" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-emerald-400 font-bold focus:outline-none focus:border-emerald-500 cursor-pointer">
+              <option value="ALL_FILTER">എല്ലാ ഫോൾഡറുകളും</option>
+              <option value="LDC">🏛️ LDC മാത്രം</option>
+              <option value="LGS">🛡️ LGS മാത്രം</option>
+              <option value="DEGREE">🎓 Degree മാത്രം</option>
+            </select>
+            <input type="text" id="searchPublishInput" oninput="filterPublishExams()" placeholder="പരീക്ഷ തിരയുക..." class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+          </div>
         </div>
 
         <div class="overflow-x-auto custom-scroll border border-slate-800 rounded-2xl">
-          <table class="w-full text-left text-xs text-slate-300">
+          <table class="w-full text-left text-xs text-slate-300" style="table-layout: auto;">
             <thead class="bg-slate-950 text-slate-400 uppercase text-[10px] border-b border-slate-800">
               <tr>
                 <th class="p-3">#</th>
-                <th class="p-3">പരീക്ഷയുടെ പേര്</th>
-                <th class="p-3">ബാഡ്ജ്</th>
+                <th class="p-3">പരീക്ഷയുടെ പേര് & വിഷയം</th>
+                <th class="p-3 text-center">ഫോൾഡർ (LDC/LGS/Degree)</th>
+                <th class="p-3 text-center">PDF ലിങ്ക് (Pass Mark)</th>
+                <th class="p-3 text-center">ബാഡ്ജ്</th>
                 <th class="p-3 text-center">ഷെഡ്യൂൾ സമയം</th>
-                <th class="p-3 text-center">ഹോം പേജ് സ്റ്റാറ്റസ്</th>
                 <th class="p-3 text-center">പബ്ലിഷ് കൺട്രോൾ</th>
                 <th class="p-3 text-center">സേവ്</th>
               </tr>
             </thead>
             <tbody id="publishTableBody" class="divide-y divide-slate-800/60 bg-slate-900/60">
-              <tr><td colspan="7" class="p-6 text-center text-slate-500">ലോഡ് ചെയ്യുന്നു...</td></tr>
+              <tr><td colspan="8" class="p-6 text-center text-slate-500">ലോഡ് ചെയ്യുന്നു...</td></tr>
             </tbody>
           </table>
         </div>
@@ -313,7 +453,7 @@
             <span>🏆</span>
             <span>പരീക്ഷാഫലവും റാങ്ക് ലിസ്റ്റും</span>
           </h3>
-          <p class="text-xs text-slate-400">ഡ്യൂപ്ലിക്കേഷൻ ഒഴിവാക്കി തയ്യാറാക്കിയ തത്സമയ ആദ്യ ശ്രമ റാങ്ക് ലിസ്റ്റ്[cite: 14].</p>
+          <p class="text-xs text-slate-400">ഡ്യൂപ്ലിക്കേഷൻ ഒഴിവാക്കി തയ്യാറാക്കിയ തത്സമയ ആദ്യ ശ്രമ റാങ്ക് ലിസ്റ്റ്.</p>
         </div>
         <div class="flex items-center space-x-2">
           <select id="examDropdownSelect" onchange="fetchSelectedExamDetails()" class="bg-slate-950 border border-slate-800 text-xs sm:text-sm text-emerald-400 font-bold rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-emerald-500 max-w-xs cursor-pointer">
@@ -614,6 +754,7 @@
     let currentSelectedExamData = null;
     let reportedQuestionsList = [];
     let publishExamsList = [];
+    let rawExamsArrayFromDb = [];
     let adminControlsCache = {};
     let examsLookupMap = {};
 
@@ -633,6 +774,95 @@
 
     function cleanTitle(str) {
       return String(str || '').replace(/[\s\-_,.:;()\/\\|\[\]+&]+/g, '').toLowerCase();
+    }
+
+    // 🌟 ഗൂഗിൾ ഡോക്സ് / ഡ്രൈവ് ലിങ്ക് നേരിട്ട് PDF ഡൗൺലോഡ് ലിങ്കാക്കി മാറ്റുന്ന ഫംഗ്ഷൻ
+    function convertGoogleDocToPdfLink(inputId) {
+      const inputEl = document.getElementById(inputId);
+      if (!inputEl) return;
+      let url = inputEl.value.trim();
+      if (!url) {
+        alert("ആദ്യം ഗൂഗിൾ ഡോക്സ് അല്ലെങ്കിൽ ഡ്രൈവ് ലിങ്ക് ബോക്സിൽ പേസ്റ്റ് ചെയ്യുക.");
+        return;
+      }
+
+      // Google Docs Link -> /export?format=pdf
+      const docMatch = url.match(/docs\.google\.com\/document\/d\/([a-zA-Z0-9_-]+)/);
+      if (docMatch && docMatch[1]) {
+        inputEl.value = `https://docs.google.com/document/d/${docMatch[1]}/export?format=pdf`;
+        alert("✅ ഗൂഗിൾ ഡോക്സ് ലിങ്ക് നേരിട്ട് PDF ഡൗൺലോഡ് ആകുന്ന ലിങ്കാക്കി മാറ്റി!");
+        return;
+      }
+
+      // Google Drive File Link -> Direct view/download
+      const driveMatch = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
+      if (driveMatch && driveMatch[1]) {
+        inputEl.value = `https://drive.google.com/uc?export=download&id=${driveMatch[1]}`;
+        alert("✅ ഗൂഗിൾ ഡ്രൈവ് ലിങ്ക് Direct PDF Download ലിങ്കാക്കി മാറ്റി!");
+        return;
+      }
+
+      alert("ലിങ്ക് അതേപടി നിലനിർത്തിയിട്ടുണ്ട്.");
+    }
+
+    function autoFillExamKey() {
+      const titleVal = document.getElementById('newExTitle').value.trim();
+      const keyInput = document.getElementById('newExKey');
+      if (!keyInput.dataset.manuallyEdited) {
+        const numMatch = titleVal.match(/\d+/);
+        if (numMatch) {
+          keyInput.value = `exam_${numMatch[0]}_${Date.now().toString().slice(-3)}`;
+        } else {
+          keyInput.value = `exam_${rawExamsArrayFromDb.length + 1}`;
+        }
+      }
+    }
+
+    document.getElementById('newExKey').addEventListener('input', function() {
+      this.dataset.manuallyEdited = 'true';
+    });
+
+    // 🌟 ചോദ്യങ്ങളുടെ .json ഫയൽ തിരഞ്ഞെടുക്കുമ്പോൾ വായിച്ച് വാലിഡേറ്റ് ചെയ്യുന്നു
+    function handleQuestionsFileSelect(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('newExQuestionsJson').value = e.target.result;
+        validateQuestionsJsonLive();
+      };
+      reader.readAsText(file);
+    }
+
+    function validateQuestionsJsonLive() {
+      const rawText = document.getElementById('newExQuestionsJson').value.trim();
+      const badge = document.getElementById('jsonValidationBadge');
+      const qCountInput = document.getElementById('newExQuestions');
+
+      if (!rawText) {
+        badge.innerText = "ചോദ്യങ്ങൾ നൽകിയിട്ടില്ല (Optional)";
+        badge.className = "text-[11px] font-mono text-slate-400 bg-slate-950 px-3 py-1 rounded-lg border border-slate-800";
+        return null;
+      }
+
+      try {
+        const parsed = JSON.parse(rawText);
+        let qArray = Array.isArray(parsed) ? parsed : (parsed.questions || Object.values(parsed));
+        if (Array.isArray(qArray) && qArray.length > 0) {
+          qCountInput.value = qArray.length;
+          badge.innerText = `✅ JSON ശരിയാണ് (${qArray.length} ചോദ്യങ്ങൾ കണ്ടെത്തി)`;
+          badge.className = "text-[11px] font-mono text-emerald-400 bg-emerald-950/60 px-3 py-1 rounded-lg border border-emerald-500/40 font-bold";
+          return parsed;
+        } else {
+          badge.innerText = "⚠️ JSON-ൽ ചോദ്യങ്ങൾ കണ്ടെത്തിയില്ല";
+          badge.className = "text-[11px] font-mono text-amber-400 bg-amber-950/60 px-3 py-1 rounded-lg border border-amber-500/40";
+          return parsed;
+        }
+      } catch (err) {
+        badge.innerText = "❌ JSON ഫോർമാറ്റ് തെറ്റാണ്! പരിശോധിക്കുക";
+        badge.className = "text-[11px] font-mono text-rose-400 bg-rose-950/60 px-3 py-1 rounded-lg border border-rose-500/40 font-bold";
+        return false;
+      }
     }
 
     function extractPhone(obj) {
@@ -687,6 +917,17 @@
       const entered = document.getElementById('adminPinInput').value.trim();
       if (entered === ADMIN_SECRET_PIN) {
         document.getElementById('pinLockModal').classList.add('hidden');
+        
+        // Restore saved Common HTML URL & Firebase Questions Node
+        const savedCommonUrl = localStorage.getItem('sk_common_exam_url');
+        if (savedCommonUrl) {
+          document.getElementById('newExFileUrl').value = savedCommonUrl;
+        }
+        const savedQNode = localStorage.getItem('sk_firebase_q_node');
+        if (savedQNode) {
+          document.getElementById('firebaseQuestionsNodeInput').value = savedQNode;
+        }
+
         loadAnalyticsData();
         loadDashboardData();
         loadPublishManagerData();
@@ -738,7 +979,6 @@
       }
     }
 
-    // 🌟 ഒപ്റ്റിമൈസ്ഡ് അനലിറ്റിക്സ്: users_history ബൾക്ക് ഡൗൺലോഡ് ചെയ്യാതെ ranks/live_ranks വെച്ച് ചാർട്ട് നിർമ്മിക്കുന്നു
     async function loadAnalyticsData() {
       try {
         const [ranksRes, liveRanksRes, examsRes] = await Promise.all([
@@ -1041,10 +1281,138 @@
       return exams.slice().reverse();
     }
 
-    // 1. PUBLISH MANAGER
+    function toggleNewExamForm() {
+      const form = document.getElementById('addNewExamForm');
+      const btn = document.getElementById('toggleAddExamBtn');
+      form.classList.toggle('hidden');
+      btn.innerText = form.classList.contains('hidden') ? '➕ പുതിയ പരീക്ഷ & ചോദ്യങ്ങൾ ചേർക്കുക' : '✕ ഫോം മടക്കുക';
+    }
+
+    // 🌟 ഓൾ-ഇൻ-വൺ ഫംഗ്ഷൻ: Exam Details + Folder + PDF Link + Questions JSON ഒരുമിച്ച് ഫയർബേസിലേക്ക് സേവ് ചെയ്യുന്നു
+    async function createNewExamInFirebase(e) {
+      e.preventDefault();
+      const title = document.getElementById('newExTitle').value.trim();
+      const mainFolder = document.getElementById('newExMainFolder').value;
+      const category = document.getElementById('newExCategory').value.trim();
+      const fileUrl = document.getElementById('newExFileUrl').value.trim();
+      const pdfUrl = document.getElementById('newExPdfUrl').value.trim();
+      const topics = document.getElementById('newExTopics').value.trim() || 'പ്രധാന പരീക്ഷാ ചോദ്യങ്ങൾ';
+      const questions = Number(document.getElementById('newExQuestions').value) || 25;
+      const time = document.getElementById('newExTime').value.trim() || '20 മിനിറ്റ്';
+      const customKey = document.getElementById('newExKey').value.trim();
+      const relDate = document.getElementById('newExReleaseDate').value.trim();
+      const rawQuestionsJson = document.getElementById('newExQuestionsJson').value.trim();
+      const qNodeName = document.getElementById('firebaseQuestionsNodeInput').value.trim() || 'questions';
+
+      if (!title || !category || !fileUrl || !customKey) {
+        alert("ദയവായി പരീക്ഷയുടെ പേര്, വിഷയം, കീ, കോമൺ HTML ലിങ്ക് എന്നിവ നൽകുക.");
+        return;
+      }
+
+      let parsedQuestionsData = null;
+      if (rawQuestionsJson) {
+        parsedQuestionsData = validateQuestionsJsonLive();
+        if (parsedQuestionsData === false) {
+          alert("നിങ്ങൾ നൽകിയ ചോദ്യങ്ങളുടെ JSON ഫോർമാറ്റിൽ തെറ്റുണ്ട്! ദയവായി ബ്രാക്കറ്റുകളും കോമകളും പരിശോധിക്കുക.");
+          return;
+        }
+      }
+
+      // Save Common HTML URL & Questions Node in localStorage for future convenience
+      localStorage.setItem('sk_common_exam_url', fileUrl);
+      localStorage.setItem('sk_firebase_q_node', qNodeName);
+
+      const btn = document.getElementById('btnCreateExam');
+      btn.innerText = "ഫയർബേസിലേക്ക് അപ്‌ലോഡ് ചെയ്യുന്നു...";
+      btn.disabled = true;
+
+      const cleanControlKey = cleanTitle(title);
+
+      const newExamEntry = {
+        TITLE: title,
+        CATEGORY: category,
+        MAIN_FOLDER: mainFolder,
+        FILEURL: fileUrl,
+        pdfUrl: pdfUrl,
+        TOPICS: topics,
+        QUESTIONS: questions,
+        TIME: time,
+        BADGE: 'LATEST',
+        KEY: customKey,
+        Release_Date: relDate
+      };
+
+      const controlPayload = {
+        status: 'LATEST',
+        mainFolder: mainFolder,
+        pdfUrl: pdfUrl,
+        releaseDate: relDate,
+        isPublished: true
+      };
+
+      try {
+        const updatedExamsList = [...rawExamsArrayFromDb, newExamEntry];
+
+        const promises = [
+          fetch(`${FIREBASE_DB_URL}/exams.json`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedExamsList)
+          }),
+          fetch(`${FIREBASE_DB_URL}/portal_config/exam_controls/${cleanControlKey}.json`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(controlPayload)
+          })
+        ];
+
+        // 🌟 ചോദ്യങ്ങളുടെ JSON ഉണ്ടെങ്കിൽ അതും ഒരേ സമയം ഫയർബേസിലേക്ക് അപ്‌ലോഡ് ചെയ്യുന്നു
+        if (parsedQuestionsData) {
+          const targetQuestionsUrl = (qNodeName.toUpperCase() === 'ROOT')
+            ? `${FIREBASE_DB_URL}/${customKey}.json`
+            : `${FIREBASE_DB_URL}/${qNodeName}/${customKey}.json`;
+
+          promises.push(
+            fetch(targetQuestionsUrl, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(parsedQuestionsData)
+            })
+          );
+        }
+
+        await Promise.all(promises);
+
+        sessionStorage.removeItem('sk_cache_time');
+        sessionStorage.removeItem('sk_cached_exams');
+        sessionStorage.removeItem('sk_cached_config');
+
+        alert(`🎉 "${title}" പരീക്ഷയും ${parsedQuestionsData ? questions + ' ചോദ്യങ്ങളും' : ''} ${mainFolder} ഫോൾഡറിലേക്ക് വിജയകരമായി ചേർത്തു!`);
+        
+        // Reset form except common URL
+        document.getElementById('newExTitle').value = '';
+        document.getElementById('newExTopics').value = '';
+        document.getElementById('newExPdfUrl').value = '';
+        document.getElementById('newExQuestionsJson').value = '';
+        document.getElementById('questionsJsonFileInput').value = '';
+        delete document.getElementById('newExKey').dataset.manuallyEdited;
+        validateQuestionsJsonLive();
+
+        toggleNewExamForm();
+        await loadPublishManagerData();
+        await loadExamDropdownList();
+      } catch (err) {
+        alert("പരീക്ഷ ചേർക്കുന്നതിൽ തടസ്സം നേരിട്ടു: " + err.toString());
+      } finally {
+        btn.innerText = "🚀 പരീക്ഷയും ചോദ്യങ്ങളും ഫയർബേസിലേക്ക് സേവ് ചെയ്യുക";
+        btn.disabled = false;
+      }
+    }
+
+    // 1. PUBLISH MANAGER & FOLDER CONTROLLER
     async function loadPublishManagerData() {
       const tbody = document.getElementById('publishTableBody');
-      tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-400">ഫയർബേസിൽ നിന്നും വിവരങ്ങൾ ശേഖരിക്കുന്നു...</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="8" class="p-6 text-center text-slate-400">ഫയർബേസിൽ നിന്നും വിവരങ്ങൾ ശേഖരിക്കുന്നു...</td></tr>';
 
       try {
         const [examsRes, configRes] = await Promise.all([
@@ -1060,12 +1428,44 @@
 
         let list = examsRes ? (Array.isArray(examsRes) ? examsRes : Object.values(examsRes)) : [];
         list = list.filter(item => item !== null && item !== undefined);
+        rawExamsArrayFromDb = list;
+
+        // Auto-detect common exam HTML link from existing exams if not saved yet
+        if (!localStorage.getItem('sk_common_exam_url') && list.length > 0) {
+          const lastExamWithUrl = [...list].reverse().find(x => x.FILEURL || x.fileUrl);
+          if (lastExamWithUrl) {
+            const detectedUrl = lastExamWithUrl.FILEURL || lastExamWithUrl.fileUrl;
+            document.getElementById('newExFileUrl').value = detectedUrl;
+            localStorage.setItem('sk_common_exam_url', detectedUrl);
+          }
+        }
+
+        const catSet = new Set();
+        list.forEach((item, index) => {
+          item._dbIndex = index;
+          const c = item.CATEGORY || item.category;
+          if (c) catSet.add(String(c).trim());
+        });
+        const datalist = document.getElementById('existingCategoriesList');
+        if (datalist) {
+          datalist.innerHTML = Array.from(catSet).map(c => `<option value="${c}">`).join('');
+        }
 
         publishExamsList = sortExamsNewestFirst(list);
         renderPublishTable(publishExamsList);
       } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-rose-400 font-bold">എറർ: ${err.toString()}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-rose-400 font-bold">എറർ: ${err.toString()}</td></tr>`;
       }
+    }
+
+    function getExamEffectiveMainFolder(ex, savedCtrl) {
+      if (savedCtrl && (savedCtrl.mainFolder || savedCtrl.examFolder)) {
+        return String(savedCtrl.mainFolder || savedCtrl.examFolder).toUpperCase().trim();
+      }
+      if (ex && (ex.MAIN_FOLDER || ex.mainFolder || ex.EXAM_FOLDER || ex.examFolder)) {
+        return String(ex.MAIN_FOLDER || ex.mainFolder || ex.EXAM_FOLDER || ex.examFolder).toUpperCase().trim();
+      }
+      return 'LDC';
     }
 
     function renderPublishTable(list) {
@@ -1073,7 +1473,7 @@
       tbody.innerHTML = '';
 
       if (list.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-400">പരീക്ഷകൾ ഒന്നും കണ്ടെത്തിയില്ല.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" class="p-6 text-center text-slate-400">പരീക്ഷകൾ ഒന്നും കണ്ടെത്തിയില്ല.</td></tr>';
         return;
       }
 
@@ -1082,30 +1482,51 @@
         tr.className = "hover:bg-slate-800/40 transition border-b border-slate-800/50";
 
         const title = ex.TITLE || ex.title || `Exam ${idx + 1}`;
+        const category = ex.CATEGORY || ex.category || 'പൊതുവിജ്ഞാനം';
         const key = cleanTitle(title);
+        const dbIndex = ex._dbIndex;
 
         const savedCtrl = adminControlsCache[key] || {};
         const currentStatus = savedCtrl.status || (ex.BADGE === 'LATEST' ? 'LATEST' : 'NORMAL');
-        const isPublished = savedCtrl.isPublished === true;
+        const currentMainFolder = getExamEffectiveMainFolder(ex, savedCtrl);
+        const currentPdfUrl = savedCtrl.pdfUrl || ex.pdfUrl || ex.pdfurl || '';
+        const isPublished = savedCtrl.isPublished !== false;
 
         let currentDateVal = savedCtrl.releaseDate || ex.Release_Date || '';
         if (currentDateVal.includes(' ')) {
           currentDateVal = currentDateVal.replace(' ', 'T').substring(0, 16);
         }
 
-        const statusBadge = isPublished
-          ? `<span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-full text-[10px] font-bold">● Published Live</span>`
-          : `<span class="bg-slate-800 text-slate-400 border border-slate-700 px-2 py-0.5 rounded-full text-[10px] font-bold">🔒 Hidden (Draft / Unlisted)</span>`;
-
         const publishActionBtn = isPublished
-          ? `<button onclick="toggleExamPublish('${key}', false, this)" class="px-3 py-1 bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 border border-rose-500/40 text-[11px] font-bold rounded-lg transition shadow cursor-pointer">🔒 Unpublish</button>`
-          : `<button onclick="toggleExamPublish('${key}', true, this)" class="px-3 py-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-[11px] font-black rounded-lg transition shadow cursor-pointer">🚀 Publish</button>`;
+          ? `<button onclick="toggleExamPublish('${key}', false, this)" class="px-2.5 py-1 bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 border border-rose-500/40 text-[10px] font-bold rounded-lg transition shadow cursor-pointer">🔒 Unpublish</button>`
+          : `<button onclick="toggleExamPublish('${key}', true, this)" class="px-2.5 py-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-[10px] font-black rounded-lg transition shadow cursor-pointer">🚀 Publish</button>`;
 
         tr.innerHTML = `
           <td class="p-3 font-mono text-slate-500">${idx + 1}</td>
-          <td class="p-3 font-bold text-white">${title}</td>
+          <td class="p-3">
+            <div class="font-bold text-white">${title}</div>
+            <div class="flex items-center space-x-1.5 mt-1">
+              <span class="text-[10px] text-slate-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">📁 ${category}</span>
+              ${ex.KEY || ex.key ? `<span class="text-[10px] text-cyan-400 font-mono bg-slate-950 px-1.5 py-0.5 rounded border border-slate-800">🔑 ${ex.KEY || ex.key}</span>` : ''}
+            </div>
+          </td>
           <td class="p-3 text-center">
-            <select id="status_${key}" class="bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-white">
+            <select id="folder_${key}" class="bg-slate-950 border border-emerald-500/40 rounded-lg px-2 py-1.5 text-xs text-emerald-300 font-bold focus:outline-none focus:border-emerald-400 cursor-pointer">
+              <option value="LDC" ${currentMainFolder === 'LDC' ? 'selected' : ''}>🏛️ LDC</option>
+              <option value="LGS" ${currentMainFolder === 'LGS' ? 'selected' : ''}>🛡️ LGS</option>
+              <option value="DEGREE" ${currentMainFolder === 'DEGREE' ? 'selected' : ''}>🎓 Degree Level</option>
+              <option value="LDC, LGS" ${currentMainFolder === 'LDC, LGS' ? 'selected' : ''}>🏛️+🛡️ LDC & LGS</option>
+              <option value="ALL" ${currentMainFolder === 'ALL' ? 'selected' : ''}>🌟 എല്ലാം (All)</option>
+            </select>
+          </td>
+          <td class="p-3 text-center">
+            <div class="flex items-center space-x-1">
+              <input type="text" id="pdf_${key}" value="${currentPdfUrl}" placeholder="PDF Link..." class="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-[11px] text-slate-200 font-mono w-28 focus:outline-none focus:border-emerald-500">
+              <button type="button" onclick="convertGoogleDocToPdfLink('pdf_${key}')" class="px-1.5 py-1 bg-slate-800 hover:bg-slate-700 text-emerald-400 rounded text-[10px] cursor-pointer" title="ഗൂഗിൾ ഡോക്സ് ലിങ്ക് Direct PDF ആക്കി മാറ്റുക">🔄</button>
+            </div>
+          </td>
+          <td class="p-3 text-center">
+            <select id="status_${key}" class="bg-slate-950 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-white cursor-pointer">
               <option value="NORMAL" ${currentStatus === 'NORMAL' ? 'selected' : ''}>സാധാരണ</option>
               <option value="LATEST" ${currentStatus === 'LATEST' ? 'selected' : ''}>🔥 LATEST</option>
             </select>
@@ -1113,12 +1534,11 @@
           <td class="p-3 text-center">
             <input type="datetime-local" id="date_${key}" value="${currentDateVal}" class="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-[11px] text-cyan-300 font-mono focus:outline-none focus:border-cyan-500">
           </td>
-          <td class="p-3 text-center">${statusBadge}</td>
           <td class="p-3 text-center">${publishActionBtn}</td>
           <td class="p-3 text-center">
             <div class="flex items-center justify-center space-x-1">
-              <button onclick="saveExamControl('${key}')" class="px-2.5 py-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-lg text-xs transition shadow cursor-pointer" title="ഷെഡ്യൂളും ബാഡ്ജും സേവ് ചെയ്യുക">💾</button>
-              <button onclick="clearExamLock('${key}')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-400 rounded-lg text-xs cursor-pointer" title="സമയം ക്ലിയർ ചെയ്യുക">✕</button>
+              <button onclick="saveExamControl('${key}', ${dbIndex})" class="px-2.5 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-lg text-xs transition shadow cursor-pointer" title="ഫോൾഡറും PDF ലിങ്കും സേവ് ചെയ്യുക">💾</button>
+              <button onclick="clearExamLock('${key}')" class="px-2 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-400 rounded-lg text-xs cursor-pointer" title="സമയം ക്ലിയർ ചെയ്യുക">✕</button>
             </div>
           </td>
         `;
@@ -1132,11 +1552,15 @@
 
       const currentCtrl = adminControlsCache[key] || {};
       const st = document.getElementById(`status_${key}`) ? document.getElementById(`status_${key}`).value : (currentCtrl.status || 'NORMAL');
+      const mf = document.getElementById(`folder_${key}`) ? document.getElementById(`folder_${key}`).value : (currentCtrl.mainFolder || 'LDC');
+      const pdf = document.getElementById(`pdf_${key}`) ? document.getElementById(`pdf_${key}`).value.trim() : (currentCtrl.pdfUrl || '');
       const dt = document.getElementById(`date_${key}`) ? document.getElementById(`date_${key}`).value.trim() : (currentCtrl.releaseDate || '');
 
       const payload = {
         ...currentCtrl,
         status: st,
+        mainFolder: mf,
+        pdfUrl: pdf,
         releaseDate: dt,
         isPublished: publishState
       };
@@ -1148,45 +1572,77 @@
           body: JSON.stringify(payload)
         });
 
+        sessionStorage.removeItem('sk_cache_time');
+        sessionStorage.removeItem('sk_cached_config');
+
         adminControlsCache[key] = payload;
-        renderPublishTable(publishExamsList);
+        filterPublishExams();
       } catch (e) {
         alert("പബ്ലിഷ് സ്റ്റാറ്റസ് മാറ്റുന്നതിൽ തടസ്സം നേരിട്ടു: " + e.toString());
         btnElement.disabled = false;
       }
     }
 
-    async function saveExamControl(key) {
+    async function saveExamControl(key, dbIndex) {
       const st = document.getElementById(`status_${key}`).value;
+      const mf = document.getElementById(`folder_${key}`).value;
+      const pdf = document.getElementById(`pdf_${key}`).value.trim();
       const dt = document.getElementById(`date_${key}`).value.trim();
       const currentCtrl = adminControlsCache[key] || {};
 
       const payload = {
         ...currentCtrl,
         status: st,
+        mainFolder: mf,
+        pdfUrl: pdf,
         releaseDate: dt,
-        isPublished: currentCtrl.isPublished === true
+        isPublished: currentCtrl.isPublished !== false
       };
 
-      await fetch(`${FIREBASE_DB_URL}/portal_config/exam_controls/${key}.json`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
+      const promises = [
+        fetch(`${FIREBASE_DB_URL}/portal_config/exam_controls/${key}.json`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+      ];
+
+      // Update exam node in /exams/{dbIndex} as well so pdfUrl & MAIN_FOLDER stay synced
+      if (dbIndex !== undefined && rawExamsArrayFromDb[dbIndex]) {
+        rawExamsArrayFromDb[dbIndex].MAIN_FOLDER = mf;
+        rawExamsArrayFromDb[dbIndex].pdfUrl = pdf;
+        promises.push(
+          fetch(`${FIREBASE_DB_URL}/exams/${dbIndex}.json`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ MAIN_FOLDER: mf, pdfUrl: pdf })
+          })
+        );
+      }
+
+      await Promise.all(promises);
+
+      sessionStorage.removeItem('sk_cache_time');
+      sessionStorage.removeItem('sk_cached_exams');
+      sessionStorage.removeItem('sk_cached_config');
 
       adminControlsCache[key] = payload;
-      alert('പരീക്ഷയുടെ ഷെഡ്യൂളും വിവരങ്ങളും സേവ് ചെയ്തു!');
-      renderPublishTable(publishExamsList);
+      alert(`✅ വിവരങ്ങളും PDF ലിങ്കും "${mf}" ഫോൾഡറിലേക്ക് സേവ് ചെയ്തു!`);
+      filterPublishExams();
     }
 
     async function clearExamLock(key) {
       document.getElementById(`date_${key}`).value = "";
       const st = document.getElementById(`status_${key}`).value;
+      const mf = document.getElementById(`folder_${key}`).value;
+      const pdf = document.getElementById(`pdf_${key}`).value.trim();
       const currentCtrl = adminControlsCache[key] || {};
 
       const payload = {
         ...currentCtrl,
         status: st,
+        mainFolder: mf,
+        pdfUrl: pdf,
         releaseDate: ""
       };
 
@@ -1196,9 +1652,12 @@
         body: JSON.stringify(payload)
       });
 
+      sessionStorage.removeItem('sk_cache_time');
+      sessionStorage.removeItem('sk_cached_config');
+
       adminControlsCache[key] = payload;
       alert('സമയം ഒഴിവാക്കി!');
-      renderPublishTable(publishExamsList);
+      filterPublishExams();
     }
 
     async function saveNoticeMessage() {
@@ -1213,6 +1672,9 @@
         body: JSON.stringify(noticeVal)
       });
 
+      sessionStorage.removeItem('sk_cache_time');
+      sessionStorage.removeItem('sk_cached_config');
+
       btn.innerText = "💾 നോട്ടീസ് സേവ് ചെയ്യുക";
       btn.disabled = false;
       alert("ഹോം പേജ് നോട്ടീസ് അപ്ഡേറ്റ് ചെയ്തു!");
@@ -1221,16 +1683,31 @@
     async function clearNoticeMessage() {
       if (!confirm("നോട്ടീസ് നീക്കം ചെയ്യണമെന്നുറപ്പാണോ?")) return;
       await fetch(`${FIREBASE_DB_URL}/portal_config/notice.json`, { method: 'DELETE' });
+      sessionStorage.removeItem('sk_cache_time');
+      sessionStorage.removeItem('sk_cached_config');
       document.getElementById('adminNoticeInput').value = "";
       alert("നോട്ടീസ് നീക്കം ചെയ്തു!");
     }
 
     function filterPublishExams() {
       const q = document.getElementById('searchPublishInput').value.trim().toLowerCase();
+      const folderFilter = document.getElementById('filterMainFolderSelect').value;
+
       const filtered = publishExamsList.filter(e => {
-        const t = (e.TITLE || e.title || '').toLowerCase();
+        const title = e.TITLE || e.title || '';
+        const key = cleanTitle(title);
+        const savedCtrl = adminControlsCache[key] || {};
+        const effectiveFolder = getExamEffectiveMainFolder(e, savedCtrl);
+
+        const matchFolder = (folderFilter === 'ALL_FILTER') || 
+                            effectiveFolder === 'ALL' || 
+                            effectiveFolder.includes(folderFilter);
+
+        const t = title.toLowerCase();
         const c = (e.CATEGORY || e.category || '').toLowerCase();
-        return t.includes(q) || c.includes(q);
+        const matchSearch = !q || t.includes(q) || c.includes(q);
+
+        return matchFolder && matchSearch;
       });
       renderPublishTable(filtered);
     }
@@ -1373,7 +1850,7 @@
       renderSummaryTable(list);
     }
 
-    // 3. EXAM RANK LIST (സ്മാർട്ട് ഇംഗ്ലീഷ് കീ + മലയാളം മാച്ചിംഗ്)
+    // 3. EXAM RANK LIST
     async function loadExamDropdownList() {
       try {
         const res = await fetch(`${FIREBASE_DB_URL}/exams.json`);
@@ -1590,7 +2067,7 @@
       html2pdf().set(opt).from(element).save();
     }
 
-    // 🌟 4. STUDENT SEARCH (Targeted Single-Node Fetch)
+    // 4. STUDENT SEARCH
     async function searchStudentDetails() {
       const rawInput = document.getElementById('studentSearchInput').value.trim();
 
@@ -1644,7 +2121,6 @@
           return;
         }
 
-        // 🔥 മുഴുവൻ users_history-ക്ക് പകരം ആ കുട്ടിയുടെ നോഡ് മാത്രം ഡൗൺലോഡ് ചെയ്യുന്നു
         const histRes = await fetch(`${FIREBASE_DB_URL}/users_history/${targetPhone}.json`).then(r => r.json()).catch(() => null);
 
         let rawAttemptsList = [];
