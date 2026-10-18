@@ -919,6 +919,60 @@
     const GITHUB_LOGO_URL = "https://raw.githubusercontent.com/subhash-kumar00/PSC-EXAMS/main/logo.png";
     const TWENTY_FOUR_HOURS_MS = 24 * 60 * 60 * 1000;
 
+    // 🌟 OneSignal ബാക്ക്ഗ്രൗണ്ട് പുഷ് കോൺഫിഗറേഷൻ
+    const ONESIGNAL_APP_ID = "39db2070-7998-49fc-b624-28b368a1674a";
+    const ONESIGNAL_REST_API_KEY = "os_v2_app_hhnsa4dztbe7znrefczwrilhjji2kyi3gd2e465safyn5t3ehpihjw4o6nmzfwpbvlbg6tclblmr7m42htgt47glgklv4gmpsghtfyy";
+
+    // 🌟 1. സംശയം ചോദിച്ച വിദ്യാർത്ഥിക്ക് മാത്രം നേരിട്ട് ബാക്ക്ഗ്രൗണ്ട് പുഷ് അയക്കുന്ന ഫംഗ്ഷൻ (Chat Reply Push)
+    async function sendOneSignalPushToUser(phone, title, message) {
+      const cleanPhone = String(phone).replace(/\D/g, '').slice(-10);
+      try {
+        await fetch("https://onesignal.com/api/v1/notifications", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json; charset=utf-8",
+            "Authorization": `Key ${ONESIGNAL_REST_API_KEY}`
+          },
+          body: JSON.stringify({
+            app_id: ONESIGNAL_APP_ID,
+            include_aliases: {
+              external_id: [cleanPhone] // കുട്ടിയുടെ 10 അക്ക മൊബൈൽ നമ്പർ അടിസ്ഥാനമാക്കി
+            },
+            target_channel: "push",
+            headings: { en: title, ml: title },
+            contents: { en: message, ml: message },
+            url: "https://subhash-kumar00.github.io/PSC-EXAMS/"
+          })
+        });
+        console.log("OneSignal push sent to user:", cleanPhone);
+      } catch(err) {
+        console.error("OneSignal User Push Error:", err);
+      }
+    }
+
+    // 🌟 2. പുതിയ പരീക്ഷ വരുമ്പോൾ മുഴുവൻ വിദ്യാർത്ഥികൾക്കും ഒരുമിച്ച് പുഷ് അയക്കുന്ന ഫംഗ്ഷൻ (Broadcast Push)
+    async function sendOneSignalBroadcastPush(title, message) {
+      try {
+        await fetch("https://onesignal.com/api/v1/notifications", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json; charset=utf-8",
+            "Authorization": `Key ${ONESIGNAL_REST_API_KEY}`
+          },
+          body: JSON.stringify({
+            app_id: ONESIGNAL_APP_ID,
+            included_segments: ["Total Subscriptions"], // ആപ്പ് സബ്സ്ക്രൈബ് ചെയ്ത മുഴുവൻ കുട്ടികളിലേക്കും
+            headings: { en: title, ml: title },
+            contents: { en: message, ml: message },
+            url: "https://subhash-kumar00.github.io/PSC-EXAMS/"
+          })
+        });
+        console.log("OneSignal broadcast push sent to all!");
+      } catch(err) {
+        console.error("OneSignal Broadcast Error:", err);
+      }
+    }
+
     document.getElementById('pdfLogoStudent').src = GITHUB_LOGO_URL;
     document.getElementById('pdfLogoRank').src = GITHUB_LOGO_URL;
 
@@ -1068,8 +1122,6 @@
       const entered = document.getElementById('adminPinInput').value.trim();
       if (entered === ADMIN_SECRET_PIN) {
         document.getElementById('pinLockModal').classList.add('hidden');
-        
-        // 🌟 പഴയ തെറ്റായ localStorage key ഒഴിവാക്കുന്നു
         localStorage.removeItem('sk_firebase_q_node');
 
         const savedCommonUrl = localStorage.getItem('sk_common_exam_url');
@@ -1329,7 +1381,7 @@
       form.classList.toggle('hidden');
     }
 
-    // 🌟 പുതിയ പരീക്ഷയും ചോദ്യങ്ങളും quiz_contents-ലേക്ക് സേവ് ചെയ്യുന്നു
+    // 🌟 പുതിയ പരീക്ഷയും ചോദ്യങ്ങളും quiz_contents-ലേക്ക് സേവ് ചെയ്യുകയും എല്ലാ കുട്ടികളിലേക്കും പുഷ് അയക്കുകയും ചെയ്യുന്നു
     async function createNewExamInFirebase(e) {
       e.preventDefault();
       const title = document.getElementById('newExTitle').value.trim();
@@ -1413,11 +1465,17 @@
           })
         ]);
 
+        // 🌟 3. പുതിയ പരീക്ഷ ലൈവ് ആയ വിവരം ആപ്പ് ഉള്ള മുഴുവൻ കുട്ടികൾക്കും ബാക്ക്ഗ്രൗണ്ട് പുഷ് അയക്കുന്നു
+        sendOneSignalBroadcastPush(
+          "🚀 പുതിയ മോഡൽ പരീക്ഷ ആരംഭിച്ചു!",
+          `"${title}" ഇപ്പോൾ SK PSC പോർട്ടലിൽ ലഭ്യമാണ്. ഉടൻ എഴുതി നിങ്ങളുടെ റാങ്ക് നേടൂ!`
+        );
+
         sessionStorage.removeItem('sk_cache_time');
         sessionStorage.removeItem('sk_cached_exams');
         sessionStorage.removeItem('sk_cached_config');
 
-        alert(`🎉 "${title}" പരീക്ഷയും ചോദ്യങ്ങളും quiz_contents ഫോൾഡറിലേക്ക് വിജയകരമായി ചേർത്തു!`);
+        alert(`🎉 "${title}" പരീക്ഷയും ചോദ്യങ്ങളും quiz_contents ഫോൾഡറിലേക്ക് വിജയകരമായി ചേർത്തു! കുട്ടികൾക്ക് പുഷ് നോട്ടിഫിക്കേഷനും അയച്ചു.`);
         location.reload();
       } catch (err) {
         alert("പരീക്ഷ ചേർക്കുന്നതിൽ തടസ്സം നേരിട്ടു: " + err.toString());
@@ -2041,6 +2099,7 @@
       if (autoScroll) box.scrollTop = box.scrollHeight;
     }
 
+    // 🌟 വിദ്യാർത്ഥിക്ക് അഡ്മിൻ മറുപടി നൽകുമ്പോൾ OneSignal വഴി ബാക്ക്ഗ്രൗണ്ട് പുഷ് അയക്കുന്നു
     async function sendAdminReply(e) {
       e.preventDefault();
       if (!activeChatStudent) return;
@@ -2081,6 +2140,13 @@
             unreadByAdmin: false
           })
         });
+
+        // 🌟 കുട്ടിയുടെ ആപ്പ് ക്ലോസ് ആണെങ്കിലും നേരിട്ട് ബാക്ക്ഗ്രൗണ്ട് പുഷ് നോട്ടിഫിക്കേഷൻ അയക്കുന്നു
+        sendOneSignalPushToUser(
+          cleanPhone, 
+          "👨‍🏫 SK PSC Mentor Reply", 
+          `നിങ്ങളുടെ സംശയത്തിന് അഡ്മിൻ മറുപടി നൽകി: "${text.length > 45 ? text.substring(0, 45) + '...' : text}"`
+        );
 
         input.value = '';
         await loadStudentChatsAdmin(false);
