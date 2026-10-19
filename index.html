@@ -420,7 +420,117 @@
             ➕ പുതിയ പരീക്ഷ & ചോദ്യങ്ങൾ ചേർക്കുക
           </button>
         </div>
+<!-- ================= 💳 സബ്സ്ക്രിപ്ഷൻ & സ്റ്റുഡന്റ് വാലിഡിറ്റി മാനേജർ ================= -->
+<div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-6 my-6 shadow-2xl">
+  
+  <!-- ഹെഡറും ഗ്ലോബൽ ട്രയൽ സ്വിച്ചും -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-3">
+    <div>
+      <h3 class="text-base font-black text-amber-400 flex items-center space-x-2">
+        <span>💳</span><span>സബ്സ്ക്രിപ്ഷൻ & പെയ്‌മെന്റ് മാനേജർ</span>
+      </h3>
+      <p class="text-[11px] text-slate-400 mt-0.5">പോർട്ടൽ ഫീസ്, യു.പി.ഐ, ട്രയൽ മോഡ് എന്നിവ നിയന്ത്രിക്കുക</p>
+    </div>
+    
+    <!-- Global Trial Toggle Button -->
+    <div class="flex items-center space-x-2 bg-slate-950 px-3 py-1.5 rounded-2xl border border-slate-800">
+      <span class="text-xs text-slate-300 font-bold">Global Trial:</span>
+      <button id="btnGlobalTrialToggle" onclick="toggleGlobalTrialMode()" class="px-3 py-1 rounded-xl text-xs font-black bg-emerald-500 text-slate-950 transition">
+        ആക്റ്റീവ് (FREE)
+      </button>
+    </div>
+  </div>
 
+  <!-- UPI & പേയ്‌മെന്റ് വിവരങ്ങൾ -->
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+    <div>
+      <label class="block text-[11px] font-bold text-slate-400 mb-1 uppercase">UPI ID (GPay / PhonePe)</label>
+      <input type="text" id="admUpiId" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white" placeholder="yourname@okhdfcbank">
+    </div>
+    <div>
+      <label class="block text-[11px] font-bold text-slate-400 mb-1 uppercase">WhatsApp Number (Proof അയക്കാൻ)</label>
+      <input type="text" id="admWhatsapp" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white" placeholder="919XXXXXXXXX">
+    </div>
+    <div>
+      <label class="block text-[11px] font-bold text-slate-400 mb-1 uppercase">QR Code Image Link</label>
+      <input type="text" id="admQrUrl" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white" placeholder="https://...">
+    </div>
+  </div>
+
+  <!-- പ്ലാനുകൾ മാറ്റാനുള്ള ബോക്സുകൾ -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2">
+      <span class="text-xs font-bold text-emerald-400">📦 Plan 1 (ചെറിയ പ്ലാൻ)</span>
+      <div class="grid grid-cols-2 gap-2">
+        <div>
+          <label class="text-[10px] text-slate-500">തുക (₹)</label>
+          <input type="number" id="admPlan1Price" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white" value="50">
+        </div>
+        <div>
+          <label class="text-[10px] text-slate-500">ദിവസങ്ങൾ</label>
+          <input type="number" id="admPlan1Days" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white" value="30">
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2">
+      <span class="text-xs font-bold text-cyan-400">🚀 Plan 2 (വലിയ പ്ലാൻ)</span>
+      <div class="grid grid-cols-2 gap-2">
+        <div>
+          <label class="text-[10px] text-slate-500">തുക (₹)</label>
+          <input type="number" id="admPlan2Price" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white" value="200">
+        </div>
+        <div>
+          <label class="text-[10px] text-slate-500">ദിവസങ്ങൾ</label>
+          <input type="number" id="admPlan2Days" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white" value="200">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex justify-end">
+    <button onclick="saveAdminPaymentSettings()" class="px-5 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 text-slate-950 font-black rounded-xl text-xs shadow">
+      സെറ്റിംഗ്സ് സേവ് ചെയ്യുക 💾
+    </button>
+  </div>
+
+  <!-- ================= 🎓 STUDENT VALIDITY DESK ================= -->
+  <div class="pt-4 border-t border-slate-800 space-y-3">
+    <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center space-x-1.5">
+      <span>🎓</span><span>വിദ്യാർത്ഥി വാലിഡിറ്റി ഡെസ്ക് (Student Access Control)</span>
+    </h4>
+    
+    <div class="flex flex-col sm:flex-row gap-2">
+      <input type="text" id="searchStudentPhone" placeholder="കുട്ടിയുടെ 10 അക്ക മൊബൈൽ നമ്പർ" class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white">
+      <button onclick="checkStudentValidity()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl text-xs">
+        പരിശോധിക്കുക 🔍
+      </button>
+    </div>
+
+    <!-- കുട്ടിയുടെ വിവരങ്ങളും അൺലോക്ക് ബട്ടണുകളും -->
+    <div id="studentValidityResult" class="hidden bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-3">
+      <div class="flex justify-between items-center text-xs">
+        <span id="studResultName" class="font-bold text-white"></span>
+        <span id="studResultExpiry" class="px-2.5 py-1 rounded-lg font-bold"></span>
+      </div>
+      <div class="flex flex-wrap gap-2 pt-2">
+        <button onclick="addStudentValidityDays(30)" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold">
+          +30 Days (₹50)
+        </button>
+        <button onclick="addStudentValidityDays(200)" class="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg text-xs font-bold">
+          +200 Days (₹200)
+        </button>
+        <div class="flex items-center space-x-1">
+          <input type="date" id="studCustomDate" class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-white">
+          <button onclick="setStudentCustomDate()" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-bold">
+            സെറ്റ് ചെയ്യുക
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
         <form id="addNewExamForm" onsubmit="createNewExamInFirebase(event)" class="hidden pt-4 border-t border-slate-800 space-y-5 text-xs">
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
             <div>
@@ -2554,6 +2664,164 @@
     function closeReportModal() {
       document.getElementById('reportedQuestionsModal').classList.add('hidden');
     }
+    let currentGlobalTrialStatus = true;
+let activeSearchedPhone = null;
+
+// പേജ് തുറക്കുമ്പോൾ സെറ്റിംഗ്സ് ഫയർബേസിൽ നിന്ന് എടുക്കുന്നു
+async function loadSubscriptionConfig() {
+  try {
+    const res = await fetch(`${FIREBASE_DB_URL}/portal_config.json`);
+    const cfg = await res.json() || {};
+    
+    currentGlobalTrialStatus = cfg.global_trial_active !== false;
+    updateGlobalTrialBtnUI();
+
+    document.getElementById('admUpiId').value = cfg.upi_id || "";
+    document.getElementById('admWhatsapp').value = cfg.whatsapp_number || "";
+    document.getElementById('admQrUrl').value = cfg.qr_image_url || "";
+
+    if (cfg.plans) {
+      if (cfg.plans.plan_1) {
+        document.getElementById('admPlan1Price').value = cfg.plans.plan_1.price || 50;
+        document.getElementById('admPlan1Days').value = cfg.plans.plan_1.days || 30;
+      }
+      if (cfg.plans.plan_2) {
+        document.getElementById('admPlan2Price').value = cfg.plans.plan_2.price || 200;
+        document.getElementById('admPlan2Days').value = cfg.plans.plan_2.days || 200;
+      }
+    }
+  } catch(e) {
+    console.log("Config load error:", e);
+  }
+}
+
+// Global Trial ബട്ടൺ UI അപ്ഡേറ്റ്
+function updateGlobalTrialBtnUI() {
+  const btn = document.getElementById('btnGlobalTrialToggle');
+  if (currentGlobalTrialStatus) {
+    btn.textContent = "ആക്റ്റീവ് (FREE All)";
+    btn.className = "px-3 py-1 rounded-xl text-xs font-black bg-emerald-500 text-slate-950";
+  } else {
+    btn.textContent = "പെയ്ഡ് മോഡ് (PAID)";
+    btn.className = "px-3 py-1 rounded-xl text-xs font-black bg-rose-500 text-white";
+  }
+}
+
+// Global Trial മോഡ് ടോഗിൾ ചെയ്യുന്നു
+async function toggleGlobalTrialMode() {
+  currentGlobalTrialStatus = !currentGlobalTrialStatus;
+  await fetch(`${FIREBASE_DB_URL}/portal_config.json`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ global_trial_active: currentGlobalTrialStatus })
+  });
+  updateGlobalTrialBtnUI();
+  alert(currentGlobalTrialStatus ? "എല്ലാവർക്കും പരീക്ഷകൾ സൗജന്യമാക്കി (Global Trial Active)!" : "സബ്സ്ക്രിപ്ഷൻ മോഡിലേക്ക് മാറ്റി (Paid Mode Active)!");
+}
+
+// UPI & പ്ലാൻ വിവരങ്ങൾ സേവ് ചെയ്യുന്നു
+async function saveAdminPaymentSettings() {
+  const data = {
+    upi_id: document.getElementById('admUpiId').value.trim(),
+    whatsapp_number: document.getElementById('admWhatsapp').value.trim(),
+    qr_image_url: document.getElementById('admQrUrl').value.trim(),
+    plans: {
+      plan_1: {
+        title: `${document.getElementById('admPlan1Days').value} Days Access`,
+        price: Number(document.getElementById('admPlan1Price').value),
+        days: Number(document.getElementById('admPlan1Days').value)
+      },
+      plan_2: {
+        title: `${document.getElementById('admPlan2Days').value} Days Access`,
+        price: Number(document.getElementById('admPlan2Price').value),
+        days: Number(document.getElementById('admPlan2Days').value)
+      }
+    }
+  };
+
+  await fetch(`${FIREBASE_DB_URL}/portal_config.json`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+  alert("സബ്സ്ക്രിപ്ഷൻ വിവരങ്ങൾ വിജയകരമായി സേവ് ചെയ്തു!");
+}
+
+// കുട്ടിയുടെ വാലിഡിറ്റി പരിശോധിക്കുന്നു
+async function checkStudentValidity() {
+  const phone = document.getElementById('searchStudentPhone').value.trim();
+  if (!phone) return alert("ദയവായി ഫോൺ നമ്പർ നൽകുക!");
+  activeSearchedPhone = phone;
+
+  const res = await fetch(`${FIREBASE_DB_URL}/users/${phone}.json`);
+  const user = await res.json();
+
+  const box = document.getElementById('studentValidityResult');
+  const nameEl = document.getElementById('studResultName');
+  const expEl = document.getElementById('studResultExpiry');
+
+  if (!user) {
+    alert("ഈ നമ്പറിൽ രജിസ്റ്റർ ചെയ്ത വിദ്യാർത്ഥിയെ കണ്ടെത്തിയില്ല!");
+    box.classList.add('hidden');
+    return;
+  }
+
+  box.classList.remove('hidden');
+  nameEl.textContent = `${user.Official_Name || user.Name || 'Student'} (${phone})`;
+
+  const today = new Date().toISOString().split('T')[0];
+  const expiry = user.valid_until || "ഇതുവരെ വാലിഡിറ്റി നൽകിയിട്ടില്ല";
+
+  if (user.valid_until && user.valid_until >= today) {
+    expEl.textContent = `വാലിഡിറ്റി: ${expiry} വരെ (Active)`;
+    expEl.className = "px-2.5 py-1 rounded-lg font-bold bg-emerald-950 text-emerald-400 border border-emerald-800";
+  } else {
+    expEl.textContent = `കാലാവധി: ${expiry} (Expired / None)`;
+    expEl.className = "px-2.5 py-1 rounded-lg font-bold bg-rose-950 text-rose-400 border border-rose-800";
+  }
+}
+
+// ദിവസങ്ങൾ കൂട്ടി നൽകുന്നു (+30 അല്ലെങ്കിൽ +200)
+async function addStudentValidityDays(daysToAdd) {
+  if (!activeSearchedPhone) return;
+  const res = await fetch(`${FIREBASE_DB_URL}/users/${activeSearchedPhone}.json`);
+  const user = await res.json() || {};
+
+  const today = new Date();
+  let baseDate = new Date();
+  if (user.valid_until && new Date(user.valid_until) > today) {
+    baseDate = new Date(user.valid_until);
+  }
+  baseDate.setDate(baseDate.getDate() + daysToAdd);
+  const newDateStr = baseDate.toISOString().split('T')[0];
+
+  await fetch(`${FIREBASE_DB_URL}/users/${activeSearchedPhone}.json`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ valid_until: newDateStr, is_premium: true })
+  });
+
+  alert(`വിജയകരം! ${activeSearchedPhone} എന്ന നമ്പറിലേക്ക് ${newDateStr} വരെ വാലിഡിറ്റി നീട്ടി നൽകി.`);
+  checkStudentValidity();
+}
+
+// പ്രത്യേക തീയതി സെറ്റ് ചെയ്യുന്നു
+async function setStudentCustomDate() {
+  const customDate = document.getElementById('studCustomDate').value;
+  if (!customDate || !activeSearchedPhone) return alert("ദയവായി ഒരു തീയതി തിരഞ്ഞെടുക്കുക!");
+
+  await fetch(`${FIREBASE_DB_URL}/users/${activeSearchedPhone}.json`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ valid_until: customDate, is_premium: true })
+  });
+
+  alert(`വിജയകരം! വാലിഡിറ്റി ${customDate} വരെ സെറ്റ് ചെയ്തു.`);
+  checkStudentValidity();
+}
+
+// പേജ് ലോഡ് ആകുമ്പോൾ ഇത് റൺ ചെയ്യുന്നു
+window.addEventListener('DOMContentLoaded', loadSubscriptionConfig);
   </script>
 </body>
 </html>
