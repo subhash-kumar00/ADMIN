@@ -94,8 +94,8 @@
       <form id="editExamForm" onsubmit="submitUpdatedExam(event)" class="flex-1 overflow-y-auto custom-scroll space-y-4 pr-1 text-xs">
         <input type="hidden" id="editExDbIndex">
         
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          <div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+          <div class="lg:col-span-2">
             <label class="block text-[11px] text-slate-300 font-bold mb-1">പരീക്ഷയുടെ പേര് (TITLE) *</label>
             <input type="text" id="editExTitle" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-cyan-500">
           </div>
@@ -110,8 +110,11 @@
             </select>
           </div>
           <div>
-            <label class="block text-[11px] text-slate-300 font-bold mb-1">വിഷയം (CATEGORY) *</label>
-            <input type="text" id="editExCategory" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-cyan-500">
+            <label class="block text-[11px] text-amber-400 font-bold mb-1">ആക്സസ് ടൈപ്പ് *</label>
+            <select id="editExAccessType" class="w-full bg-slate-950 border border-amber-500/40 rounded-xl px-3 py-2 text-amber-300 font-bold focus:outline-none focus:border-amber-500">
+              <option value="FREE">🟢 FREE (സൗജന്യം)</option>
+              <option value="PAID">🔒 PAID (പ്രീമിയം)</option>
+            </select>
           </div>
           <div>
             <label class="block text-[11px] text-cyan-400 font-bold mb-1">യൂണിക് കീ (KEY) *</label>
@@ -207,7 +210,7 @@
             <span>SK PSC അഡ്മിൻ കൺട്രോൾ പാനൽ</span>
             <span class="text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded font-mono font-bold">ALL-IN-ONE STUDIO</span>
           </h1>
-          <p class="text-[11px] text-slate-400">വളർച്ചാ അനലിറ്റിക്സും എക്സാം & ഡൗട്ട് മാനേജ്‌‌മെന്റും</p>
+          <p class="text-[11px] text-slate-400">സബ്സ്ക്രിപ്ഷനും എക്സാം & ഡൗട്ട് മാനേജ്‌‌മെന്റും</p>
         </div>
       </div>
       
@@ -258,11 +261,16 @@
     <div class="flex items-center space-x-2 border-b border-slate-800 pb-2 text-xs overflow-x-auto custom-scroll">
       <button onclick="switchTab('analyticsDashboard')" id="tabBtnAnalytics" class="px-4 py-2 rounded-xl font-bold bg-emerald-500 text-slate-950 transition flex items-center space-x-1.5 shadow whitespace-nowrap cursor-pointer">
         <span>📈</span>
-        <span>പോർട്ടൽ ഗ്രോത്ത് ചാർട്ട്</span>
+        <span>അനലിറ്റിക്സ്</span>
       </button>
       <button onclick="switchTab('publishManager')" id="tabBtnPublish" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap cursor-pointer">
         <span>📢</span>
-        <span>പരീക്ഷാ പബ്ലിഷർ & ബ്ലിങ്ക് മെസ്സേജ്</span>
+        <span>പരീക്ഷാ പബ്ലിഷർ</span>
+      </button>
+      <!-- 🌟 പുതിയ സബ്സ്ക്രിപ്ഷൻ ടാബ് -->
+      <button onclick="switchTab('subscriptionDesk')" id="tabBtnSubscription" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-amber-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap cursor-pointer">
+        <span>💳</span>
+        <span>സബ്സ്ക്രിപ്ഷൻ & വാലിഡിറ്റി</span>
       </button>
       <button onclick="switchTab('studentChatDesk')" id="tabBtnChat" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap cursor-pointer relative">
         <span>💬</span>
@@ -348,6 +356,123 @@
       </div>
     </div>
 
+    <!-- 🌟 പുതിയ സെക്ഷൻ: സബ്സ്ക്രിപ്ഷൻ & സ്റ്റുഡന്റ് വാലിഡിറ്റി മാനേജർ -->
+    <div id="sectionSubscriptionDesk" class="hidden bg-slate-900 border border-amber-500/30 rounded-3xl p-5 sm:p-7 space-y-6 shadow-2xl">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-3">
+        <div>
+          <h3 class="text-base sm:text-lg font-black text-amber-400 flex items-center space-x-2">
+            <span>💳</span><span>സബ്സ്ക്രിപ്ഷൻ & പേയ്‌മെന്റ് ക്രമീകരണങ്ങൾ</span>
+          </h3>
+          <p class="text-xs text-slate-400 mt-0.5">പോർട്ടൽ ഫീസ്, യു.പി.ഐ, ഗ്ലോബൽ ട്രയൽ മോഡ് എന്നിവ ഇവിടെ മാനേജ് ചെയ്യാം.</p>
+        </div>
+        
+        <!-- Global Trial Toggle Button -->
+        <div class="flex items-center space-x-2 bg-slate-950 px-3.5 py-2 rounded-2xl border border-slate-800">
+          <span class="text-xs text-slate-300 font-bold">Global Trial:</span>
+          <button id="btnGlobalTrialToggle" onclick="toggleGlobalTrialMode()" class="px-3.5 py-1.5 rounded-xl text-xs font-black bg-emerald-500 text-slate-950 transition cursor-pointer">
+            ആക്റ്റീവ് (FREE All)
+          </button>
+        </div>
+      </div>
+
+      <!-- UPI & പേയ്‌മെന്റ് വിവരങ്ങൾ -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+        <div>
+          <label class="block text-[11px] font-bold text-slate-400 mb-1 uppercase">UPI ID (GPay / PhonePe)</label>
+          <input type="text" id="admUpiId" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white" placeholder="yourname@okhdfcbank">
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-slate-400 mb-1 uppercase">WhatsApp Number (Proof അയക്കാൻ)</label>
+          <input type="text" id="admWhatsapp" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white" placeholder="919XXXXXXXXX">
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-slate-400 mb-1 uppercase">QR Code Image Link</label>
+          <input type="text" id="admQrUrl" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white" placeholder="https://...">
+        </div>
+      </div>
+
+      <!-- പ്ലാനുകൾ മാറ്റാനുള്ള ബോക്സുകൾ -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2">
+          <span class="text-xs font-bold text-emerald-400">📦 Plan 1 (ചെറിയ പ്ലാൻ)</span>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="text-[10px] text-slate-500">തുക (₹)</label>
+              <input type="number" id="admPlan1Price" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white" value="50">
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-500">ദിവസങ്ങൾ</label>
+              <input type="number" id="admPlan1Days" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white" value="30">
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2">
+          <span class="text-xs font-bold text-cyan-400">🚀 Plan 2 (വലിയ പ്ലാൻ)</span>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="text-[10px] text-slate-500">തുക (₹)</label>
+              <input type="number" id="admPlan2Price" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white" value="200">
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-500">ദിവസങ്ങൾ</label>
+              <input type="number" id="admPlan2Days" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white" value="200">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end">
+        <button onclick="saveAdminPaymentSettings()" class="px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 text-slate-950 font-black rounded-xl text-xs shadow cursor-pointer">
+          സെറ്റിംഗ്സ് സേവ് ചെയ്യുക 💾
+        </button>
+      </div>
+
+      <!-- ================= 🎓 STUDENT VALIDITY DESK ================= -->
+      <div class="pt-6 border-t border-slate-800 space-y-4">
+        <div>
+          <h4 class="text-sm font-bold text-white uppercase tracking-wider flex items-center space-x-2">
+            <span>🎓</span><span>വിദ്യാർത്ഥി വാലിഡിറ്റി ഡെസ്ക് (Student Validity Desk)</span>
+          </h4>
+          <p class="text-xs text-slate-400 mt-0.5">ഫീസ് അടച്ച വിദ്യാർത്ഥികൾക്ക് ഇവിടെനിന്ന് നേരിട്ട് വാലിഡിറ്റി അൺലോക്ക് ചെയ്യാം.</p>
+        </div>
+        
+        <div class="flex flex-col sm:flex-row gap-2.5">
+          <input type="text" id="searchStudentPhone" placeholder="കുട്ടിയുടെ 10 അക്ക മൊബൈൽ നമ്പർ" class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
+          <button onclick="checkStudentValidity()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl text-xs transition cursor-pointer">
+            പരിശോധിക്കുക 🔍
+          </button>
+        </div>
+
+        <!-- കുട്ടിയുടെ വിവരങ്ങളും അൺലോക്ക് ബട്ടണുകളും -->
+        <div id="studentValidityResult" class="hidden bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-4 shadow-inner">
+          <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+            <div>
+              <span class="text-[10px] text-slate-500 uppercase font-mono block">വിദ്യാർത്ഥി</span>
+              <h5 id="studResultName" class="text-sm font-bold text-white mt-0.5"></h5>
+            </div>
+            <div>
+              <span id="studResultExpiry" class="px-3 py-1 rounded-xl text-xs font-bold inline-block"></span>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-slate-800/80">
+            <button onclick="addStudentValidityDays(30)" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition shadow cursor-pointer">
+              +30 Days (₹50)
+            </button>
+            <button onclick="addStudentValidityDays(200)" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-xl text-xs font-bold transition shadow cursor-pointer">
+              +200 Days (₹200)
+            </button>
+            <div class="flex items-center space-x-1.5 bg-slate-900 p-1 rounded-xl border border-slate-700">
+              <input type="date" id="studCustomDate" class="bg-transparent px-2 py-1 text-xs text-white focus:outline-none">
+              <button onclick="setStudentCustomDate()" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-bold transition cursor-pointer">
+                സെറ്റ് ചെയ്യുക
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- 1. PUBLISH MANAGER & ALL-IN-ONE EXAM CREATOR -->
     <div id="sectionPublishManager" class="hidden bg-slate-900 border border-emerald-500/30 rounded-3xl p-5 sm:p-7 space-y-6 shadow-2xl">
       
@@ -420,120 +545,10 @@
             ➕ പുതിയ പരീക്ഷ & ചോദ്യങ്ങൾ ചേർക്കുക
           </button>
         </div>
-<!-- ================= 💳 സബ്സ്ക്രിപ്ഷൻ & സ്റ്റുഡന്റ് വാലിഡിറ്റി മാനേജർ ================= -->
-<div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-6 my-6 shadow-2xl">
-  
-  <!-- ഹെഡറും ഗ്ലോബൽ ട്രയൽ സ്വിച്ചും -->
-  <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-3">
-    <div>
-      <h3 class="text-base font-black text-amber-400 flex items-center space-x-2">
-        <span>💳</span><span>സബ്സ്ക്രിപ്ഷൻ & പെയ്‌മെന്റ് മാനേജർ</span>
-      </h3>
-      <p class="text-[11px] text-slate-400 mt-0.5">പോർട്ടൽ ഫീസ്, യു.പി.ഐ, ട്രയൽ മോഡ് എന്നിവ നിയന്ത്രിക്കുക</p>
-    </div>
-    
-    <!-- Global Trial Toggle Button -->
-    <div class="flex items-center space-x-2 bg-slate-950 px-3 py-1.5 rounded-2xl border border-slate-800">
-      <span class="text-xs text-slate-300 font-bold">Global Trial:</span>
-      <button id="btnGlobalTrialToggle" onclick="toggleGlobalTrialMode()" class="px-3 py-1 rounded-xl text-xs font-black bg-emerald-500 text-slate-950 transition">
-        ആക്റ്റീവ് (FREE)
-      </button>
-    </div>
-  </div>
 
-  <!-- UPI & പേയ്‌മെന്റ് വിവരങ്ങൾ -->
-  <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-    <div>
-      <label class="block text-[11px] font-bold text-slate-400 mb-1 uppercase">UPI ID (GPay / PhonePe)</label>
-      <input type="text" id="admUpiId" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white" placeholder="yourname@okhdfcbank">
-    </div>
-    <div>
-      <label class="block text-[11px] font-bold text-slate-400 mb-1 uppercase">WhatsApp Number (Proof അയക്കാൻ)</label>
-      <input type="text" id="admWhatsapp" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white" placeholder="919XXXXXXXXX">
-    </div>
-    <div>
-      <label class="block text-[11px] font-bold text-slate-400 mb-1 uppercase">QR Code Image Link</label>
-      <input type="text" id="admQrUrl" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white" placeholder="https://...">
-    </div>
-  </div>
-
-  <!-- പ്ലാനുകൾ മാറ്റാനുള്ള ബോക്സുകൾ -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-    <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2">
-      <span class="text-xs font-bold text-emerald-400">📦 Plan 1 (ചെറിയ പ്ലാൻ)</span>
-      <div class="grid grid-cols-2 gap-2">
-        <div>
-          <label class="text-[10px] text-slate-500">തുക (₹)</label>
-          <input type="number" id="admPlan1Price" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white" value="50">
-        </div>
-        <div>
-          <label class="text-[10px] text-slate-500">ദിവസങ്ങൾ</label>
-          <input type="number" id="admPlan1Days" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white" value="30">
-        </div>
-      </div>
-    </div>
-
-    <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2">
-      <span class="text-xs font-bold text-cyan-400">🚀 Plan 2 (വലിയ പ്ലാൻ)</span>
-      <div class="grid grid-cols-2 gap-2">
-        <div>
-          <label class="text-[10px] text-slate-500">തുക (₹)</label>
-          <input type="number" id="admPlan2Price" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white" value="200">
-        </div>
-        <div>
-          <label class="text-[10px] text-slate-500">ദിവസങ്ങൾ</label>
-          <input type="number" id="admPlan2Days" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white" value="200">
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="flex justify-end">
-    <button onclick="saveAdminPaymentSettings()" class="px-5 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 text-slate-950 font-black rounded-xl text-xs shadow">
-      സെറ്റിംഗ്സ് സേവ് ചെയ്യുക 💾
-    </button>
-  </div>
-
-  <!-- ================= 🎓 STUDENT VALIDITY DESK ================= -->
-  <div class="pt-4 border-t border-slate-800 space-y-3">
-    <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center space-x-1.5">
-      <span>🎓</span><span>വിദ്യാർത്ഥി വാലിഡിറ്റി ഡെസ്ക് (Student Access Control)</span>
-    </h4>
-    
-    <div class="flex flex-col sm:flex-row gap-2">
-      <input type="text" id="searchStudentPhone" placeholder="കുട്ടിയുടെ 10 അക്ക മൊബൈൽ നമ്പർ" class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white">
-      <button onclick="checkStudentValidity()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl text-xs">
-        പരിശോധിക്കുക 🔍
-      </button>
-    </div>
-
-    <!-- കുട്ടിയുടെ വിവരങ്ങളും അൺലോക്ക് ബട്ടണുകളും -->
-    <div id="studentValidityResult" class="hidden bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-3">
-      <div class="flex justify-between items-center text-xs">
-        <span id="studResultName" class="font-bold text-white"></span>
-        <span id="studResultExpiry" class="px-2.5 py-1 rounded-lg font-bold"></span>
-      </div>
-      <div class="flex flex-wrap gap-2 pt-2">
-        <button onclick="addStudentValidityDays(30)" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold">
-          +30 Days (₹50)
-        </button>
-        <button onclick="addStudentValidityDays(200)" class="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg text-xs font-bold">
-          +200 Days (₹200)
-        </button>
-        <div class="flex items-center space-x-1">
-          <input type="date" id="studCustomDate" class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-white">
-          <button onclick="setStudentCustomDate()" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-bold">
-            സെറ്റ് ചെയ്യുക
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-</div>
         <form id="addNewExamForm" onsubmit="createNewExamInFirebase(event)" class="hidden pt-4 border-t border-slate-800 space-y-5 text-xs">
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
-            <div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
+            <div class="lg:col-span-2">
               <label class="block text-[11px] text-slate-300 font-bold mb-1">1. പരീക്ഷയുടെ പേര് (TITLE) *</label>
               <input type="text" id="newExTitle" oninput="autoFillExamKey()" required placeholder="ഉദാ: മോഡൽ എക്സാം - 51" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-emerald-500">
             </div>
@@ -549,40 +564,43 @@
               </select>
             </div>
 
+            <!-- 🌟 പുതിയ Access Type ഫീൽഡ് -->
             <div>
-              <label class="block text-[11px] text-slate-300 font-bold mb-1">3. വിഷയം (CATEGORY) *</label>
-              <input type="text" id="newExCategory" list="existingCategoriesList" required placeholder="ഉദാ: കേരള ചരിത്രം" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-emerald-500">
-              <datalist id="existingCategoriesList"></datalist>
+              <label class="block text-[11px] text-amber-400 font-bold mb-1">3. ആക്സസ് ടൈപ്പ് *</label>
+              <select id="newExAccessType" class="w-full bg-slate-900 border border-amber-500/50 rounded-xl px-3 py-2.5 text-amber-300 font-bold focus:outline-none focus:border-amber-500 cursor-pointer">
+                <option value="FREE">🟢 FREE (സൗജന്യം)</option>
+                <option value="PAID">🔒 PAID (പ്രീമിയം)</option>
+              </select>
             </div>
 
             <div>
-              <label class="block text-[11px] text-cyan-400 font-bold mb-1">4. യൂണിക് ഇംഗ്ലീഷ് കീ (KEY) *</label>
+              <label class="block text-[11px] text-cyan-400 font-bold mb-1">4. യൂണിക് കീ (KEY) *</label>
               <input type="text" id="newExKey" required placeholder="ഉദാ: exam_51" class="w-full bg-slate-900 border border-cyan-500/40 rounded-xl px-3 py-2.5 text-cyan-300 font-mono font-bold focus:outline-none focus:border-cyan-400">
-              <span class="text-[10px] text-slate-500 block mt-0.5">ചോദ്യങ്ങൾ quiz_contents-ൽ ഈ കീയിലാണ് സേവ് ആവുക.</span>
             </div>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-900/60 p-3.5 rounded-2xl border border-slate-800">
             <div>
-              <label class="block text-[11px] text-amber-400 font-bold mb-1">5. കോമൺ എക്സാം HTML ലിങ്ക് (FILEURL) *</label>
-              <input type="text" id="newExFileUrl" value="quiz.html" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-emerald-500 font-mono">
+              <label class="block text-[11px] text-slate-300 font-bold mb-1">വിഷയം (CATEGORY) *</label>
+              <input type="text" id="newExCategory" list="existingCategoriesList" required placeholder="ഉദാ: കേരള ചരിത്രം" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-emerald-500">
+              <datalist id="existingCategoriesList"></datalist>
             </div>
 
             <div>
-              <div class="flex items-center justify-between mb-1">
-                <label class="text-[11px] text-emerald-400 font-bold">6. Google Docs PDF ലിങ്ക് (pdfUrl)</label>
-                <button type="button" onclick="convertGoogleDocToPdfLink('newExPdfUrl')" class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/30">
-                  🔄 Direct PDF ലിങ്കാക്കുക
-                </button>
-              </div>
-              <input type="text" id="newExPdfUrl" placeholder="Google Docs Share Link ഇവിടെ പേസ്റ്റ് ചെയ്യുക..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-emerald-500 font-mono">
+              <label class="block text-[11px] text-amber-400 font-bold mb-1">കോമൺ എക്സാം HTML ലിങ്ക് (FILEURL) *</label>
+              <input type="text" id="newExFileUrl" value="quiz.html" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-emerald-500 font-mono">
             </div>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
             <div>
-              <label class="block text-[11px] text-slate-400 font-semibold mb-1">പ്രധാന ടോപ്പിക്കുകൾ</label>
-              <input type="text" id="newExTopics" placeholder="ഉദാ: നവോത്ഥാനം, പ്രധാന വർഷങ്ങൾ" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500">
+              <div class="flex items-center justify-between mb-1">
+                <label class="text-[11px] text-emerald-400 font-bold">Google Docs PDF ലിങ്ക്</label>
+                <button type="button" onclick="convertGoogleDocToPdfLink('newExPdfUrl')" class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/30">
+                  🔄 Direct PDF
+                </button>
+              </div>
+              <input type="text" id="newExPdfUrl" placeholder="Docs Share Link..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono text-[11px]">
             </div>
             <div>
               <label class="block text-[11px] text-slate-400 font-semibold mb-1">ചോദ്യങ്ങളുടെ എണ്ണം</label>
@@ -603,7 +621,7 @@
             <div class="flex items-center justify-between border-b border-slate-800 pb-2">
               <h5 class="text-xs font-black text-cyan-400 flex items-center space-x-1.5">
                 <span>📝</span>
-                <span>7. ചോദ്യങ്ങളുടെ JSON നൽകുക (Questions JSON Upload / Paste)</span>
+                <span>ചോദ്യങ്ങളുടെ JSON നൽകുക (Questions JSON Upload / Paste)</span>
               </h5>
               <span class="text-[10px] text-emerald-400 font-mono">Target: quiz_contents/KEY.json</span>
             </div>
@@ -635,7 +653,7 @@
               <span>🗂️</span>
               <span>നിലവിലുള്ള പരീക്ഷകളുടെ ലിസ്റ്റ് & എഡിറ്റിംഗ്</span>
             </h3>
-            <p class="text-xs text-slate-400">ഏതെങ്കിലും പരീക്ഷയിലെ വിവരങ്ങളോ ചോദ്യങ്ങളോ മാറ്റാൻ <strong>✏️ Edit</strong> ബട്ടൺ അമർത്താം.</p>
+            <p class="text-xs text-slate-400">ഏതെങ്കിലും പരീക്ഷയിലെ വിവരങ്ങളോ ഫ്രീ/പെയ്ഡ് സ്റ്റാറ്റസോ മാറ്റാൻ ഇവിടെ ഉപയോഗിക്കാം.</p>
           </div>
           <div class="flex items-center space-x-2">
             <select id="filterMainFolderSelect" onchange="filterPublishExams()" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-emerald-400 font-bold focus:outline-none focus:border-emerald-500 cursor-pointer">
@@ -648,14 +666,14 @@
           </div>
         </div>
 
-        <!-- 🌟 min-w-[950px] നൽകി ഫുൾ വ്യൂ ഉറപ്പാക്കിയ ടേബിൾ കണ്ടെയ്നർ -->
         <div class="overflow-x-auto custom-scroll border border-slate-800 rounded-2xl shadow-inner">
-          <table class="w-full text-left text-xs text-slate-300 min-w-[950px]">
+          <table class="w-full text-left text-xs text-slate-300 min-w-[1000px]">
             <thead class="bg-slate-950 text-slate-400 uppercase text-[10px] border-b border-slate-800 sticky top-0">
               <tr>
                 <th class="p-3 text-center w-12">#</th>
                 <th class="p-3">പരീക്ഷയുടെ പേര് & കീ</th>
                 <th class="p-3 text-center">ഫോൾഡർ</th>
+                <th class="p-3 text-center">ആക്സസ് (Fee)</th>
                 <th class="p-3 text-center">PDF ലിങ്ക്</th>
                 <th class="p-3 text-center">ബാഡ്ജ്</th>
                 <th class="p-3 text-center">ഷെഡ്യൂൾ സമയം</th>
@@ -664,7 +682,7 @@
               </tr>
             </thead>
             <tbody id="publishTableBody" class="divide-y divide-slate-800/60 bg-slate-900/60">
-              <tr><td colspan="8" class="p-6 text-center text-slate-500">ലോഡ് ചെയ്യുന്നു...</td></tr>
+              <tr><td colspan="9" class="p-6 text-center text-slate-500">ലോഡ് ചെയ്യുന്നു...</td></tr>
             </tbody>
           </table>
         </div>
@@ -1029,12 +1047,9 @@
     const GITHUB_LOGO_URL = "https://raw.githubusercontent.com/subhash-kumar00/PSC-EXAMS/main/logo.png";
     const TWENTY_FOUR_HOURS_MS = 24 * 60 * 60 * 1000;
 
-   // 🌟 OneSignal ബാക്ക്ഗ്രൗണ്ട് പുഷ് കോൺഫിഗറേഷൻ (Secure & High Priority)
     const ONESIGNAL_APP_ID = "39db2070-7998-49fc-b624-28b368a1674a";
-    // GitHub Secret Scanner ബ്ലോക്ക് ചെയ്യാതിരിക്കാൻ പുതിയ കീ സുരക്ഷിതമായി ഉൾപ്പെടുത്തിയിരിക്കുന്നു
     const ONESIGNAL_REST_API_KEY = atob("b3NfdjJfYXBwX2hobnNhNGR6dGJlN3pucmVmY3p3cmlsaGprbGx0N3RjemprZTR1bnozbmZkaG4zMm80bHJ1NXl3b2N2dm83a2MzdWZ2bHZtYnQ0bG9kbDJvamN2c21udXd2NHE3bmg3c2tjYXJ5aXk=");
 
-    // 🌟 1. സംശയം ചോദിച്ച വിദ്യാർത്ഥിക്ക് മാത്രം നേരിട്ട് ബാക്ക്ഗ്രൗണ്ട് പുഷ് അയക്കുന്ന ഫംഗ്ഷൻ (Chat Reply Push)
     async function sendOneSignalPushToUser(phone, title, message) {
       const cleanPhone = String(phone).replace(/\D/g, '').slice(-10);
       try {
@@ -1046,27 +1061,22 @@
           },
           body: JSON.stringify({
             app_id: ONESIGNAL_APP_ID,
-            include_aliases: {
-              external_id: [cleanPhone] // കുട്ടിയുടെ 10 അക്ക മൊബൈൽ നമ്പർ
-            },
+            include_aliases: { external_id: [cleanPhone] },
             target_channel: "push",
-            priority: 10, // ആപ്പ് ക്ലോസ് ആണെങ്കിലും ഫോൺ ഉണർത്താൻ High Priority
+            priority: 10,
             headings: { en: title, ml: title },
             contents: { en: message, ml: message },
             url: "https://subhash-kumar00.github.io/PSC-EXAMS/"
           })
         });
-        const resData = await response.json();
-        console.log("OneSignal push response for", cleanPhone, ":", resData);
       } catch(err) {
         console.error("OneSignal User Push Error:", err);
       }
     }
 
-    // 🌟 2. പുതിയ പരീക്ഷ വരുമ്പോൾ മുഴുവൻ വിദ്യാർത്ഥികൾക്കും ഒരുമിച്ച് പുഷ് അയക്കുന്ന ഫംഗ്ഷൻ (Broadcast Push)
     async function sendOneSignalBroadcastPush(title, message) {
       try {
-        const response = await fetch("https://onesignal.com/api/v1/notifications", {
+        await fetch("https://onesignal.com/api/v1/notifications", {
           method: "POST",
           headers: {
             "Content-Type": "application/json; charset=utf-8",
@@ -1074,19 +1084,18 @@
           },
           body: JSON.stringify({
             app_id: ONESIGNAL_APP_ID,
-            included_segments: ["Total Subscriptions"], // ആപ്പ് ഇൻസ്റ്റാൾ ചെയ്ത എല്ലാവരിലേക്കും
+            included_segments: ["Total Subscriptions"],
             priority: 10,
             headings: { en: title, ml: title },
             contents: { en: message, ml: message },
             url: "https://subhash-kumar00.github.io/PSC-EXAMS/"
           })
         });
-        const resData = await response.json();
-        console.log("OneSignal broadcast response:", resData);
       } catch(err) {
         console.error("OneSignal Broadcast Error:", err);
       }
     }
+
     document.getElementById('pdfLogoStudent').src = GITHUB_LOGO_URL;
     document.getElementById('pdfLogoRank').src = GITHUB_LOGO_URL;
 
@@ -1108,6 +1117,9 @@
     let allStudentChatsCache = [];
     let activeChatStudent = null;
 
+    let currentGlobalTrialStatus = true;
+    let activeSearchedPhone = null;
+
     document.getElementById('adminPinInput').addEventListener('keyup', (e) => {
       if (e.key === 'Enter') verifyPin();
     });
@@ -1124,10 +1136,7 @@
       const inputEl = document.getElementById(inputId);
       if (!inputEl) return;
       let url = inputEl.value.trim();
-      if (!url) {
-        alert("ആദ്യം ഗൂഗിൾ ഡോക്സ് അല്ലെങ്കിൽ ഡ്രൈവ് ലിങ്ക് ബോക്സിൽ പേസ്റ്റ് ചെയ്യുക.");
-        return;
-      }
+      if (!url) return alert("ആദ്യം ഗൂഗിൾ ഡോക്സ് അല്ലെങ്കിൽ ഡ്രൈവ് ലിങ്ക് പേസ്റ്റ് ചെയ്യുക.");
       const docMatch = url.match(/docs\.google\.com\/document\/d\/([a-zA-Z0-9_-]+)/);
       if (docMatch && docMatch[1]) {
         inputEl.value = `https://docs.google.com/document/d/${docMatch[1]}/export?format=pdf`;
@@ -1249,6 +1258,7 @@
         loadExamDropdownList();
         loadReportedQuestions();
         loadStudentChatsAdmin(false);
+        loadSubscriptionConfig();
 
         setInterval(() => { loadStudentChatsAdmin(false); }, 12000);
       } else {
@@ -1258,13 +1268,14 @@
     }
 
     function switchTab(tab) {
-      ['sectionAnalyticsDashboard', 'sectionPublishManager', 'sectionStudentChatDesk', 'sectionExamWise', 'sectionStudentWise', 'sectionSummaryWise'].forEach(id => {
+      ['sectionAnalyticsDashboard', 'sectionPublishManager', 'sectionSubscriptionDesk', 'sectionStudentChatDesk', 'sectionExamWise', 'sectionStudentWise', 'sectionSummaryWise'].forEach(id => {
         document.getElementById(id).classList.add('hidden');
       });
 
       const btnMap = {
         analyticsDashboard: 'tabBtnAnalytics',
         publishManager: 'tabBtnPublish',
+        subscriptionDesk: 'tabBtnSubscription',
         studentChatDesk: 'tabBtnChat',
         examWise: 'tabBtnExam',
         studentWise: 'tabBtnStudent',
@@ -1278,6 +1289,7 @@
 
       if (tab === 'analyticsDashboard') document.getElementById('sectionAnalyticsDashboard').classList.remove('hidden');
       if (tab === 'publishManager') document.getElementById('sectionPublishManager').classList.remove('hidden');
+      if (tab === 'subscriptionDesk') document.getElementById('sectionSubscriptionDesk').classList.remove('hidden');
       if (tab === 'studentChatDesk') { document.getElementById('sectionStudentChatDesk').classList.remove('hidden'); loadStudentChatsAdmin(true); }
       if (tab === 'examWise') document.getElementById('sectionExamWise').classList.remove('hidden');
       if (tab === 'studentWise') document.getElementById('sectionStudentWise').classList.remove('hidden');
@@ -1288,6 +1300,154 @@
       }
     }
 
+    // 🌟 സബ്സ്ക്രിപ്ഷൻ വിവരങ്ങൾ കൈകാര്യം ചെയ്യുന്നു
+    async function loadSubscriptionConfig() {
+      try {
+        const res = await fetch(`${FIREBASE_DB_URL}/portal_config.json`);
+        const cfg = await res.json() || {};
+        
+        currentGlobalTrialStatus = cfg.global_trial_active !== false;
+        updateGlobalTrialBtnUI();
+
+        document.getElementById('admUpiId').value = cfg.upi_id || "";
+        document.getElementById('admWhatsapp').value = cfg.whatsapp_number || "";
+        document.getElementById('admQrUrl').value = cfg.qr_image_url || "";
+
+        if (cfg.plans) {
+          if (cfg.plans.plan_1) {
+            document.getElementById('admPlan1Price').value = cfg.plans.plan_1.price || 50;
+            document.getElementById('admPlan1Days').value = cfg.plans.plan_1.days || 30;
+          }
+          if (cfg.plans.plan_2) {
+            document.getElementById('admPlan2Price').value = cfg.plans.plan_2.price || 200;
+            document.getElementById('admPlan2Days').value = cfg.plans.plan_2.days || 200;
+          }
+        }
+      } catch(e) {
+        console.log("Config load error:", e);
+      }
+    }
+
+    function updateGlobalTrialBtnUI() {
+      const btn = document.getElementById('btnGlobalTrialToggle');
+      if (currentGlobalTrialStatus) {
+        btn.textContent = "ആക്റ്റീവ് (FREE All)";
+        btn.className = "px-3.5 py-1.5 rounded-xl text-xs font-black bg-emerald-500 text-slate-950";
+      } else {
+        btn.textContent = "പെയ്ഡ് മോഡ് (PAID)";
+        btn.className = "px-3.5 py-1.5 rounded-xl text-xs font-black bg-rose-500 text-white";
+      }
+    }
+
+    async function toggleGlobalTrialMode() {
+      currentGlobalTrialStatus = !currentGlobalTrialStatus;
+      await fetch(`${FIREBASE_DB_URL}/portal_config.json`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ global_trial_active: currentGlobalTrialStatus })
+      });
+      updateGlobalTrialBtnUI();
+      alert(currentGlobalTrialStatus ? "എല്ലാവർക്കും പരീക്ഷകൾ സൗജന്യമാക്കി (Global Trial Active)!" : "സബ്സ്ക്രിപ്ഷൻ മോഡിലേക്ക് മാറ്റി (Paid Mode Active)!");
+    }
+
+    async function saveAdminPaymentSettings() {
+      const data = {
+        upi_id: document.getElementById('admUpiId').value.trim(),
+        whatsapp_number: document.getElementById('admWhatsapp').value.trim(),
+        qr_image_url: document.getElementById('admQrUrl').value.trim(),
+        plans: {
+          plan_1: {
+            title: `${document.getElementById('admPlan1Days').value} Days Access`,
+            price: Number(document.getElementById('admPlan1Price').value),
+            days: Number(document.getElementById('admPlan1Days').value)
+          },
+          plan_2: {
+            title: `${document.getElementById('admPlan2Days').value} Days Access`,
+            price: Number(document.getElementById('admPlan2Price').value),
+            days: Number(document.getElementById('admPlan2Days').value)
+          }
+        }
+      };
+
+      await fetch(`${FIREBASE_DB_URL}/portal_config.json`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      alert("സബ്സ്ക്രിപ്ഷൻ വിവരങ്ങൾ വിജയകരമായി സേവ് ചെയ്തു!");
+    }
+
+    async function checkStudentValidity() {
+      const phone = document.getElementById('searchStudentPhone').value.trim();
+      if (!phone) return alert("ദയവായി ഫോൺ നമ്പർ നൽകുക!");
+      activeSearchedPhone = phone;
+
+      const res = await fetch(`${FIREBASE_DB_URL}/users/${phone}.json`);
+      const user = await res.json();
+
+      const box = document.getElementById('studentValidityResult');
+      const nameEl = document.getElementById('studResultName');
+      const expEl = document.getElementById('studResultExpiry');
+
+      if (!user) {
+        alert("ഈ നമ്പറിൽ രജിസ്റ്റർ ചെയ്ത വിദ്യാർത്ഥിയെ കണ്ടെത്തിയില്ല!");
+        box.classList.add('hidden');
+        return;
+      }
+
+      box.classList.remove('hidden');
+      nameEl.textContent = `${user.Official_Name || user.Name || 'Student'} (${phone})`;
+
+      const today = new Date().toISOString().split('T')[0];
+      const expiry = user.valid_until || "ഇതുവരെ വാലിഡിറ്റി നൽകിയിട്ടില്ല";
+
+      if (user.valid_until && user.valid_until >= today) {
+        expEl.textContent = `വാലിഡിറ്റി: ${expiry} വരെ (Active)`;
+        expEl.className = "px-3 py-1 rounded-xl text-xs font-bold bg-emerald-950 text-emerald-400 border border-emerald-800";
+      } else {
+        expEl.textContent = `കാലാവധി: ${expiry} (Expired / None)`;
+        expEl.className = "px-3 py-1 rounded-xl text-xs font-bold bg-rose-950 text-rose-400 border border-rose-800";
+      }
+    }
+
+    async function addStudentValidityDays(daysToAdd) {
+      if (!activeSearchedPhone) return;
+      const res = await fetch(`${FIREBASE_DB_URL}/users/${activeSearchedPhone}.json`);
+      const user = await res.json() || {};
+
+      const today = new Date();
+      let baseDate = new Date();
+      if (user.valid_until && new Date(user.valid_until) > today) {
+        baseDate = new Date(user.valid_until);
+      }
+      baseDate.setDate(baseDate.getDate() + daysToAdd);
+      const newDateStr = baseDate.toISOString().split('T')[0];
+
+      await fetch(`${FIREBASE_DB_URL}/users/${activeSearchedPhone}.json`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ valid_until: newDateStr, is_premium: true })
+      });
+
+      alert(`വിജയകരം! ${activeSearchedPhone} എന്ന നമ്പറിലേക്ക് ${newDateStr} വരെ വാലിഡിറ്റി നീട്ടി നൽകി.`);
+      checkStudentValidity();
+    }
+
+    async function setStudentCustomDate() {
+      const customDate = document.getElementById('studCustomDate').value;
+      if (!customDate || !activeSearchedPhone) return alert("ദയവായി ഒരു തീയതി തിരഞ്ഞെടുക്കുക!");
+
+      await fetch(`${FIREBASE_DB_URL}/users/${activeSearchedPhone}.json`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ valid_until: customDate, is_premium: true })
+      });
+
+      alert(`വിജയകരം! വാലിഡിറ്റി ${customDate} വരെ സെറ്റ് ചെയ്തു.`);
+      checkStudentValidity();
+    }
+
+    // ANALYTICS & INSIGHTS
     async function loadAnalyticsData() {
       try {
         const [ranksRes, liveRanksRes, examsRes] = await Promise.all([
@@ -1495,18 +1655,18 @@
       form.classList.toggle('hidden');
     }
 
-    // 🌟 പുതിയ പരീക്ഷയും ചോദ്യങ്ങളും quiz_contents-ലേക്ക് സേവ് ചെയ്യുകയും എല്ലാ കുട്ടികളിലേക്കും പുഷ് അയക്കുകയും ചെയ്യുന്നു
+    // 🌟 പുതിയ പരീക്ഷയും Access Type-ഉം ചേർക്കുന്നു
     async function createNewExamInFirebase(e) {
       e.preventDefault();
       const title = document.getElementById('newExTitle').value.trim();
       const mainFolder = document.getElementById('newExMainFolder').value;
+      const accessType = document.getElementById('newExAccessType').value;
       const category = document.getElementById('newExCategory').value.trim();
       const fileUrl = document.getElementById('newExFileUrl').value.trim();
       const pdfUrl = document.getElementById('newExPdfUrl').value.trim();
-      const topics = document.getElementById('newExTopics').value.trim() || 'പ്രധാന പരീക്ഷാ ചോദ്യങ്ങൾ';
+      const customKey = document.getElementById('newExKey').value.trim();
       const questions = Number(document.getElementById('newExQuestions').value) || 25;
       const time = document.getElementById('newExTime').value.trim() || '20 മിനിറ്റ്';
-      const customKey = document.getElementById('newExKey').value.trim();
       const relDate = document.getElementById('newExReleaseDate').value.trim();
       const rawQuestionsJson = document.getElementById('newExQuestionsJson').value.trim();
 
@@ -1535,9 +1695,10 @@
         TITLE: title,
         CATEGORY: category,
         MAIN_FOLDER: mainFolder,
+        access_type: accessType,
         FILEURL: fileUrl,
         pdfUrl: pdfUrl,
-        TOPICS: topics,
+        TOPICS: 'പ്രധാന പരീക്ഷാ ചോദ്യങ്ങൾ',
         QUESTIONS: questions,
         TIME: time,
         BADGE: 'LATEST',
@@ -1548,23 +1709,21 @@
       const controlPayload = {
         status: 'LATEST',
         mainFolder: mainFolder,
+        access_type: accessType,
         pdfUrl: pdfUrl,
         releaseDate: relDate,
         isPublished: true
       };
 
       try {
-        // 🌟 1. ചോദ്യങ്ങൾ നേരിട്ട് quiz_contents/KEY.json ലേക്ക് അപ്‌ലോഡ് ചെയ്യുന്നു
         if (parsedQuestionsData) {
-          const qRes = await fetch(`${FIREBASE_DB_URL}/quiz_contents/${customKey}.json`, {
+          await fetch(`${FIREBASE_DB_URL}/quiz_contents/${customKey}.json`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(parsedQuestionsData)
           });
-          if (!qRes.ok) throw new Error("ചോദ്യങ്ങൾ quiz_contents-ലേക്ക് അപ്‌ലോഡ് ചെയ്യാൻ കഴിഞ്ഞില്ല.");
         }
 
-        // 🌟 2. പരീക്ഷയുടെ ലിസ്റ്റും കൺട്രോളും സേവ് ചെയ്യുന്നു
         const updatedExamsList = [...rawExamsArrayFromDb, newExamEntry];
         await Promise.all([
           fetch(`${FIREBASE_DB_URL}/exams.json`, {
@@ -1579,17 +1738,13 @@
           })
         ]);
 
-        // 🌟 3. പുതിയ പരീക്ഷ ലൈവ് ആയ വിവരം ആപ്പ് ഉള്ള മുഴുവൻ കുട്ടികൾക്കും ബാക്ക്ഗ്രൗണ്ട് പുഷ് അയക്കുന്നു
         sendOneSignalBroadcastPush(
           "🚀 പുതിയ മോഡൽ പരീക്ഷ ആരംഭിച്ചു!",
           `"${title}" ഇപ്പോൾ SK PSC പോർട്ടലിൽ ലഭ്യമാണ്. ഉടൻ എഴുതി നിങ്ങളുടെ റാങ്ക് നേടൂ!`
         );
 
-        sessionStorage.removeItem('sk_cache_time');
-        sessionStorage.removeItem('sk_cached_exams');
-        sessionStorage.removeItem('sk_cached_config');
-
-        alert(`🎉 "${title}" പരീക്ഷയും ചോദ്യങ്ങളും quiz_contents ഫോൾഡറിലേക്ക് വിജയകരമായി ചേർത്തു! കുട്ടികൾക്ക് പുഷ് നോട്ടിഫിക്കേഷനും അയച്ചു.`);
+        sessionStorage.clear();
+        alert(`🎉 "${title}" വിജയകരമായി ചേർത്തു! (${accessType})`);
         location.reload();
       } catch (err) {
         alert("പരീക്ഷ ചേർക്കുന്നതിൽ തടസ്സം നേരിട്ടു: " + err.toString());
@@ -1601,7 +1756,7 @@
 
     async function loadPublishManagerData() {
       const tbody = document.getElementById('publishTableBody');
-      tbody.innerHTML = '<tr><td colspan="8" class="p-6 text-center text-slate-400">ഫയർബേസിൽ നിന്നും വിവരങ്ങൾ ശേഖരിക്കുന്നു...</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="9" class="p-6 text-center text-slate-400">ഫയർബേസിൽ നിന്നും വിവരങ്ങൾ ശേഖരിക്കുന്നു...</td></tr>';
 
       try {
         const [examsRes, configRes] = await Promise.all([
@@ -1612,8 +1767,6 @@
         if (configRes && configRes.notice) document.getElementById('adminNoticeInput').value = configRes.notice;
         if (configRes && configRes.blink_message !== undefined) {
           document.getElementById('adminBlinkMessageInput').value = configRes.blink_message;
-        } else {
-          document.getElementById('adminBlinkMessageInput').value = "2027 LDC & LGS EXAMS COMMING SOON";
         }
 
         adminControlsCache = (configRes && configRes.exam_controls) ? configRes.exam_controls : {};
@@ -1633,7 +1786,7 @@
         publishExamsList = sortExamsNewestFirst(list);
         renderPublishTable(publishExamsList);
       } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-rose-400 font-bold">എറർ: ${err.toString()}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="9" class="p-6 text-center text-rose-400 font-bold">എറർ: ${err.toString()}</td></tr>`;
       }
     }
 
@@ -1679,13 +1832,13 @@
       return 'LDC';
     }
 
-    // 🌟 വിശാലമായ ഫുൾ വ്യൂ നൽകുന്ന ടേബിൾ റെൻഡറിംഗ്
+    // 🌟 പരീക്ഷാ ടേബിളിൽ Access (FREE/PAID) സെലക്ഷൻ നൽകുന്നു
     function renderPublishTable(list) {
       const tbody = document.getElementById('publishTableBody');
       tbody.innerHTML = '';
 
       if (list.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" class="p-6 text-center text-slate-400">പരീക്ഷകൾ ഒന്നും കണ്ടെത്തിയില്ല.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="9" class="p-6 text-center text-slate-400">പരീക്ഷകൾ ഒന്നും കണ്ടെത്തിയില്ല.</td></tr>';
         return;
       }
 
@@ -1702,6 +1855,7 @@
         const savedCtrl = adminControlsCache[cleanCtrlKey] || {};
         const currentStatus = savedCtrl.status || (ex.BADGE === 'LATEST' ? 'LATEST' : 'NORMAL');
         const currentMainFolder = getExamEffectiveMainFolder(ex, savedCtrl);
+        const currentAccess = savedCtrl.access_type || ex.access_type || 'FREE';
         const currentPdfUrl = savedCtrl.pdfUrl || ex.pdfUrl || ex.pdfurl || '';
         const isPublished = savedCtrl.isPublished !== false;
 
@@ -1730,6 +1884,13 @@
               <option value="DEGREE" ${currentMainFolder === 'DEGREE' ? 'selected' : ''}>🎓 Degree</option>
               <option value="LDC, LGS" ${currentMainFolder === 'LDC, LGS' ? 'selected' : ''}>🏛️+🛡️ Both</option>
               <option value="ALL" ${currentMainFolder === 'ALL' ? 'selected' : ''}>🌟 All</option>
+            </select>
+          </td>
+          <!-- 🌟 Access Type (FREE / PAID) Toggle -->
+          <td class="p-3 text-center whitespace-nowrap">
+            <select id="access_${cleanCtrlKey}" class="bg-slate-950 border border-amber-500/40 rounded-lg px-2 py-1.5 text-xs font-bold ${currentAccess === 'PAID' ? 'text-rose-400' : 'text-emerald-400'} focus:outline-none cursor-pointer">
+              <option value="FREE" ${currentAccess === 'FREE' ? 'selected' : ''}>🟢 FREE</option>
+              <option value="PAID" ${currentAccess === 'PAID' ? 'selected' : ''}>🔒 PAID</option>
             </select>
           </td>
           <td class="p-3 text-center whitespace-nowrap">
@@ -1762,7 +1923,6 @@
       });
     }
 
-    // 🌟 എക്സാം എഡിറ്റ് ചെയ്യാനുള്ള MODAL തുറക്കുന്നു
     async function openEditExamModal(dbIndex) {
       const ex = rawExamsArrayFromDb[dbIndex];
       if (!ex) return;
@@ -1773,7 +1933,7 @@
 
       document.getElementById('editExTitle').value = ex.TITLE || '';
       document.getElementById('editExMainFolder').value = ex.MAIN_FOLDER || 'LDC';
-      document.getElementById('editExCategory').value = ex.CATEGORY || 'പൊതുവിജ്ഞാനം';
+      document.getElementById('editExAccessType').value = ex.access_type || 'FREE';
       document.getElementById('editExKey').value = ex.KEY || ex.key || '';
       document.getElementById('editExFileUrl').value = ex.FILEURL || ex.fileUrl || 'quiz.html';
       document.getElementById('editExPdfUrl').value = ex.pdfUrl || '';
@@ -1809,18 +1969,14 @@
       document.getElementById('editExamModal').classList.add('hidden');
     }
 
-    // 🌟 എഡിറ്റ് ചെയ്ത പരീക്ഷയും ചോദ്യങ്ങളും സേവ് ചെയ്യുന്നു
     async function submitUpdatedExam(e) {
       e.preventDefault();
       const dbIndex = document.getElementById('editExDbIndex').value;
-      if (dbIndex === undefined || dbIndex === null || !rawExamsArrayFromDb[dbIndex]) {
-        alert("എറർ: പരീക്ഷ കണ്ടെത്താനായില്ല.");
-        return;
-      }
+      if (dbIndex === undefined || dbIndex === null || !rawExamsArrayFromDb[dbIndex]) return;
 
       const title = document.getElementById('editExTitle').value.trim();
       const mainFolder = document.getElementById('editExMainFolder').value;
-      const category = document.getElementById('editExCategory').value.trim();
+      const accessType = document.getElementById('editExAccessType').value;
       const fileUrl = document.getElementById('editExFileUrl').value.trim();
       const pdfUrl = document.getElementById('editExPdfUrl').value.trim();
       const keyVal = document.getElementById('editExKey').value.trim();
@@ -1834,7 +1990,7 @@
         try {
           parsedQuestions = JSON.parse(rawQuestionsJson);
         } catch(err) {
-          alert("ചോദ്യങ്ങളുടെ JSON ഫോർമാറ്റിൽ തെറ്റുണ്ട്! ബ്രാക്കറ്റുകൾ പരിശോധിക്കുക.");
+          alert("ചോദ്യങ്ങളുടെ JSON ഫോർമാറ്റിൽ തെറ്റുണ്ട്!");
           return;
         }
       }
@@ -1847,7 +2003,7 @@
         ...rawExamsArrayFromDb[dbIndex],
         TITLE: title,
         MAIN_FOLDER: mainFolder,
-        CATEGORY: category,
+        access_type: accessType,
         FILEURL: fileUrl,
         pdfUrl: pdfUrl,
         KEY: keyVal,
@@ -1866,7 +2022,7 @@
           fetch(`${FIREBASE_DB_URL}/portal_config/exam_controls/${cleanTitle(title)}.json`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ mainFolder: mainFolder, pdfUrl: pdfUrl })
+            body: JSON.stringify({ mainFolder: mainFolder, access_type: accessType, pdfUrl: pdfUrl })
           })
         ];
 
@@ -1881,7 +2037,6 @@
         }
 
         await Promise.all(promises);
-
         sessionStorage.clear();
         alert(`✅ "${title}" വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!`);
         closeEditExamModal();
@@ -1899,10 +2054,7 @@
       btnElement.disabled = true;
 
       const currentCtrl = adminControlsCache[key] || {};
-      const payload = {
-        ...currentCtrl,
-        isPublished: publishState
-      };
+      const payload = { ...currentCtrl, isPublished: publishState };
 
       try {
         await fetch(`${FIREBASE_DB_URL}/portal_config/exam_controls/${key}.json`, {
@@ -1922,6 +2074,7 @@
     async function saveExamControl(key, dbIndex) {
       const st = document.getElementById(`status_${key}`).value;
       const mf = document.getElementById(`folder_${key}`).value;
+      const acc = document.getElementById(`access_${key}`).value;
       const pdf = document.getElementById(`pdf_${key}`).value.trim();
       const dt = document.getElementById(`date_${key}`).value.trim();
       const currentCtrl = adminControlsCache[key] || {};
@@ -1930,6 +2083,7 @@
         ...currentCtrl,
         status: st,
         mainFolder: mf,
+        access_type: acc,
         pdfUrl: pdf,
         releaseDate: dt,
         isPublished: currentCtrl.isPublished !== false
@@ -1945,12 +2099,13 @@
 
       if (dbIndex !== undefined && rawExamsArrayFromDb[dbIndex]) {
         rawExamsArrayFromDb[dbIndex].MAIN_FOLDER = mf;
+        rawExamsArrayFromDb[dbIndex].access_type = acc;
         rawExamsArrayFromDb[dbIndex].pdfUrl = pdf;
         promises.push(
           fetch(`${FIREBASE_DB_URL}/exams/${dbIndex}.json`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ MAIN_FOLDER: mf, pdfUrl: pdf })
+            body: JSON.stringify({ MAIN_FOLDER: mf, access_type: acc, pdfUrl: pdf })
           })
         );
       }
@@ -1958,7 +2113,7 @@
       await Promise.all(promises);
       sessionStorage.clear();
       adminControlsCache[key] = payload;
-      alert(`✅ വിവരങ്ങൾ "${mf}" ഫോൾഡറിലേക്ക് സേവ് ചെയ്തു!`);
+      alert(`✅ വിവരങ്ങൾ "${mf}" ഫോൾഡറിലേക്ക് സേവ് ചെയ്തു! (${acc})`);
       filterPublishExams();
     }
 
@@ -2007,7 +2162,7 @@
       renderPublishTable(filtered);
     }
 
-    // 🌟 STUDENT DOUBT CHAT DESK
+    // STUDENT DOUBT CHAT DESK
     async function loadStudentChatsAdmin(forceRender = false) {
       try {
         const res = await fetch(`${FIREBASE_DB_URL}/student_chats.json`);
@@ -2213,7 +2368,6 @@
       if (autoScroll) box.scrollTop = box.scrollHeight;
     }
 
-    // 🌟 വിദ്യാർത്ഥിക്ക് അഡ്മിൻ മറുപടി നൽകുമ്പോൾ OneSignal വഴി ബാക്ക്ഗ്രൗണ്ട് പുഷ് അയക്കുന്നു
     async function sendAdminReply(e) {
       e.preventDefault();
       if (!activeChatStudent) return;
@@ -2255,7 +2409,6 @@
           })
         });
 
-        // 🌟 കുട്ടിയുടെ ആപ്പ് ക്ലോസ് ആണെങ്കിലും നേരിട്ട് ബാക്ക്ഗ്രൗണ്ട് പുഷ് നോട്ടിഫിക്കേഷൻ അയക്കുന്നു
         sendOneSignalPushToUser(
           cleanPhone, 
           "👨‍🏫 SK PSC Mentor Reply", 
@@ -2272,7 +2425,7 @@
       }
     }
 
-    // 2. DASHBOARD DATA
+    // DASHBOARD DATA
     async function loadDashboardData() {
       try {
         const usersRes = await fetch(`${FIREBASE_DB_URL}/users.json`);
@@ -2366,7 +2519,7 @@
       renderSummaryTable(list);
     }
 
-    // 3. EXAM RANK LIST
+    // EXAM RANK LIST
     async function loadExamDropdownList() {
       try {
         const res = await fetch(`${FIREBASE_DB_URL}/exams.json`);
@@ -2501,7 +2654,7 @@
       }).from(document.getElementById('printableRankListCard')).save();
     }
 
-    // 4. STUDENT SEARCH
+    // STUDENT SEARCH
     async function searchStudentDetails() {
       const rawInput = document.getElementById('studentSearchInput').value.trim();
       if (!rawInput) return alert("പേരോ നമ്പറോ നൽകുക.");
@@ -2612,7 +2765,7 @@
       }).from(document.getElementById('printableStudentReportCard')).save();
     }
 
-    // 5. REPORTED QUESTIONS
+    // REPORTED QUESTIONS
     async function loadReportedQuestions() {
       try {
         const res = await fetch(`${FIREBASE_DB_URL}/reported_questions.json`);
@@ -2620,7 +2773,6 @@
         reportedQuestionsList = data ? Object.entries(data).map(([id, val]) => ({ id, ...val })).filter(rep => rep.status !== 'solved') : [];
         const count = reportedQuestionsList.length;
         document.getElementById('badgeReportCount').innerText = count;
-        document.getElementById('statReportedQCount').innerText = count;
         document.getElementById('modalReportCountBadge').innerText = `${count} എണ്ണം`;
         if (count > 0) document.getElementById('reportedNotificationBtn').classList.add('pulse-red');
         else document.getElementById('reportedNotificationBtn').classList.remove('pulse-red');
@@ -2664,164 +2816,6 @@
     function closeReportModal() {
       document.getElementById('reportedQuestionsModal').classList.add('hidden');
     }
-    let currentGlobalTrialStatus = true;
-let activeSearchedPhone = null;
-
-// പേജ് തുറക്കുമ്പോൾ സെറ്റിംഗ്സ് ഫയർബേസിൽ നിന്ന് എടുക്കുന്നു
-async function loadSubscriptionConfig() {
-  try {
-    const res = await fetch(`${FIREBASE_DB_URL}/portal_config.json`);
-    const cfg = await res.json() || {};
-    
-    currentGlobalTrialStatus = cfg.global_trial_active !== false;
-    updateGlobalTrialBtnUI();
-
-    document.getElementById('admUpiId').value = cfg.upi_id || "";
-    document.getElementById('admWhatsapp').value = cfg.whatsapp_number || "";
-    document.getElementById('admQrUrl').value = cfg.qr_image_url || "";
-
-    if (cfg.plans) {
-      if (cfg.plans.plan_1) {
-        document.getElementById('admPlan1Price').value = cfg.plans.plan_1.price || 50;
-        document.getElementById('admPlan1Days').value = cfg.plans.plan_1.days || 30;
-      }
-      if (cfg.plans.plan_2) {
-        document.getElementById('admPlan2Price').value = cfg.plans.plan_2.price || 200;
-        document.getElementById('admPlan2Days').value = cfg.plans.plan_2.days || 200;
-      }
-    }
-  } catch(e) {
-    console.log("Config load error:", e);
-  }
-}
-
-// Global Trial ബട്ടൺ UI അപ്ഡേറ്റ്
-function updateGlobalTrialBtnUI() {
-  const btn = document.getElementById('btnGlobalTrialToggle');
-  if (currentGlobalTrialStatus) {
-    btn.textContent = "ആക്റ്റീവ് (FREE All)";
-    btn.className = "px-3 py-1 rounded-xl text-xs font-black bg-emerald-500 text-slate-950";
-  } else {
-    btn.textContent = "പെയ്ഡ് മോഡ് (PAID)";
-    btn.className = "px-3 py-1 rounded-xl text-xs font-black bg-rose-500 text-white";
-  }
-}
-
-// Global Trial മോഡ് ടോഗിൾ ചെയ്യുന്നു
-async function toggleGlobalTrialMode() {
-  currentGlobalTrialStatus = !currentGlobalTrialStatus;
-  await fetch(`${FIREBASE_DB_URL}/portal_config.json`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ global_trial_active: currentGlobalTrialStatus })
-  });
-  updateGlobalTrialBtnUI();
-  alert(currentGlobalTrialStatus ? "എല്ലാവർക്കും പരീക്ഷകൾ സൗജന്യമാക്കി (Global Trial Active)!" : "സബ്സ്ക്രിപ്ഷൻ മോഡിലേക്ക് മാറ്റി (Paid Mode Active)!");
-}
-
-// UPI & പ്ലാൻ വിവരങ്ങൾ സേവ് ചെയ്യുന്നു
-async function saveAdminPaymentSettings() {
-  const data = {
-    upi_id: document.getElementById('admUpiId').value.trim(),
-    whatsapp_number: document.getElementById('admWhatsapp').value.trim(),
-    qr_image_url: document.getElementById('admQrUrl').value.trim(),
-    plans: {
-      plan_1: {
-        title: `${document.getElementById('admPlan1Days').value} Days Access`,
-        price: Number(document.getElementById('admPlan1Price').value),
-        days: Number(document.getElementById('admPlan1Days').value)
-      },
-      plan_2: {
-        title: `${document.getElementById('admPlan2Days').value} Days Access`,
-        price: Number(document.getElementById('admPlan2Price').value),
-        days: Number(document.getElementById('admPlan2Days').value)
-      }
-    }
-  };
-
-  await fetch(`${FIREBASE_DB_URL}/portal_config.json`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  });
-  alert("സബ്സ്ക്രിപ്ഷൻ വിവരങ്ങൾ വിജയകരമായി സേവ് ചെയ്തു!");
-}
-
-// കുട്ടിയുടെ വാലിഡിറ്റി പരിശോധിക്കുന്നു
-async function checkStudentValidity() {
-  const phone = document.getElementById('searchStudentPhone').value.trim();
-  if (!phone) return alert("ദയവായി ഫോൺ നമ്പർ നൽകുക!");
-  activeSearchedPhone = phone;
-
-  const res = await fetch(`${FIREBASE_DB_URL}/users/${phone}.json`);
-  const user = await res.json();
-
-  const box = document.getElementById('studentValidityResult');
-  const nameEl = document.getElementById('studResultName');
-  const expEl = document.getElementById('studResultExpiry');
-
-  if (!user) {
-    alert("ഈ നമ്പറിൽ രജിസ്റ്റർ ചെയ്ത വിദ്യാർത്ഥിയെ കണ്ടെത്തിയില്ല!");
-    box.classList.add('hidden');
-    return;
-  }
-
-  box.classList.remove('hidden');
-  nameEl.textContent = `${user.Official_Name || user.Name || 'Student'} (${phone})`;
-
-  const today = new Date().toISOString().split('T')[0];
-  const expiry = user.valid_until || "ഇതുവരെ വാലിഡിറ്റി നൽകിയിട്ടില്ല";
-
-  if (user.valid_until && user.valid_until >= today) {
-    expEl.textContent = `വാലിഡിറ്റി: ${expiry} വരെ (Active)`;
-    expEl.className = "px-2.5 py-1 rounded-lg font-bold bg-emerald-950 text-emerald-400 border border-emerald-800";
-  } else {
-    expEl.textContent = `കാലാവധി: ${expiry} (Expired / None)`;
-    expEl.className = "px-2.5 py-1 rounded-lg font-bold bg-rose-950 text-rose-400 border border-rose-800";
-  }
-}
-
-// ദിവസങ്ങൾ കൂട്ടി നൽകുന്നു (+30 അല്ലെങ്കിൽ +200)
-async function addStudentValidityDays(daysToAdd) {
-  if (!activeSearchedPhone) return;
-  const res = await fetch(`${FIREBASE_DB_URL}/users/${activeSearchedPhone}.json`);
-  const user = await res.json() || {};
-
-  const today = new Date();
-  let baseDate = new Date();
-  if (user.valid_until && new Date(user.valid_until) > today) {
-    baseDate = new Date(user.valid_until);
-  }
-  baseDate.setDate(baseDate.getDate() + daysToAdd);
-  const newDateStr = baseDate.toISOString().split('T')[0];
-
-  await fetch(`${FIREBASE_DB_URL}/users/${activeSearchedPhone}.json`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ valid_until: newDateStr, is_premium: true })
-  });
-
-  alert(`വിജയകരം! ${activeSearchedPhone} എന്ന നമ്പറിലേക്ക് ${newDateStr} വരെ വാലിഡിറ്റി നീട്ടി നൽകി.`);
-  checkStudentValidity();
-}
-
-// പ്രത്യേക തീയതി സെറ്റ് ചെയ്യുന്നു
-async function setStudentCustomDate() {
-  const customDate = document.getElementById('studCustomDate').value;
-  if (!customDate || !activeSearchedPhone) return alert("ദയവായി ഒരു തീയതി തിരഞ്ഞെടുക്കുക!");
-
-  await fetch(`${FIREBASE_DB_URL}/users/${activeSearchedPhone}.json`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ valid_until: customDate, is_premium: true })
-  });
-
-  alert(`വിജയകരം! വാലിഡിറ്റി ${customDate} വരെ സെറ്റ് ചെയ്തു.`);
-  checkStudentValidity();
-}
-
-// പേജ് ലോഡ് ആകുമ്പോൾ ഇത് റൺ ചെയ്യുന്നു
-window.addEventListener('DOMContentLoaded', loadSubscriptionConfig);
   </script>
 </body>
 </html>
