@@ -1409,6 +1409,17 @@
         expEl.className = "px-3 py-1 rounded-xl text-xs font-bold bg-rose-950 text-rose-400 border border-rose-800";
       }
     }
+    // അഡ്മിൻ പാനലിൽ നിന്ന് കുട്ടിയുടെ ഡിവൈസ് ലോക്ക് മാറ്റുന്നു
+async function resetStudentDeviceLock() {
+  if (!activeSearchedPhone) return alert("ദയവായി വിദ്യാർത്ഥിയുടെ നമ്പർ പരിശോധിക്കുക!");
+  if (!confirm(`${activeSearchedPhone} എന്ന വിദ്യാർത്ഥിയുടെ രജിസ്റ്റർ ചെയ്ത ഡിവൈസുകൾ റീസെറ്റ് ചെയ്യണമെന്നുറപ്പാണോ?`)) return;
+
+  await fetch(`${FIREBASE_DB_URL}/users/${activeSearchedPhone}/bound_devices.json`, {
+    method: 'DELETE'
+  });
+
+  alert("ഡിവൈസ് ലോക്ക് വിജയകരമായി റീസെറ്റ് ചെയ്തു! കുട്ടിക്ക് പുതിയ ഫോണിലോ കമ്പ്യൂട്ടറിലോ ലോഗിൻ ചെയ്യാം.");
+}
 
     async function addStudentValidityDays(daysToAdd) {
       if (!activeSearchedPhone) return;
