@@ -2440,42 +2440,105 @@ async function resetStudentDeviceLock() {
     }
 
     // DASHBOARD DATA
+    // ✅ പരിഹരിച്ച DASHBOARD DATA ഫംഗ്ഷൻ (യഥാർത്ഥ ഹിസ്റ്ററിയിൽ നിന്ന് കൗണ്ട് എടുക്കുന്നു)
     async function loadDashboardData() {
       try {
-        const usersRes = await fetch(`${FIREBASE_DB_URL}/users.json`);
-        const usersData = await usersRes.json();
-        let rawList = usersData ? (Array.isArray(usersData) ? usersData.filter(u => u !== null) : Object.entries(usersData).map(([key, val]) => (typeof val === 'object' && val !== null ? { key, ...val } : { key, name: String(val) }))) : [];
+        const [usersRes, historyRes, liveRanksRes, ranksRes] = await Promise.all([
+          fetch(`${FIREBASE_DB_URL}/users.json`).then(r => r.json()).catch(() => null),
+          fetch(`${FIREBASE_DB_URL}/users_history.json`).then(r => r.json()).catch(() => null),
+          fetch(`${FIREBASE_DB_URL}/live_ranks.json`).then(r => r.json()).catch(() => null),
+          fetch(`${FIREBASE_DB_URL}/ranks.json`).then(r => r.json()).catch(() => null)
+        ]);
 
         const phoneMap = {};
-        rawList.forEach(item => {
-          const phone = extractPhone(item);
-          if (!phone) return;
-          const currentName = extractName(item);
-          const currentExams = Number(item.Unique_Exams || item.Total_Attempts || 0);
-          const currentAvg = Number(item.First_Attempt_Avg || 0);
 
-          if (!phoneMap[phone]) {
-            phoneMap[phone] = { ...item, phone, name: currentName, totalExams: currentExams, avgScore: currentAvg };
-          } else {
-            if (phoneMap[phone].name === 'വിദ്യാർത്ഥി' && currentName !== 'വിദ്യാർത്ഥി') phoneMap[phone].name = currentName;
-            if (currentExams > phoneMap[phone].totalExams) {
-              phoneMap[phone].totalExams = currentExams;
-              phoneMap[phone].avgScore = currentAvg;
+        // 1. ആദ്യം Users ലിസ്റ്റിൽ നിന്ന് പേരും വിവരങ്ങളും എടുക്കുന്നു
+        if (usersRes) {
+          let rawList = Array.isArray(usersRes)
+            ? usersRes.filter(u => u !== null)
+            : Object.entries(usersRes).map(([key, val]) => (typeof val === 'object' && val !== null ? { key, ...val } : { key, name: String(val) }));
+
+          rawList.forEach(item => {
+            const phone = extractPhone(item);
+            if (!phone) return;
+            const currentName = extractName(item);
+            const profileExams = Number(item.Total_Attempts || item.Unique_Exams || 0);
+            const profileAvg = Number(item.First_Attempt_Avg || 0);
+
+            if (!phoneMap[phone]) {
+              phoneMap[phone] = { ...item, phone, name: currentName, totalExams: profileExams, avgScore: profileAvg };
+            } else {
+              if (phoneMap[phone].name === 'വിദ്യാർത്ഥി' && currentName !== 'വിദ്യാർത്ഥി') {
+                phoneMap[phone].name = currentName;
+              }
+              if (profileExams > phoneMap[phone].totalExams) {
+                phoneMap[phone].totalExams = profileExams;
+                phoneMap[phone].avgScore = profileAvg;
+              }
+            }
+          });
+        }
+
+        // 2. users_history ഫോൾഡറിൽ നിന്ന് ഓരോ കുട്ടിയുടെയും യഥാർത്ഥ പരീക്ഷാ എണ്ണവും ശരാശരിയും എടുക്കുന്നു
+        let actualHistoryTotal = 0;
+        if (historyRes && typeof historyRes === 'object') {
+          for (const [rawPhone, userHistObj] of Object.entries(historyRes)) {
+            const phone = extractPhone({ phone: rawPhone });
+            if (!phone || !userHistObj || typeof userHistObj !== 'object') continue;
+
+            const attemptsList = Object.values(userHistObj).filter(h => h && (h.title || h.score !== undefined));
+            const actualCount = attemptsList.length;
+            actualHistoryTotal += actualCount;
+
+            let totalScore = 0;
+            attemptsList.forEach(a => totalScore += parseCandidateScore(a));
+            const calculatedAvg = actualCount > 0 ? (totalScore / actualCount) : 0;
+
+            if (!phoneMap[phone]) {
+              phoneMap[phone] = { phone, name: 'വിദ്യാർത്ഥി', totalExams: actualCount, avgScore: calculatedAvg };
+            } else {
+              // പ്രൊഫൈലിലെ സംഖ്യയേക്കാൾ കൂടുതൽ ഹിസ്റ്ററിയിലുണ്ടെങ്കിൽ അത് എടുക്കുന്നു (ഒരിക്കലും കുറയില്ല)
+              if (actualCount >= phoneMap[phone].totalExams) {
+                phoneMap[phone].totalExams = actualCount;
+                phoneMap[phone].avgScore = calculatedAvg;
+              }
             }
           }
-        });
+        }
+
+        // 3. റാങ്ക് ലിസ്റ്റുകളിലെ (ranks + live_ranks) ആകെ എൻട്രികൾ കൂടി പരിശോധിക്കുന്നു
+        let rankEntriesMap = {};
+        const countRankNode = (nodeObj) => {
+          if (!nodeObj || typeof nodeObj !== 'object') return;
+          for (const [examKey, entries] of Object.entries(nodeObj)) {
+            if (entries && typeof entries === 'object') {
+              for (const [entryId, item] of Object.entries(entries)) {
+                if (!item) continue;
+                const p = extractPhone(item) || entryId;
+                rankEntriesMap[`${examKey}_${p}`] = true;
+              }
+            }
+          }
+        };
+        countRankNode(ranksRes);
+        countRankNode(liveRanksRes);
+        const totalRankAttempts = Object.keys(rankEntriesMap).length;
 
         allCandidatesCache = Object.values(phoneMap);
         document.getElementById('statTotalStudents').innerText = allCandidatesCache.length;
-        let totalAttempts = 0;
-        allCandidatesCache.forEach(c => totalAttempts += Number(c.totalExams || 0));
-        document.getElementById('statTotalAttempts').innerText = totalAttempts;
+
+        // 4. Users sum, History count, Rank count എന്നിവയിൽ ഏറ്റവും ഉയർന്ന യഥാർത്ഥ സംഖ്യ കാണിക്കുന്നു
+        let sumFromUsers = 0;
+        allCandidatesCache.forEach(c => sumFromUsers += Number(c.totalExams || 0));
+
+        const finalTotalAttempts = Math.max(sumFromUsers, actualHistoryTotal, totalRankAttempts);
+        document.getElementById('statTotalAttempts').innerText = finalTotalAttempts;
+
         applySummaryFilterAndSort();
       } catch (err) {
         console.log("Dashboard fetch error:", err);
       }
     }
-
     function renderSummaryTable(list) {
       const tbody = document.getElementById('summaryTableBody');
       tbody.innerHTML = "";
