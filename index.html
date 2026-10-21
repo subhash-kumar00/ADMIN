@@ -2441,18 +2441,18 @@ async function resetStudentDeviceLock() {
 
     // DASHBOARD DATA
     // ✅ പരിഹരിച്ച DASHBOARD DATA ഫംഗ്ഷൻ (യഥാർത്ഥ ഹിസ്റ്ററിയിൽ നിന്ന് കൗണ്ട് എടുക്കുന്നു)
-    async function loadDashboardData() {
+   async function loadDashboardData() {
       try {
-        const [usersRes, historyRes, liveRanksRes, ranksRes] = await Promise.all([
+        const [usersRes, liveRanksRes, ranksRes] = await Promise.all([
           fetch(`${FIREBASE_DB_URL}/users.json`).then(r => r.json()).catch(() => null),
-          fetch(`${FIREBASE_DB_URL}/users_history.json`).then(r => r.json()).catch(() => null),
           fetch(`${FIREBASE_DB_URL}/live_ranks.json`).then(r => r.json()).catch(() => null),
           fetch(`${FIREBASE_DB_URL}/ranks.json`).then(r => r.json()).catch(() => null)
         ]);
 
         const phoneMap = {};
+        let totalUsersAttemptsSum = 0;
 
-        // 1. ആദ്യം Users ലിസ്റ്റിൽ നിന്ന് പേരും വിവരങ്ങളും എടുക്കുന്നു
+        // 1. Users ലിസ്റ്റിൽ നിന്നുള്ള കണക്ക്
         if (usersRes) {
           let rawList = Array.isArray(usersRes)
             ? usersRes.filter(u => u !== null)
@@ -2464,6 +2464,8 @@ async function resetStudentDeviceLock() {
             const currentName = extractName(item);
             const profileExams = Number(item.Total_Attempts || item.Unique_Exams || 0);
             const profileAvg = Number(item.First_Attempt_Avg || 0);
+
+            totalUsersAttemptsSum += profileExams;
 
             if (!phoneMap[phone]) {
               phoneMap[phone] = { ...item, phone, name: currentName, totalExams: profileExams, avgScore: profileAvg };
@@ -2479,60 +2481,30 @@ async function resetStudentDeviceLock() {
           });
         }
 
-        // 2. users_history ഫോൾഡറിൽ നിന്ന് ഓരോ കുട്ടിയുടെയും യഥാർത്ഥ പരീക്ഷാ എണ്ണവും ശരാശരിയും എടുക്കുന്നു
-        let actualHistoryTotal = 0;
-        if (historyRes && typeof historyRes === 'object') {
-          for (const [rawPhone, userHistObj] of Object.entries(historyRes)) {
-            const phone = extractPhone({ phone: rawPhone });
-            if (!phone || !userHistObj || typeof userHistObj !== 'object') continue;
-
-            const attemptsList = Object.values(userHistObj).filter(h => h && (h.title || h.score !== undefined));
-            const actualCount = attemptsList.length;
-            actualHistoryTotal += actualCount;
-
-            let totalScore = 0;
-            attemptsList.forEach(a => totalScore += parseCandidateScore(a));
-            const calculatedAvg = actualCount > 0 ? (totalScore / actualCount) : 0;
-
-            if (!phoneMap[phone]) {
-              phoneMap[phone] = { phone, name: 'വിദ്യാർത്ഥി', totalExams: actualCount, avgScore: calculatedAvg };
-            } else {
-              // പ്രൊഫൈലിലെ സംഖ്യയേക്കാൾ കൂടുതൽ ഹിസ്റ്ററിയിലുണ്ടെങ്കിൽ അത് എടുക്കുന്നു (ഒരിക്കലും കുറയില്ല)
-              if (actualCount >= phoneMap[phone].totalExams) {
-                phoneMap[phone].totalExams = actualCount;
-                phoneMap[phone].avgScore = calculatedAvg;
-              }
-            }
-          }
-        }
-
-        // 3. റാങ്ക് ലിസ്റ്റുകളിലെ (ranks + live_ranks) ആകെ എൻട്രികൾ കൂടി പരിശോധിക്കുന്നു
-        let rankEntriesMap = {};
-        const countRankNode = (nodeObj) => {
+        // 2. യഥാർത്ഥ റാങ്ക് ലിസ്റ്റുകളിൽ നിന്നുള്ള മുഴുവൻ അറ്റംപ്റ്റുകളുടെയും ആകെ എണ്ണം
+        let totalRankAttemptsCount = 0;
+        const countAllAttempts = (nodeObj) => {
           if (!nodeObj || typeof nodeObj !== 'object') return;
           for (const [examKey, entries] of Object.entries(nodeObj)) {
             if (entries && typeof entries === 'object') {
-              for (const [entryId, item] of Object.entries(entries)) {
-                if (!item) continue;
-                const p = extractPhone(item) || entryId;
-                rankEntriesMap[`${examKey}_${p}`] = true;
-              }
+              totalRankAttemptsCount += Object.keys(entries).length;
             }
           }
         };
-        countRankNode(ranksRes);
-        countRankNode(liveRanksRes);
-        const totalRankAttempts = Object.keys(rankEntriesMap).length;
+
+        countAllAttempts(ranksRes);
+        countAllAttempts(liveRanksRes);
 
         allCandidatesCache = Object.values(phoneMap);
         document.getElementById('statTotalStudents').innerText = allCandidatesCache.length;
 
-        // 4. Users sum, History count, Rank count എന്നിവയിൽ ഏറ്റവും ഉയർന്ന യഥാർത്ഥ സംഖ്യ കാണിക്കുന്നു
-        let sumFromUsers = 0;
-        allCandidatesCache.forEach(c => sumFromUsers += Number(c.totalExams || 0));
+        // 3. മുൻപുണ്ടായിരുന്ന ഏറ്റവും ഉയർന്ന കൗണ്ട് പരിശോധിച്ച് നിലനിർത്തുന്നു (Never Decreases)
+        const previousHighest = Number(localStorage.getItem('sk_highest_attempts_count') || 1720);
+        const calculatedAttempts = Math.max(totalUsersAttemptsSum, totalRankAttemptsCount, previousHighest);
 
-        const finalTotalAttempts = Math.max(sumFromUsers, actualHistoryTotal, totalRankAttempts);
-        document.getElementById('statTotalAttempts').innerText = finalTotalAttempts;
+        // പുതിയ ഉയർന്ന സംഖ്യ സേവ് ചെയ്യുന്നു
+        localStorage.setItem('sk_highest_attempts_count', String(calculatedAttempts));
+        document.getElementById('statTotalAttempts').innerText = calculatedAttempts;
 
         applySummaryFilterAndSort();
       } catch (err) {
