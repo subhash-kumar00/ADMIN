@@ -421,7 +421,7 @@
           </span>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 text-xs">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3 text-xs">
           <div class="lg:col-span-2">
             <label class="block text-[11px] text-slate-300 font-bold mb-1">കോഴ്സ് പേര് *</label>
             <input type="text" id="newPlanName" list="defaultCoursePresets" placeholder="ഉദാ: LDC 2027 ലക്ഷ്യ ബാച്ച്, SCERT" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-cyan-500">
@@ -444,8 +444,13 @@
           </div>
 
           <div>
-            <label class="block text-[11px] text-slate-300 font-bold mb-1">ഫീസ് തുക (₹) *</label>
-            <input type="number" id="newPlanPrice" placeholder="ഉദാ: 149" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-emerald-400 font-bold font-mono focus:outline-none focus:border-emerald-500">
+            <label class="block text-[11px] text-slate-400 font-bold mb-1">യഥാർത്ഥ ഫീസ് (₹)</label>
+            <input type="number" id="newPlanOriginalPrice" placeholder="ഉദാ: 299" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-slate-300 font-mono focus:outline-none focus:border-cyan-500" title="വെട്ടിയിട്ട് കാണിക്കാൻ വേണ്ട യഥാർത്ഥ തുക">
+          </div>
+
+          <div>
+            <label class="block text-[11px] text-emerald-400 font-bold mb-1">ഓഫർ ഫീസ് (₹) *</label>
+            <input type="number" id="newPlanPrice" placeholder="ഉദാ: 149" class="w-full bg-slate-900 border border-emerald-500/50 rounded-xl px-3 py-2 text-emerald-400 font-bold font-mono focus:outline-none focus:border-emerald-500">
           </div>
 
           <div>
@@ -1469,7 +1474,7 @@
       }
     }
 
-    // 🌟 2. കോഴ്സ് പ്ലാനുകൾ കാർഡുകളായി പ്രദർശിപ്പിക്കുന്നു (പ്രീ-ബുക്കിംഗ് ബാഡ്ജുകളോടെ)
+    // 🌟 2. കോഴ്സ് പ്ലാനുകൾ കാർഡുകളായി പ്രദർശിപ്പിക്കുന്നു (യഥാർത്ഥ വില & ഡിസ്കൗണ്ട് സഹിതം)
     function renderCoursePlansList() {
       const container = document.getElementById('coursePlansListContainer');
       const selectDropdown = document.getElementById('assignCourseSelect');
@@ -1485,6 +1490,9 @@
       keys.forEach(k => {
         const p = allCoursePlansCache[k];
         const isPrebook = p.is_prebook === true;
+        const origPrice = Number(p.original_price || 0);
+        const hasDiscount = origPrice > p.price;
+        const discountPct = hasDiscount ? Math.round(((origPrice - p.price) / origPrice) * 100) : 0;
         
         const card = document.createElement('div');
         const borderClass = isPrebook ? 'border-2 border-amber-500/70 bg-slate-950/90' : 'border border-slate-800 bg-slate-950';
@@ -1493,6 +1501,10 @@
         const badgeHtml = isPrebook
           ? `<span class="bg-gradient-to-r from-amber-500 to-rose-500 text-slate-950 text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider">⚡ PRE-BOOKING</span>`
           : `<span class="bg-slate-800 text-slate-300 text-[9px] font-bold px-2 py-0.5 rounded uppercase">REGULAR</span>`;
+
+        const discountBadge = hasDiscount
+          ? `<span class="bg-rose-600/30 text-rose-300 border border-rose-500/40 text-[9px] font-black px-1.5 py-0.2 rounded font-mono">${discountPct}% OFF</span>`
+          : '';
 
         const launchInfo = isPrebook && p.launch_date
           ? `<div class="text-[10px] text-amber-300 font-mono bg-amber-950/50 p-1.5 rounded-lg border border-amber-500/30 flex items-center justify-between">
@@ -1504,7 +1516,10 @@
         card.innerHTML = `
           <div class="flex items-start justify-between gap-1.5">
             <div>
-              ${badgeHtml}
+              <div class="flex items-center space-x-1.5">
+                ${badgeHtml}
+                ${discountBadge}
+              </div>
               <h5 class="text-xs font-black text-white mt-1 leading-snug">${p.name}</h5>
             </div>
             <button onclick="deleteCoursePlan('${k}')" class="text-rose-400 hover:text-rose-300 text-xs font-bold p-1 bg-slate-900 rounded-lg" title="ഡിലീറ്റ് ചെയ്യുക">✕</button>
@@ -1516,13 +1531,17 @@
 
           ${launchInfo}
 
-          <div class="grid grid-cols-2 gap-2 pt-1 border-t border-slate-800/80">
+          <div class="grid grid-cols-3 gap-2 pt-1 border-t border-slate-800/80">
             <div>
-              <label class="text-[10px] text-slate-500 block font-semibold">ഫീസ് (₹)</label>
-              <input type="number" id="price_${k}" value="${p.price}" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-emerald-400 font-bold font-mono">
+              <label class="text-[10px] text-slate-400 block font-semibold">യഥാർത്ഥം (₹)</label>
+              <input type="number" id="orig_price_${k}" value="${origPrice || ''}" placeholder="299" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-slate-300 font-mono" title="വെട്ടിയിട്ട് കാണിക്കേണ്ട തുക">
             </div>
             <div>
-              <label class="text-[10px] text-slate-500 block font-semibold">വാലിഡിറ്റി (Days)</label>
+              <label class="text-[10px] text-emerald-400 block font-semibold">ഓഫർ (₹) *</label>
+              <input type="number" id="price_${k}" value="${p.price}" class="w-full bg-slate-900 border border-emerald-500/40 rounded-lg px-2 py-1 text-xs text-emerald-400 font-bold font-mono">
+            </div>
+            <div>
+              <label class="text-[10px] text-amber-300 block font-semibold">Days *</label>
               <input type="number" id="days_${k}" value="${p.days}" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-amber-300 font-bold font-mono">
             </div>
           </div>
@@ -1531,7 +1550,7 @@
             <button onclick="toggleCoursePrebook('${k}')" class="flex-1 py-1 px-2 ${isPrebook ? 'bg-amber-950 text-amber-300 border border-amber-500/40' : 'bg-slate-900 text-slate-400 border border-slate-800'} rounded-lg text-[10px] font-bold cursor-pointer">
               ${isPrebook ? '⚡ പ്രീ-ബുക്ക് Off ആക്കുക' : '⚡ പ്രീ-ബുക്ക് ആക്കുക'}
             </button>
-            <button onclick="updateSingleCoursePlan('${k}')" class="py-1 px-3 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-[11px] font-bold cursor-pointer">
+            <button onclick="updateSingleCoursePlan('${k}')" class="py-1 px-3 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-[11px] font-bold cursor-pointer" title="സേവ് ചെയ്യുക">
               💾
             </button>
           </div>
@@ -1546,11 +1565,12 @@
       });
     }
 
-    // 🌟 3. പുതിയ കോഴ്സ് പ്ലാൻ ചേർക്കുന്നു (Pre-booking സഹിതം)
+    // 🌟 3. പുതിയ കോഴ്സ് പ്ലാൻ ചേർക്കുന്നു (Original Price & Offer Price സഹിതം)
     async function addNewCoursePlan() {
       const name = document.getElementById('newPlanName').value.trim();
       let id = document.getElementById('newPlanId').value.trim().toLowerCase().replace(/[\s\-_]+/g, '_');
       const price = Number(document.getElementById('newPlanPrice').value);
+      const originalPrice = Number(document.getElementById('newPlanOriginalPrice')?.value) || 0;
       const days = Number(document.getElementById('newPlanDays').value);
       const planType = document.getElementById('newPlanType').value;
       const isPrebook = planType === 'PREBOOK';
@@ -1566,6 +1586,7 @@
         name,
         id,
         price,
+        original_price: originalPrice,
         days,
         is_prebook: isPrebook,
         launch_date: launchDate,
@@ -1581,6 +1602,7 @@
       document.getElementById('newPlanName').value = '';
       document.getElementById('newPlanId').value = '';
       document.getElementById('newPlanPrice').value = '';
+      if (document.getElementById('newPlanOriginalPrice')) document.getElementById('newPlanOriginalPrice').value = '';
       document.getElementById('newPlanDays').value = '';
       if (document.getElementById('newPlanLaunchDate')) document.getElementById('newPlanLaunchDate').value = '';
       if (document.getElementById('newPlanTagline')) document.getElementById('newPlanTagline').value = '';
@@ -1592,21 +1614,25 @@
     // 🌟 4. നിലവിലുള്ള പ്ലാനിലെ ഫീസോ വാലിഡിറ്റിയോ എഡിറ്റ് ചെയ്യുന്നു
     async function updateSingleCoursePlan(key) {
       const pInput = document.getElementById(`price_${key}`);
+      const origInput = document.getElementById(`orig_price_${key}`);
       const dInput = document.getElementById(`days_${key}`);
       const newPrice = Number(pInput.value);
+      const newOrigPrice = origInput ? Number(origInput.value) || 0 : 0;
       const newDays = Number(dInput.value);
 
       if (!allCoursePlansCache[key]) return;
       allCoursePlansCache[key].price = newPrice;
+      allCoursePlansCache[key].original_price = newOrigPrice;
       allCoursePlansCache[key].days = newDays;
 
       await fetch(`${FIREBASE_DB_URL}/portal_config/course_plans/${key}.json`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ price: newPrice, days: newDays })
+        body: JSON.stringify({ price: newPrice, original_price: newOrigPrice, days: newDays })
       });
 
       alert(`✅ "${allCoursePlansCache[key].name}" പ്ലാൻ അപ്ഡേറ്റ് ചെയ്തു!`);
+      renderCoursePlansList();
     }
 
     // 🌟 4B. പ്രീ-ബുക്കിംഗ് സ്റ്റാറ്റസ് ഓൺ / ഓഫ് ചെയ്യുന്നു
