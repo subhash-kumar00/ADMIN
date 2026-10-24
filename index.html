@@ -14,7 +14,7 @@
   <!-- html2pdf.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-  <!-- 🌟 Chart.js ലൈബ്രറി -->
+  <!-- Chart.js ലൈബ്രറി -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <!-- PWA Meta tags -->
@@ -85,7 +85,7 @@
           <span class="w-8 h-8 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-base">✏️</span>
           <div>
             <h3 class="text-base font-bold text-white" id="editModalHeaderTitle">പരീക്ഷാ വിവരങ്ങൾ എഡിറ്റ് ചെയ്യുക</h3>
-            <p class="text-[11px] text-slate-400">പരീക്ഷയുടെ വിവരങ്ങളിലോ ചോദ്യങ്ങളിലോ വന്ന തെറ്റുകൾ തിരുത്താം.</p>
+            <p class="text-[11px] text-slate-400">പരീക്ഷയുടെ ഫോൾഡറുകൾ, സബ് ഫോൾഡറുകൾ അല്ലെങ്കിൽ ചോദ്യങ്ങൾ തിരുത്താം.</p>
           </div>
         </div>
         <button onclick="closeEditExamModal()" class="text-slate-400 hover:text-white text-xl font-bold p-1 bg-slate-800 rounded-xl w-8 h-8 flex items-center justify-center cursor-pointer">✕</button>
@@ -102,7 +102,7 @@
           <div class="sm:col-span-2">
             <label class="block text-[11px] text-emerald-400 font-bold mb-1.5 flex items-center justify-between">
               <span>പ്രധാന കോഴ്സുകൾ (Tick Courses) *</span>
-              <span class="text-[10px] text-slate-400 font-normal">ആവശ്യമുള്ളവയിൽ മാത്രം ടിക്ക് ചെയ്യുക</span>
+              <span class="text-[10px] text-slate-400 font-normal">ആവശ്യമുള്ളവയിൽ ടിക്ക് ചെയ്യുക</span>
             </label>
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-950 p-2 rounded-xl border border-cyan-500/40">
               <label class="flex items-center space-x-1.5 p-1 rounded-lg hover:bg-slate-900 cursor-pointer text-xs">
@@ -136,6 +136,18 @@
           </div>
         </div>
 
+        <!-- 🌟 ഫോൾഡർ & സബ് ഫോൾഡർ എഡിറ്റ് സെക്ഷൻ -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-950/80 p-3 rounded-2xl border border-slate-800">
+          <div>
+            <label class="block text-[11px] text-emerald-400 font-bold mb-1">പ്രധാന ഫോൾഡർ / വിഷയം (CATEGORY) *</label>
+            <input type="text" id="editExCategory" required list="existingCategoriesList" placeholder="ഉദാ: ഇന്ത്യൻ ഭരണഘടന" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500">
+          </div>
+          <div>
+            <label class="block text-[11px] text-cyan-400 font-bold mb-1">സബ് ഫോൾഡർ / ടോപ്പിക് (SUB FOLDER)</label>
+            <input type="text" id="editExSubFolder" placeholder="ഉദാ: ആമുഖം, മൗലികാവകാശങ്ങൾ" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-cyan-300 focus:outline-none focus:border-cyan-500">
+          </div>
+        </div>
+
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-950/80 p-3 rounded-2xl border border-slate-800">
           <div>
             <label class="block text-[11px] text-amber-400 font-bold mb-1">എക്സാം HTML ഫയൽ (FILEURL)</label>
@@ -154,7 +166,7 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
-            <label class="block text-[11px] text-slate-400 font-semibold mb-1">പ്രധാന ടോപ്പിക്കുകൾ</label>
+            <label class="block text-[11px] text-slate-400 font-semibold mb-1">പ്രധാന ടോപ്പിക്കുകൾ (വിവരണം)</label>
             <input type="text" id="editExTopics" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500">
           </div>
           <div>
@@ -183,6 +195,72 @@
         <div class="pt-2 border-t border-slate-800 flex justify-end space-x-2.5">
           <button type="button" onclick="closeEditExamModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold rounded-xl cursor-pointer">റദ്ദാക്കുക</button>
           <button type="submit" id="btnSaveEditedExam" class="px-6 py-2 bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-slate-950 font-black rounded-xl shadow cursor-pointer">
+            💾 മാറ്റങ്ങൾ സേവ് ചെയ്യുക
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 🌟 2. കോഴ്സ് പ്ലാൻ പൂർണ്ണമായി എഡിറ്റ് ചെയ്യാനുള്ള MODAL (Edit Course Plan Modal) -->
+  <div id="editCourseModal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-slate-900 border-2 border-amber-500/50 rounded-3xl max-w-xl w-full p-5 sm:p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center space-x-2">
+          <span class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-base">✏️</span>
+          <div>
+            <h3 class="text-base font-bold text-white">കോഴ്സ് പ്ലാൻ പൂർണ്ണമായി എഡിറ്റ് ചെയ്യുക</h3>
+            <p class="text-[11px] text-slate-400">പേര്, വാലിഡിറ്റി, ഓഫർ ഫീസ്, പ്രീ-ബുക്കിംഗ് എന്നിവ തിരുത്താം.</p>
+          </div>
+        </div>
+        <button onclick="closeEditCourseModal()" class="text-slate-400 hover:text-white text-xl font-bold p-1 bg-slate-800 rounded-xl w-8 h-8 flex items-center justify-center cursor-pointer">✕</button>
+      </div>
+
+      <form id="editCourseForm" onsubmit="submitUpdatedCoursePlan(event)" class="space-y-3.5 text-xs">
+        <input type="hidden" id="editCourseId">
+        
+        <div>
+          <label class="block text-[11px] text-slate-300 font-bold mb-1">കോഴ്സ് പേര് (Course Name) *</label>
+          <input type="text" id="editCourseName" required placeholder="ഉദാ: LDC Complete Batch" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-[11px] text-slate-400 font-bold mb-1">യഥാർത്ഥ ഫീസ് (₹)</label>
+            <input type="number" id="editCourseOriginalPrice" placeholder="299" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-300 font-mono focus:outline-none focus:border-amber-500">
+          </div>
+          <div>
+            <label class="block text-[11px] text-emerald-400 font-bold mb-1">ഓഫർ ഫീസ് (₹) *</label>
+            <input type="number" id="editCoursePrice" required placeholder="149" class="w-full bg-slate-950 border border-emerald-500/40 rounded-xl px-3 py-2 text-emerald-400 font-bold font-mono focus:outline-none focus:border-emerald-500">
+          </div>
+          <div>
+            <label class="block text-[11px] text-amber-400 font-bold mb-1">വാലിഡിറ്റി (Days) *</label>
+            <input type="number" id="editCourseDays" required placeholder="90" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-amber-300 font-bold font-mono focus:outline-none focus:border-amber-500">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[11px] text-amber-400 font-bold mb-1">പ്ലാൻ തരം *</label>
+          <select id="editCourseType" onchange="toggleEditPrebookFields()" class="w-full bg-slate-950 border border-amber-500/40 rounded-xl px-3 py-2 text-amber-300 font-bold focus:outline-none">
+            <option value="REGULAR">സാധാരണ കോഴ്സ് (Regular)</option>
+            <option value="PREBOOK">⚡ പ്രീ-ബുക്കിംഗ് (Pre-book)</option>
+          </select>
+        </div>
+
+        <div id="editPrebookDetailsArea" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-950 p-3 rounded-2xl border border-amber-500/30">
+          <div>
+            <label class="block text-[11px] text-amber-300 font-bold mb-1">ബാച്ച് ആരംഭിക്കുന്ന തീയതി</label>
+            <input type="date" id="editCourseLaunchDate" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white">
+          </div>
+          <div>
+            <label class="block text-[11px] text-slate-300 font-bold mb-1">ഓഫർ വിവരണം (Tagline)</label>
+            <input type="text" id="editCourseTagline" placeholder="ഉദാ: ആദ്യം ചേരുന്ന 100 പേർക്ക് മാത്രം" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-amber-200">
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-800 flex justify-end space-x-2.5">
+          <button type="button" onclick="closeEditCourseModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold rounded-xl cursor-pointer">റദ്ദാക്കുക</button>
+          <button type="submit" id="btnSaveEditedCourse" class="px-6 py-2 bg-gradient-to-r from-amber-500 to-emerald-500 hover:from-amber-400 hover:to-emerald-400 text-slate-950 font-black rounded-xl shadow cursor-pointer">
             💾 മാറ്റങ്ങൾ സേവ് ചെയ്യുക
           </button>
         </div>
@@ -281,7 +359,6 @@
         <span>📢</span>
         <span>പരീക്ഷാ പബ്ലിഷർ</span>
       </button>
-      <!-- 🌟 പുതിയ സബ്സ്ക്രിപ്ഷൻ ടാബ് -->
       <button onclick="switchTab('subscriptionDesk')" id="tabBtnSubscription" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-amber-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap cursor-pointer">
         <span>💳</span>
         <span>കോഴ്സ് സബ്സ്ക്രിപ്ഷൻ & വാലിഡിറ്റി</span>
@@ -370,17 +447,16 @@
       </div>
     </div>
 
-    <!-- 🌟 പുതിയ ഡൈനാമിക് കോഴ്സ് & സബ്സ്ക്രിപ്ഷൻ മാനേജർ -->
+    <!-- ഡൈനാമിക് കോഴ്സ് & സബ്സ്ക്രിപ്ഷൻ മാനേജർ -->
     <div id="sectionSubscriptionDesk" class="hidden bg-slate-900 border border-amber-500/30 rounded-3xl p-5 sm:p-7 space-y-6 shadow-2xl">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-3">
         <div>
           <h3 class="text-base sm:text-lg font-black text-amber-400 flex items-center space-x-2">
             <span>💳</span><span>കോഴ്സ് പ്ലാനുകളും പേയ്‌മെന്റ് ക്രമീകരണങ്ങളും</span>
           </h3>
-          <p class="text-xs text-slate-400 mt-0.5">SCERT, LGS, LDC തുടങ്ങി ഏത് കോഴ്സും ഫീസും വാലിഡിറ്റിയും ഇവിടെ ചേർക്കാം, മാറ്റം വരുത്താം.</p>
+          <p class="text-xs text-slate-400 mt-0.5">SCERT, LGS, LDC തുടങ്ങി ഏത് കോഴ്സും ഫീസും വാലിഡിറ്റിയും ഇവിടെ ചേർക്കാം, എഡിറ്റ് ചെയ്യാം.</p>
         </div>
         
-        <!-- Global Trial Toggle Button -->
         <div class="flex items-center space-x-2 bg-slate-950 px-3.5 py-2 rounded-2xl border border-slate-800">
           <span class="text-xs text-slate-300 font-bold">Global Trial:</span>
           <button id="btnGlobalTrialToggle" onclick="toggleGlobalTrialMode()" class="px-3.5 py-1.5 rounded-xl text-xs font-black bg-emerald-500 text-slate-950 transition cursor-pointer">
@@ -389,7 +465,7 @@
         </div>
       </div>
 
-      <!-- UPI & പേയ്‌മെന്റ് വിവരങ്ങൾ -->
+      <!-- UPI വിവരങ്ങൾ -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 bg-slate-950 p-4 rounded-2xl border border-slate-800">
         <div>
           <label class="block text-[11px] font-bold text-slate-400 mb-1 uppercase">UPI ID (GPay / PhonePe)</label>
@@ -410,7 +486,7 @@
         </div>
       </div>
 
-      <!-- 🌟 പുതിയ കോഴ്സ് പ്ലാൻ / പ്രീ-ബുക്കിംഗ് ചേർക്കാനുള്ള ഫോം -->
+      <!-- പുതിയ കോഴ്സ് പ്ലാൻ ചേർക്കാനുള്ള ഫോം -->
       <div class="bg-slate-950 border-2 border-cyan-500/40 p-4 sm:p-5 rounded-3xl space-y-3.5 shadow-xl">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-2">
           <h4 class="text-xs sm:text-sm font-bold text-cyan-400 flex items-center space-x-1.5">
@@ -433,8 +509,6 @@
               <option value="LDC + LGS Combo"></option>
               <option value="LDC + DEGREE Combo"></option>
               <option value="ALL EXAMS PASS"></option>
-              <option value="LDC 2027 PRE-BOOKING"></option>
-              <option value="LGS 2027 PRE-BOOKING"></option>
             </datalist>
           </div>
 
@@ -445,7 +519,7 @@
 
           <div>
             <label class="block text-[11px] text-slate-400 font-bold mb-1">യഥാർത്ഥ ഫീസ് (₹)</label>
-            <input type="number" id="newPlanOriginalPrice" placeholder="ഉദാ: 299" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-slate-300 font-mono focus:outline-none focus:border-cyan-500" title="വെട്ടിയിട്ട് കാണിക്കാൻ വേണ്ട യഥാർത്ഥ തുക">
+            <input type="number" id="newPlanOriginalPrice" placeholder="ഉദാ: 299" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-slate-300 font-mono focus:outline-none focus:border-cyan-500">
           </div>
 
           <div>
@@ -469,11 +543,11 @@
 
         <div id="prebookDetailsArea" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-900/80 p-3 rounded-2xl border border-amber-500/30 text-xs">
           <div>
-            <label class="block text-[11px] text-amber-300 font-bold mb-1">ബാച്ച് ആരംഭിക്കുന്ന തീയതി (Launch Date)</label>
+            <label class="block text-[11px] text-amber-300 font-bold mb-1">ബാച്ച് ആരംഭിക്കുന്ന തീയതി</label>
             <input type="date" id="newPlanLaunchDate" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white">
           </div>
           <div>
-            <label class="block text-[11px] text-slate-300 font-bold mb-1">പ്രീ-ബുക്കിംഗ് ഓഫർ വിവരണം (Optional)</label>
+            <label class="block text-[11px] text-slate-300 font-bold mb-1">പ്രീ-ബുക്കിംഗ് വിവരണം (Optional)</label>
             <input type="text" id="newPlanTagline" placeholder="ഉദാ: ആദ്യം ബുക്ക് ചെയ്യുന്ന 100 പേർക്ക് മാത്രം!" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-amber-200">
           </div>
         </div>
@@ -485,7 +559,7 @@
         </div>
       </div>
 
-      <!-- നിലവിലുള്ള കോഴ്സ് പ്ലാനുകളുടെ ലിസ്റ്റ് -->
+      <!-- നിലവിലുള്ള കോഴ്സ് പ്ലാനുകൾ -->
       <div class="space-y-3">
         <h4 class="text-xs sm:text-sm font-bold text-white uppercase tracking-wider flex items-center space-x-2">
           <span>📚</span><span>നിലവിലുള്ള കോഴ്സ് പ്ലാനുകൾ (Active Courses)</span>
@@ -495,7 +569,7 @@
         </div>
       </div>
 
-      <!-- ================= 🎓 STUDENT VALIDITY DESK ================= -->
+      <!-- STUDENT VALIDITY DESK -->
       <div class="pt-6 border-t border-slate-800 space-y-4">
         <div>
           <h4 class="text-sm font-bold text-white uppercase tracking-wider flex items-center space-x-2">
@@ -511,7 +585,6 @@
           </button>
         </div>
 
-        <!-- കുട്ടിയുടെ വിവരങ്ങളും കോഴ്സ് അസൈൻ ചെയ്യാനുള്ള ഭാഗവും -->
         <div id="studentValidityResult" class="hidden bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-4 shadow-inner">
           <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2">
             <div>
@@ -527,9 +600,7 @@
           <div class="flex flex-wrap items-center gap-3 pt-3 border-t border-slate-800/80">
             <div class="flex items-center space-x-2">
               <span class="text-xs text-slate-400 font-bold">കോഴ്സ് നൽകുക:</span>
-              <select id="assignCourseSelect" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-emerald-400 font-bold focus:outline-none">
-                <!-- ഡൈനാമിക് കോഴ്സുകൾ ഇവിടെ വരും -->
-              </select>
+              <select id="assignCourseSelect" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-emerald-400 font-bold focus:outline-none"></select>
               <button onclick="assignSelectedCourseToStudent()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition shadow cursor-pointer">
                 അൺലോക്ക് ചെയ്യുക 🚀
               </button>
@@ -565,7 +636,7 @@
           <span class="text-[10px] text-slate-500 font-mono">portal_config/blink_message</span>
         </div>
         <p class="text-[11px] text-slate-400">
-          ഹോം പേജിന്റെ മുകളിൽ ചുവപ്പ് നിറത്തിൽ ബ്ലിങ്ക് ചെയ്തു കാണിക്കേണ്ട മെസ്സേജ് നൽകുക. മെസ്സേജ് താല്പര്യമില്ലെങ്കിൽ 'ഹൈഡ്' ചെയ്യാം.
+          ഹോം പേജിന്റെ മുകളിൽ ചുവപ്പ് നിറത്തിൽ ബ്ലിങ്ക് ചെയ്തു കാണിക്കേണ്ട മെസ്സേജ് നൽകുക.
         </p>
         <div class="flex flex-col sm:flex-row gap-2.5">
           <input type="text" id="adminBlinkMessageInput" placeholder="ഉദാ: 2027 LDC & LGS EXAMS COMMING SOON" class="flex-1 bg-slate-900 border border-rose-500/30 rounded-xl px-4 py-2.5 text-xs text-rose-300 font-bold focus:outline-none focus:border-rose-400 tracking-wide uppercase">
@@ -614,12 +685,12 @@
             <span class="text-[10px] font-black uppercase tracking-wider bg-cyan-500/20 text-cyan-300 px-2.5 py-0.5 rounded-full border border-cyan-500/30">ALL-IN-ONE DIRECT SYNC</span>
             <h4 class="text-sm sm:text-base font-black text-white flex items-center space-x-2 mt-1">
               <span>⚡</span>
-              <span>പുതിയ പരീക്ഷയും ചോദ്യങ്ങളും ഫയർബേസിലേക്ക് ചേർക്കുക</span>
+              <span>പുതിയ പരീക്ഷയും ഫോൾഡറുകളും ചോദ്യങ്ങളും ചേർക്കുക</span>
             </h4>
-            <p class="text-[11px] text-slate-400">വിവരങ്ങളും ചോദ്യങ്ങളുടെ JSON-ഉം നൽകി ഒരൊറ്റ ക്ലിക്കിൽ <strong class="text-emerald-400">quiz_contents</strong> ഫോൾഡറിലേക്ക് അപ്‌ലോഡ് ചെയ്യാം.</p>
+            <p class="text-[11px] text-slate-400">ഫോൾഡറുകൾ, സബ് ഫോൾഡറുകൾ, ചോദ്യങ്ങളുടെ JSON എന്നിവ ഒരൊറ്റ ക്ലിക്കിൽ അപ്‌ലോഡ് ചെയ്യാം.</p>
           </div>
           <button onclick="toggleNewExamForm()" id="toggleAddExamBtn" class="px-4 py-2.5 bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-slate-950 font-black rounded-xl text-xs transition shadow-lg whitespace-nowrap cursor-pointer">
-            ➕ പുതിയ പരീക്ഷ & ചോദ്യങ്ങൾ ചേർക്കുക
+            ➕ പുതിയ പരീക്ഷ ചേർക്കുക
           </button>
         </div>
 
@@ -632,8 +703,8 @@
 
             <div class="sm:col-span-2">
               <label class="block text-[11px] text-emerald-400 font-bold mb-1.5 flex items-center justify-between">
-                <span>2. ഏതെല്ലാം കോഴ്സുകളിൽ വേണം? (Tick Courses) *</span>
-                <span class="text-[10px] text-slate-400 font-normal">ആവശ്യമുള്ളവയിൽ മാത്രം ടിക്ക് ചെയ്യുക</span>
+                <span>2. ഏതെല്ലാം പ്രധാന കോഴ്സുകളിൽ വേണം? *</span>
+                <span class="text-[10px] text-slate-400 font-normal">ആവശ്യമുള്ളവയിൽ ടിക്ക് ചെയ്യുക</span>
               </label>
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-900 p-2 rounded-xl border border-emerald-500/50">
                 <label class="flex items-center space-x-1.5 p-1 rounded-lg hover:bg-slate-950 cursor-pointer text-xs">
@@ -655,7 +726,6 @@
               </div>
             </div>
 
-            <!-- 🌟 പുതിയ Access Type ഫീൽഡ് -->
             <div>
               <label class="block text-[11px] text-amber-400 font-bold mb-1">3. ആക്സസ് ടൈപ്പ് *</label>
               <select id="newExAccessType" class="w-full bg-slate-900 border border-amber-500/50 rounded-xl px-3 py-2.5 text-amber-300 font-bold focus:outline-none focus:border-amber-500 cursor-pointer">
@@ -670,11 +740,18 @@
             </div>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-900/60 p-3.5 rounded-2xl border border-slate-800">
+          <!-- 🌟 ഫോൾഡർ & സബ് ഫോൾഡർ ഇൻപുട്ടുകൾ -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5 bg-slate-900/60 p-3.5 rounded-2xl border border-slate-800">
             <div>
-              <label class="block text-[11px] text-slate-300 font-bold mb-1">വിഷയം (CATEGORY) *</label>
-              <input type="text" id="newExCategory" list="existingCategoriesList" required placeholder="ഉദാ: കേരള ചരിത്രം" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-emerald-500">
+              <label class="block text-[11px] text-slate-300 font-bold mb-1">പ്രധാന ഫോൾഡർ / വിഷയം (CATEGORY) *</label>
+              <input type="text" id="newExCategory" list="existingCategoriesList" required placeholder="ഉദാ: ഇന്ത്യൻ ഭരണഘടന, കേരള ചരിത്രം" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-emerald-500">
               <datalist id="existingCategoriesList"></datalist>
+            </div>
+
+            <div>
+              <label class="block text-[11px] text-cyan-400 font-bold mb-1">സബ് ഫോൾഡർ / ടോപ്പിക് (SUB FOLDER)</label>
+              <input type="text" id="newExSubFolder" list="existingSubFoldersList" placeholder="ഉദാ: ആമുഖം, മൗലികാവകാശങ്ങൾ" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-cyan-300 focus:outline-none focus:border-cyan-400">
+              <datalist id="existingSubFoldersList"></datalist>
             </div>
 
             <div>
@@ -736,7 +813,7 @@
         </form>
       </div>
 
-      <!-- 🌟 ഫുൾ വ്യൂ ഉള്ള വിശാലമായ പരീക്ഷാ ടേബിൾ (Full Width View Table) -->
+      <!-- വിശാലമായ പരീക്ഷാ ടേബിൾ -->
       <div class="space-y-3">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-2">
           <div>
@@ -744,7 +821,7 @@
               <span>🗂️</span>
               <span>നിലവിലുള്ള പരീക്ഷകളുടെ ലിസ്റ്റ് & എഡിറ്റിംഗ്</span>
             </h3>
-            <p class="text-xs text-slate-400">ഏതെങ്കിലും പരീക്ഷയിലെ വിവരങ്ങളോ ഫ്രീ/പെയ്ഡ് സ്റ്റാറ്റസോ മാറ്റാൻ ഇവിടെ ഉപയോഗിക്കാം.</p>
+            <p class="text-xs text-slate-400">ഫോൾഡർ, സബ് ഫോൾഡർ അല്ലെങ്കിൽ ഫ്രീ/പെയ്ഡ് സ്റ്റാറ്റസ് മാറ്റാൻ ഇവിടെ ഉപയോഗിക്കാം.</p>
           </div>
           <div class="flex items-center space-x-2">
             <select id="filterMainFolderSelect" onchange="filterPublishExams()" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-emerald-400 font-bold focus:outline-none focus:border-emerald-500 cursor-pointer">
@@ -754,7 +831,7 @@
               <option value="LGS">🛡️ LGS മാത്രം</option>
               <option value="DEGREE">🎓 Degree മാത്രം</option>
             </select>
-            <input type="text" id="searchPublishInput" oninput="filterPublishExams()" placeholder="പരീക്ഷ തിരയുക..." class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+            <input type="text" id="searchPublishInput" oninput="filterPublishExams()" placeholder="പരീക്ഷയോ സബ് ഫോൾഡറോ തിരയുക..." class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500">
           </div>
         </div>
 
@@ -763,9 +840,9 @@
             <thead class="bg-slate-950 text-slate-400 uppercase text-[10px] border-b border-slate-800 sticky top-0">
               <tr>
                 <th class="p-3 text-center w-12">#</th>
-                <th class="p-3">പരീക്ഷയുടെ പേര് & കീ</th>
-                <th class="p-3 text-center">ഫോൾഡർ</th>
-                <th class="p-3 text-center">ആക്സസ് (Fee)</th>
+                <th class="p-3">പരീക്ഷയുടെ പേര് & ഫോൾഡർ ഘടന</th>
+                <th class="p-3 text-center">കോഴ്സ്</th>
+                <th class="p-3 text-center">ആക്സസ്</th>
                 <th class="p-3 text-center">PDF ലിങ്ക്</th>
                 <th class="p-3 text-center">ബാഡ്ജ്</th>
                 <th class="p-3 text-center">ഷെഡ്യൂൾ സമയം</th>
@@ -1142,11 +1219,10 @@
     const ONESIGNAL_APP_ID = "39db2070-7998-49fc-b624-28b368a1674a";
     const ONESIGNAL_REST_API_KEY = atob("b3NfdjJfYXBwX2hobnNhNGR6dGJlN3pucmVmY3p3cmlsaGprbGx0N3RjemprZTR1bnozbmZkaG4zMm80bHJ1NXl3b2N2dm83a2MzdWZ2bHZtYnQ0bG9kbDJvamN2c21udXd2NHE3bmg3c2tjYXJ5aXk=");
 
-    // 🌟 1. സംശയം ചോദിച്ച വിദ്യാർത്ഥിക്ക് മാത്രം ബാക്ക്ഗ്രൗണ്ട് പുഷ് അയക്കുന്നു (Updated v16 Endpoint)
     async function sendOneSignalPushToUser(phone, title, message) {
       const cleanPhone = String(phone).replace(/\D/g, '').slice(-10);
       try {
-        const response = await fetch("https://api.onesignal.com/notifications?c=push", {
+        await fetch("https://api.onesignal.com/notifications?c=push", {
           method: "POST",
           headers: {
             "Accept": "application/json",
@@ -1168,7 +1244,6 @@
       }
     }
 
-    // 🌟 2. പുതിയ പരീക്ഷ വരുമ്പോൾ മുഴുവൻ വിദ്യാർത്ഥികൾക്കും ഒരുമിച്ച് പുഷ് അയക്കുന്നു
     async function sendOneSignalBroadcastPush(title, message) {
       try {
         await fetch("https://api.onesignal.com/notifications?c=push", {
@@ -1217,10 +1292,8 @@
     let currentGlobalTrialStatus = true;
     let activeSearchedPhone = null;
 
-    // 🌟 ഗ്ലോബൽ കോഴ്സ് പ്ലാനുകൾ സൂക്ഷിക്കുന്ന ഒബ്ജക്റ്റ്
     let allCoursePlansCache = {};
 
-    // 🌟 ഡിഫോൾട്ടായി വേണ്ട 7 പ്രധാന കോഴ്സ് പ്ലാനുകൾ (SCERT, LGS, LDC, DEGREE, LDC+LGS, LDC+DEGREE, ALL EXAMS)
     const DEFAULT_COURSES = {
       "scert": { name: "SCERT Special", price: 99, days: 60, id: "scert" },
       "lgs": { name: "LGS Complete", price: 149, days: 90, id: "lgs" },
@@ -1424,7 +1497,6 @@
         document.getElementById('admWhatsapp').value = cfg.whatsapp_number || "";
         document.getElementById('admQrUrl').value = cfg.qr_image_url || "";
 
-        // ഫയർബേസിൽ കോഴ്സ് പ്ലാനുകൾ ഉണ്ടെങ്കിൽ അത് എടുക്കുന്നു, ഇല്ലെങ്കിൽ ഡിഫോൾട്ട് കോഴ്സുകൾ ആദ്യമായി സേവ് ചെയ്യുന്നു
         if (cfg.course_plans && Object.keys(cfg.course_plans).length > 0) {
           allCoursePlansCache = cfg.course_plans;
         } else {
@@ -1446,10 +1518,10 @@
       const btn = document.getElementById('btnGlobalTrialToggle');
       if (currentGlobalTrialStatus) {
         btn.textContent = "ആക്റ്റീവ് (FREE All)";
-        btn.className = "px-3.5 py-1.5 rounded-xl text-xs font-black bg-emerald-500 text-slate-950";
+        btn.className = "px-3.5 py-1.5 rounded-xl text-xs font-black bg-emerald-500 text-slate-950 cursor-pointer";
       } else {
         btn.textContent = "പെയ്ഡ് മോഡ് (PAID)";
-        btn.className = "px-3.5 py-1.5 rounded-xl text-xs font-black bg-rose-500 text-white";
+        btn.className = "px-3.5 py-1.5 rounded-xl text-xs font-black bg-rose-500 text-white cursor-pointer";
       }
     }
 
@@ -1467,14 +1539,11 @@
     function togglePrebookDateInput() {
       const type = document.getElementById('newPlanType').value;
       const area = document.getElementById('prebookDetailsArea');
-      if (type === 'PREBOOK') {
-        area.classList.remove('hidden');
-      } else {
-        area.classList.add('hidden');
-      }
+      if (type === 'PREBOOK') area.classList.remove('hidden');
+      else area.classList.add('hidden');
     }
 
-    // 🌟 2. കോഴ്സ് പ്ലാനുകൾ കാർഡുകളായി പ്രദർശിപ്പിക്കുന്നു (യഥാർത്ഥ വില & ഡിസ്കൗണ്ട് സഹിതം)
+    // 🌟 2. കോഴ്സ് പ്ലാനുകൾ കാർഡുകളായി പ്രദർശിപ്പിക്കുന്നു (Full Edit ബട്ടൺ സഹിതം)
     function renderCoursePlansList() {
       const container = document.getElementById('coursePlansListContainer');
       const selectDropdown = document.getElementById('assignCourseSelect');
@@ -1522,42 +1591,35 @@
               </div>
               <h5 class="text-xs font-black text-white mt-1 leading-snug">${p.name}</h5>
             </div>
-            <button onclick="deleteCoursePlan('${k}')" class="text-rose-400 hover:text-rose-300 text-xs font-bold p-1 bg-slate-900 rounded-lg" title="ഡിലീറ്റ് ചെയ്യുക">✕</button>
+            <div class="flex items-center space-x-1">
+              <button onclick="openEditCourseModal('${k}')" class="px-2 py-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 rounded-lg text-[10px] font-bold cursor-pointer" title="പൂർണ്ണമായി എഡിറ്റ് ചെയ്യുക">
+                ✏️ എഡിറ്റ്
+              </button>
+              <button onclick="deleteCoursePlan('${k}')" class="text-rose-400 hover:text-rose-300 text-xs font-bold p-1 bg-slate-900 rounded-lg" title="ഡിലീറ്റ് ചെയ്യുക">✕</button>
+            </div>
           </div>
 
           <div class="flex items-center space-x-2 text-[11px] font-mono text-slate-400">
             <span>ID: <strong class="text-cyan-400">${p.id || k}</strong></span>
+            <span>• വാലിഡിറ്റി: <strong class="text-amber-300 font-bold">${p.days} Days</strong></span>
           </div>
 
           ${launchInfo}
 
-          <div class="grid grid-cols-3 gap-2 pt-1 border-t border-slate-800/80">
-            <div>
-              <label class="text-[10px] text-slate-400 block font-semibold">യഥാർത്ഥം (₹)</label>
-              <input type="number" id="orig_price_${k}" value="${origPrice || ''}" placeholder="299" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-slate-300 font-mono" title="വെട്ടിയിട്ട് കാണിക്കേണ്ട തുക">
+          <div class="grid grid-cols-2 gap-2 pt-1.5 border-t border-slate-800/80">
+            <div class="bg-slate-900/80 p-2 rounded-xl text-center border border-slate-800">
+              <span class="text-[9px] text-slate-400 block font-semibold">ഫീസ്</span>
+              <span class="text-xs font-black text-emerald-400 font-mono">₹${p.price}</span>
+              ${hasDiscount ? `<span class="text-[9px] text-slate-500 line-through ml-1 font-mono">₹${origPrice}</span>` : ''}
             </div>
-            <div>
-              <label class="text-[10px] text-emerald-400 block font-semibold">ഓഫർ (₹) *</label>
-              <input type="number" id="price_${k}" value="${p.price}" class="w-full bg-slate-900 border border-emerald-500/40 rounded-lg px-2 py-1 text-xs text-emerald-400 font-bold font-mono">
+            <div class="bg-slate-900/80 p-2 rounded-xl text-center border border-slate-800">
+              <span class="text-[9px] text-slate-400 block font-semibold">തരം</span>
+              <span class="text-[10px] font-bold ${isPrebook ? 'text-amber-400' : 'text-slate-300'}">${isPrebook ? 'Pre-book' : 'സാധാരണ'}</span>
             </div>
-            <div>
-              <label class="text-[10px] text-amber-300 block font-semibold">Days *</label>
-              <input type="number" id="days_${k}" value="${p.days}" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-amber-300 font-bold font-mono">
-            </div>
-          </div>
-
-          <div class="flex items-center justify-between gap-2 pt-1">
-            <button onclick="toggleCoursePrebook('${k}')" class="flex-1 py-1 px-2 ${isPrebook ? 'bg-amber-950 text-amber-300 border border-amber-500/40' : 'bg-slate-900 text-slate-400 border border-slate-800'} rounded-lg text-[10px] font-bold cursor-pointer">
-              ${isPrebook ? '⚡ പ്രീ-ബുക്ക് Off ആക്കുക' : '⚡ പ്രീ-ബുക്ക് ആക്കുക'}
-            </button>
-            <button onclick="updateSingleCoursePlan('${k}')" class="py-1 px-3 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-[11px] font-bold cursor-pointer" title="സേവ് ചെയ്യുക">
-              💾
-            </button>
           </div>
         `;
         container.appendChild(card);
 
-        // സ്റ്റുഡന്റ് വാലിഡിറ്റി ഡ്രോപ്ഡൗണിലേക്ക് ചേർക്കുന്നു
         const opt = document.createElement('option');
         opt.value = k;
         opt.textContent = `${p.name} (₹${p.price} - ${p.days} Days)${isPrebook ? ' [Pre-book]' : ''}`;
@@ -1565,7 +1627,7 @@
       });
     }
 
-    // 🌟 3. പുതിയ കോഴ്സ് പ്ലാൻ ചേർക്കുന്നു (Original Price & Offer Price സഹിതം)
+    // 🌟 3. പുതിയ കോഴ്സ് പ്ലാൻ ചേർക്കുന്നു
     async function addNewCoursePlan() {
       const name = document.getElementById('newPlanName').value.trim();
       let id = document.getElementById('newPlanId').value.trim().toLowerCase().replace(/[\s\-_]+/g, '_');
@@ -1607,55 +1669,85 @@
       if (document.getElementById('newPlanLaunchDate')) document.getElementById('newPlanLaunchDate').value = '';
       if (document.getElementById('newPlanTagline')) document.getElementById('newPlanTagline').value = '';
 
-      alert(`✅ "${name}" കോഴ്സ് പ്ലാൻ വിജയകരമായി ചേർത്തു! ${isPrebook ? '(Pre-booking Active)' : ''}`);
+      alert(`✅ "${name}" കോഴ്സ് പ്ലാൻ വിജയകരമായി ചേർത്തു!`);
       renderCoursePlansList();
     }
 
-    // 🌟 4. നിലവിലുള്ള പ്ലാനിലെ ഫീസോ വാലിഡിറ്റിയോ എഡിറ്റ് ചെയ്യുന്നു
-    async function updateSingleCoursePlan(key) {
-      const pInput = document.getElementById(`price_${key}`);
-      const origInput = document.getElementById(`orig_price_${key}`);
-      const dInput = document.getElementById(`days_${key}`);
-      const newPrice = Number(pInput.value);
-      const newOrigPrice = origInput ? Number(origInput.value) || 0 : 0;
-      const newDays = Number(dInput.value);
-
-      if (!allCoursePlansCache[key]) return;
-      allCoursePlansCache[key].price = newPrice;
-      allCoursePlansCache[key].original_price = newOrigPrice;
-      allCoursePlansCache[key].days = newDays;
-
-      await fetch(`${FIREBASE_DB_URL}/portal_config/course_plans/${key}.json`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ price: newPrice, original_price: newOrigPrice, days: newDays })
-      });
-
-      alert(`✅ "${allCoursePlansCache[key].name}" പ്ലാൻ അപ്ഡേറ്റ് ചെയ്തു!`);
-      renderCoursePlansList();
+    // 🌟 4. കോഴ്സ് പൂർണ്ണമായി എഡിറ്റ് ചെയ്യാനുള്ള ഫംഗ്ഷനുകൾ
+    function openEditCourseModal(k) {
+      const p = allCoursePlansCache[k];
+      if (!p) return;
+      document.getElementById('editCourseId').value = k;
+      document.getElementById('editCourseName').value = p.name || '';
+      document.getElementById('editCourseOriginalPrice').value = p.original_price || '';
+      document.getElementById('editCoursePrice').value = p.price || '';
+      document.getElementById('editCourseDays').value = p.days || '';
+      document.getElementById('editCourseType').value = p.is_prebook ? 'PREBOOK' : 'REGULAR';
+      document.getElementById('editCourseLaunchDate').value = p.launch_date || '';
+      document.getElementById('editCourseTagline').value = p.tagline || '';
+      toggleEditPrebookFields();
+      document.getElementById('editCourseModal').classList.remove('hidden');
     }
 
-    // 🌟 4B. പ്രീ-ബുക്കിംഗ് സ്റ്റാറ്റസ് ഓൺ / ഓഫ് ചെയ്യുന്നു
-    async function toggleCoursePrebook(key) {
-      if (!allCoursePlansCache[key]) return;
-      const current = allCoursePlansCache[key].is_prebook === true;
-      const nextState = !current;
-      allCoursePlansCache[key].is_prebook = nextState;
+    function closeEditCourseModal() {
+      document.getElementById('editCourseModal').classList.add('hidden');
+    }
 
-      let launchDate = allCoursePlansCache[key].launch_date || '';
-      if (nextState && !launchDate) {
-        launchDate = prompt("ബാച്ച് ആരംഭിക്കുന്ന തീയതി നൽകുക (YYYY-MM-DD):", new Date(Date.now() + 20*86400000).toISOString().split('T')[0]) || '';
-        allCoursePlansCache[key].launch_date = launchDate;
+    function toggleEditPrebookFields() {
+      const type = document.getElementById('editCourseType').value;
+      const area = document.getElementById('editPrebookDetailsArea');
+      if (type === 'PREBOOK') area.classList.remove('hidden');
+      else area.classList.add('hidden');
+    }
+
+    async function submitUpdatedCoursePlan(e) {
+      e.preventDefault();
+      const k = document.getElementById('editCourseId').value;
+      if (!k || !allCoursePlansCache[k]) return;
+
+      const name = document.getElementById('editCourseName').value.trim();
+      const origPrice = Number(document.getElementById('editCourseOriginalPrice').value) || 0;
+      const price = Number(document.getElementById('editCoursePrice').value);
+      const days = Number(document.getElementById('editCourseDays').value);
+      const isPrebook = document.getElementById('editCourseType').value === 'PREBOOK';
+      const launchDate = document.getElementById('editCourseLaunchDate').value;
+      const tagline = document.getElementById('editCourseTagline').value.trim();
+
+      if (!name || isNaN(price) || isNaN(days) || price <= 0 || days <= 0) {
+        return alert("ദയവായി സാധുവായ വിവരങ്ങൾ നൽകുക!");
       }
 
-      await fetch(`${FIREBASE_DB_URL}/portal_config/course_plans/${key}.json`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ is_prebook: nextState, launch_date: launchDate })
-      });
+      const btn = document.getElementById('btnSaveEditedCourse');
+      btn.innerText = "സേവ് ചെയ്യുന്നു...";
+      btn.disabled = true;
 
-      renderCoursePlansList();
-      alert(`✅ "${allCoursePlansCache[key].name}" പ്രീ-ബുക്കിംഗ് ${nextState ? 'ഓൺ ആക്കി' : 'ഓഫ് ആക്കി'}!`);
+      const updated = {
+        ...allCoursePlansCache[k],
+        name,
+        original_price: origPrice,
+        price,
+        days,
+        is_prebook: isPrebook,
+        launch_date: launchDate,
+        tagline: tagline
+      };
+
+      try {
+        await fetch(`${FIREBASE_DB_URL}/portal_config/course_plans/${k}.json`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updated)
+        });
+        allCoursePlansCache[k] = updated;
+        renderCoursePlansList();
+        closeEditCourseModal();
+        alert(`✅ "${name}" കോഴ്സ് വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!`);
+      } catch(err) {
+        alert("കോഴ്സ് അപ്ഡേറ്റ് ചെയ്യുന്നതിൽ തടസ്സം: " + err.toString());
+      } finally {
+        btn.innerText = "💾 മാറ്റങ്ങൾ സേവ് ചെയ്യുക";
+        btn.disabled = false;
+      }
     }
 
     // 🌟 5. കോഴ്സ് പ്ലാൻ ഡിലീറ്റ് ചെയ്യുന്നു
@@ -1760,7 +1852,6 @@
       checkStudentValidity();
     }
 
-    // 🌟 9. കസ്റ്റം തീയതി സെറ്റ് ചെയ്യുന്നു
     async function setStudentCustomDate() {
       const customDate = document.getElementById('studCustomDate').value;
       if (!customDate || !activeSearchedPhone) return alert("ദയവായി ഒരു തീയതി തിരഞ്ഞെടുക്കുക!");
@@ -1775,7 +1866,6 @@
       checkStudentValidity();
     }
 
-    // 🌟 10. ഡിവൈസ് ലോക്ക് റീസെറ്റ് ചെയ്യുന്നു
     async function resetStudentDeviceLock() {
       if (!activeSearchedPhone) return alert("ദയവായി വിദ്യാർത്ഥിയുടെ നമ്പർ പരിശോധിക്കുക!");
       if (!confirm(`${activeSearchedPhone} എന്ന വിദ്യാർത്ഥിയുടെ രജിസ്റ്റർ ചെയ്ത ഡിവൈസുകൾ റീസെറ്റ് ചെയ്യണമെന്നുറപ്പാണോ?`)) return;
@@ -1995,7 +2085,7 @@
       form.classList.toggle('hidden');
     }
 
-    // 🌟 പുതിയ പരീക്ഷയും Access Type-ഉം ചേർക്കുന്നു
+    // 🌟 പുതിയ പരീക്ഷ, സബ് ഫോൾഡർ, ചോദ്യങ്ങൾ എന്നിവ ചേർക്കുന്നു
     async function createNewExamInFirebase(e) {
       e.preventDefault();
       const title = document.getElementById('newExTitle').value.trim();
@@ -2007,6 +2097,7 @@
       const mainFolder = checkedBoxes.join(', ');
       const accessType = document.getElementById('newExAccessType').value;
       const category = document.getElementById('newExCategory').value.trim();
+      const subFolder = document.getElementById('newExSubFolder').value.trim();
       const fileUrl = document.getElementById('newExFileUrl').value.trim();
       const pdfUrl = document.getElementById('newExPdfUrl').value.trim();
       const customKey = document.getElementById('newExKey').value.trim();
@@ -2016,7 +2107,7 @@
       const rawQuestionsJson = document.getElementById('newExQuestionsJson').value.trim();
 
       if (!title || !category || !fileUrl || !customKey) {
-        alert("ദയവായി പരീക്ഷയുടെ പേര്, വിഷയം, കീ, ഫയൽ ലിങ്ക് എന്നിവ നൽകുക.");
+        alert("ദയവായി പരീക്ഷയുടെ പേര്, പ്രധാന ഫോൾഡർ (Category), കീ, ഫയൽ ലിങ്ക് എന്നിവ നൽകുക.");
         return;
       }
 
@@ -2039,11 +2130,12 @@
       const newExamEntry = {
         TITLE: title,
         CATEGORY: category,
+        SUB_FOLDER: subFolder,
         MAIN_FOLDER: mainFolder,
         access_type: accessType,
         FILEURL: fileUrl,
         pdfUrl: pdfUrl,
-        TOPICS: 'പ്രധാന പരീക്ഷാ ചോദ്യങ്ങൾ',
+        TOPICS: subFolder ? `${category} - ${subFolder}` : 'പ്രധാന പരീക്ഷാ ചോദ്യങ്ങൾ',
         QUESTIONS: questions,
         TIME: time,
         BADGE: 'LATEST',
@@ -2054,6 +2146,8 @@
       const controlPayload = {
         status: 'LATEST',
         mainFolder: mainFolder,
+        category: category,
+        subFolder: subFolder,
         access_type: accessType,
         pdfUrl: pdfUrl,
         releaseDate: relDate,
@@ -2085,7 +2179,7 @@
 
         sendOneSignalBroadcastPush(
           "🚀 പുതിയ മോഡൽ പരീക്ഷ ആരംഭിച്ചു!",
-          `"${title}" ഇപ്പോൾ SK PSC പോർട്ടലിൽ ലഭ്യമാണ്. ഉടൻ എഴുതി നിങ്ങളുടെ റാങ്ക് നേടൂ!`
+          `"${title}" (${category}${subFolder ? ' - ' + subFolder : ''}) ഇപ്പോൾ ലഭ്യമാണ്!`
         );
 
         sessionStorage.clear();
@@ -2120,13 +2214,20 @@
         rawExamsArrayFromDb = list;
 
         const catSet = new Set();
+        const subSet = new Set();
         list.forEach((item, index) => {
           item._dbIndex = index;
           const c = item.CATEGORY || item.category;
+          const s = item.SUB_FOLDER || item.subFolder || item.sub_folder;
           if (c) catSet.add(String(c).trim());
+          if (s) subSet.add(String(s).trim());
         });
-        const datalist = document.getElementById('existingCategoriesList');
-        if (datalist) datalist.innerHTML = Array.from(catSet).map(c => `<option value="${c}">`).join('');
+
+        const catDatalist = document.getElementById('existingCategoriesList');
+        if (catDatalist) catDatalist.innerHTML = Array.from(catSet).map(c => `<option value="${c}">`).join('');
+
+        const subDatalist = document.getElementById('existingSubFoldersList');
+        if (subDatalist) subDatalist.innerHTML = Array.from(subSet).map(s => `<option value="${s}">`).join('');
 
         publishExamsList = sortExamsNewestFirst(list);
         renderPublishTable(publishExamsList);
@@ -2177,7 +2278,7 @@
       return 'LDC';
     }
 
-    // 🌟 പരീക്ഷാ ടേബിളിൽ Access (FREE/PAID) സെലക്ഷൻ നൽകുന്നു
+    // 🌟 ഫോൾഡർ & സബ് ഫോൾഡർ ലിസ്റ്റ് വ്യൂ
     function renderPublishTable(list) {
       const tbody = document.getElementById('publishTableBody');
       tbody.innerHTML = '';
@@ -2193,6 +2294,7 @@
 
         const title = ex.TITLE || ex.title || `Exam ${idx + 1}`;
         const category = ex.CATEGORY || ex.category || 'പൊതുവിജ്ഞാനം';
+        const subFolder = ex.SUB_FOLDER || ex.subFolder || ex.sub_folder || '';
         const examKey = ex.KEY || ex.key || cleanTitle(title);
         const cleanCtrlKey = cleanTitle(title);
         const dbIndex = ex._dbIndex;
@@ -2213,13 +2315,18 @@
           ? `<button onclick="toggleExamPublish('${cleanCtrlKey}', false, this)" class="px-2.5 py-1 bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 border border-rose-500/40 text-[10px] font-bold rounded-lg transition shadow cursor-pointer whitespace-nowrap">🔒 Unpublish</button>`
           : `<button onclick="toggleExamPublish('${cleanCtrlKey}', true, this)" class="px-2.5 py-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-[10px] font-black rounded-lg transition shadow cursor-pointer whitespace-nowrap">🚀 Publish</button>`;
 
+        const subFolderBadge = subFolder
+          ? `<span class="text-[10px] text-cyan-300 font-bold bg-slate-950 px-2 py-0.5 rounded border border-cyan-500/40 whitespace-nowrap">📂 ${subFolder}</span>`
+          : '';
+
         tr.innerHTML = `
           <td class="p-3 font-mono text-slate-500 text-center">${idx + 1}</td>
-          <td class="p-3 min-w-[200px]">
+          <td class="p-3 min-w-[220px]">
             <div class="font-bold text-white text-xs sm:text-sm line-clamp-1">${title}</div>
-            <div class="flex items-center space-x-1.5 mt-1">
-              <span class="text-[10px] text-slate-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800 whitespace-nowrap">📁 ${category}</span>
-              <span class="text-[10px] text-cyan-400 font-mono bg-slate-950 px-1.5 py-0.5 rounded border border-slate-800 whitespace-nowrap">🔑 ${examKey}</span>
+            <div class="flex flex-wrap items-center gap-1.5 mt-1">
+              <span class="text-[10px] text-slate-300 bg-slate-950 px-2 py-0.5 rounded border border-slate-800 whitespace-nowrap">📁 ${category}</span>
+              ${subFolderBadge}
+              <span class="text-[10px] text-emerald-400 font-mono bg-slate-950 px-1.5 py-0.5 rounded border border-slate-800 whitespace-nowrap">🔑 ${examKey}</span>
             </div>
           </td>
           <td class="p-2.5 text-center whitespace-nowrap">
@@ -2238,7 +2345,6 @@
               </label>
             </div>
           </td>
-          <!-- 🌟 Access Type (FREE / PAID) Toggle -->
           <td class="p-3 text-center whitespace-nowrap">
             <select id="access_${cleanCtrlKey}" class="bg-slate-950 border border-amber-500/40 rounded-lg px-2 py-1.5 text-xs font-bold ${currentAccess === 'PAID' ? 'text-rose-400' : 'text-emerald-400'} focus:outline-none cursor-pointer">
               <option value="FREE" ${currentAccess === 'FREE' ? 'selected' : ''}>🟢 FREE</option>
@@ -2290,6 +2396,8 @@
       });
       document.getElementById('editExAccessType').value = ex.access_type || 'FREE';
       document.getElementById('editExKey').value = ex.KEY || ex.key || '';
+      document.getElementById('editExCategory').value = ex.CATEGORY || ex.category || '';
+      document.getElementById('editExSubFolder').value = ex.SUB_FOLDER || ex.subFolder || ex.sub_folder || '';
       document.getElementById('editExFileUrl').value = ex.FILEURL || ex.fileUrl || 'quiz.html';
       document.getElementById('editExPdfUrl').value = ex.pdfUrl || '';
       document.getElementById('editExTopics').value = ex.TOPICS || '';
@@ -2337,6 +2445,8 @@
       }
       const mainFolder = checkedBoxes.join(', ');
       const accessType = document.getElementById('editExAccessType').value;
+      const category = document.getElementById('editExCategory').value.trim();
+      const subFolder = document.getElementById('editExSubFolder').value.trim();
       const fileUrl = document.getElementById('editExFileUrl').value.trim();
       const pdfUrl = document.getElementById('editExPdfUrl').value.trim();
       const keyVal = document.getElementById('editExKey').value.trim();
@@ -2363,11 +2473,13 @@
         ...rawExamsArrayFromDb[dbIndex],
         TITLE: title,
         MAIN_FOLDER: mainFolder,
+        CATEGORY: category,
+        SUB_FOLDER: subFolder,
         access_type: accessType,
         FILEURL: fileUrl,
         pdfUrl: pdfUrl,
         KEY: keyVal,
-        TOPICS: topics,
+        TOPICS: topics || (subFolder ? `${category} - ${subFolder}` : 'പ്രധാന പരീക്ഷാ ചോദ്യങ്ങൾ'),
         QUESTIONS: questions,
         TIME: time
       };
@@ -2382,7 +2494,7 @@
           fetch(`${FIREBASE_DB_URL}/portal_config/exam_controls/${cleanTitle(title)}.json`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ mainFolder: mainFolder, access_type: accessType, pdfUrl: pdfUrl })
+            body: JSON.stringify({ mainFolder: mainFolder, category: category, subFolder: subFolder, access_type: accessType, pdfUrl: pdfUrl })
           })
         ];
 
@@ -2430,7 +2542,6 @@
         btnElement.disabled = false;
       }
     }
-
 
     function toggleRowFolderPill(labelEl) {
       const cb = labelEl.querySelector('input[type="checkbox"]');
@@ -2540,7 +2651,8 @@
         const matchFolder = (folderFilter === 'ALL_FILTER') || effectiveFolder === 'ALL' || effectiveFolder.includes(folderFilter);
         const t = title.toLowerCase();
         const c = (e.CATEGORY || e.category || '').toLowerCase();
-        const matchSearch = !q || t.includes(q) || c.includes(q);
+        const s = (e.SUB_FOLDER || e.subFolder || e.sub_folder || '').toLowerCase();
+        const matchSearch = !q || t.includes(q) || c.includes(q) || s.includes(q);
 
         return matchFolder && matchSearch;
       });
@@ -2811,7 +2923,6 @@
     }
 
     // DASHBOARD DATA
-    // ✅ പരിഹരിച്ച DASHBOARD DATA ഫംഗ്ഷൻ (യഥാർത്ഥ ഹിസ്റ്ററിയിൽ നിന്ന് കൗണ്ട് എടുക്കുന്നു, എണ്ണം കുറയില്ല)
     async function loadDashboardData() {
       try {
         const [usersRes, liveRanksRes, ranksRes] = await Promise.all([
@@ -2823,7 +2934,6 @@
         const phoneMap = {};
         let totalUsersAttemptsSum = 0;
 
-        // 1. Users ലിസ്റ്റിൽ നിന്നുള്ള കണക്ക്
         if (usersRes) {
           let rawList = Array.isArray(usersRes)
             ? usersRes.filter(u => u !== null)
@@ -2852,7 +2962,6 @@
           });
         }
 
-        // 2. യഥാർത്ഥ റാങ്ക് ലിസ്റ്റുകളിൽ നിന്നുള്ള മുഴുവൻ അറ്റംപ്റ്റുകളുടെയും ആകെ എണ്ണം
         let totalRankAttemptsCount = 0;
         const countAllAttempts = (nodeObj) => {
           if (!nodeObj || typeof nodeObj !== 'object') return;
@@ -2869,11 +2978,9 @@
         allCandidatesCache = Object.values(phoneMap);
         document.getElementById('statTotalStudents').innerText = allCandidatesCache.length;
 
-        // 3. മുൻപുണ്ടായിരുന്ന ഏറ്റവും ഉയർന്ന കൗണ്ട് പരിശോധിച്ച് നിലനിർത്തുന്നു (Never Decreases)
         const previousHighest = Number(localStorage.getItem('sk_highest_attempts_count') || 1720);
         const calculatedAttempts = Math.max(totalUsersAttemptsSum, totalRankAttemptsCount, previousHighest);
 
-        // പുതിയ ഉയർന്ന സംഖ്യ സേവ് ചെയ്യുന്നു
         localStorage.setItem('sk_highest_attempts_count', String(calculatedAttempts));
         document.getElementById('statTotalAttempts').innerText = calculatedAttempts;
 
@@ -3240,4 +3347,3 @@
   </script>
 </body>
 </html>
-
