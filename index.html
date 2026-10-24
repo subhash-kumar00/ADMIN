@@ -270,7 +270,7 @@
       <!-- 🌟 പുതിയ സബ്സ്ക്രിപ്ഷൻ ടാബ് -->
       <button onclick="switchTab('subscriptionDesk')" id="tabBtnSubscription" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-amber-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap cursor-pointer">
         <span>💳</span>
-        <span>സബ്സ്ക്രിപ്ഷൻ & വാലിഡിറ്റി</span>
+        <span>കോഴ്സ് സബ്സ്ക്രിപ്ഷൻ & വാലിഡിറ്റി</span>
       </button>
       <button onclick="switchTab('studentChatDesk')" id="tabBtnChat" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap cursor-pointer relative">
         <span>💬</span>
@@ -356,14 +356,14 @@
       </div>
     </div>
 
-    <!-- 🌟 പുതിയ സെക്ഷൻ: സബ്സ്ക്രിപ്ഷൻ & സ്റ്റുഡന്റ് വാലിഡിറ്റി മാനേജർ -->
+    <!-- 🌟 പുതിയ ഡൈനാമിക് കോഴ്സ് & സബ്സ്ക്രിപ്ഷൻ മാനേജർ -->
     <div id="sectionSubscriptionDesk" class="hidden bg-slate-900 border border-amber-500/30 rounded-3xl p-5 sm:p-7 space-y-6 shadow-2xl">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-3">
         <div>
           <h3 class="text-base sm:text-lg font-black text-amber-400 flex items-center space-x-2">
-            <span>💳</span><span>സബ്സ്ക്രിപ്ഷൻ & പേയ്‌മെന്റ് ക്രമീകരണങ്ങൾ</span>
+            <span>💳</span><span>കോഴ്സ് പ്ലാനുകളും പേയ്‌മെന്റ് ക്രമീകരണങ്ങളും</span>
           </h3>
-          <p class="text-xs text-slate-400 mt-0.5">പോർട്ടൽ ഫീസ്, യു.പി.ഐ, ഗ്ലോബൽ ട്രയൽ മോഡ് എന്നിവ ഇവിടെ മാനേജ് ചെയ്യാം.</p>
+          <p class="text-xs text-slate-400 mt-0.5">SCERT, LGS, LDC തുടങ്ങി ഏത് കോഴ്സും ഫീസും വാലിഡിറ്റിയും ഇവിടെ ചേർക്കാം, മാറ്റം വരുത്താം.</p>
         </div>
         
         <!-- Global Trial Toggle Button -->
@@ -376,65 +376,82 @@
       </div>
 
       <!-- UPI & പേയ്‌മെന്റ് വിവരങ്ങൾ -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 bg-slate-950 p-4 rounded-2xl border border-slate-800">
         <div>
           <label class="block text-[11px] font-bold text-slate-400 mb-1 uppercase">UPI ID (GPay / PhonePe)</label>
-          <input type="text" id="admUpiId" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white" placeholder="yourname@okhdfcbank">
+          <input type="text" id="admUpiId" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white" placeholder="yourname@okhdfcbank">
         </div>
         <div>
-          <label class="block text-[11px] font-bold text-slate-400 mb-1 uppercase">WhatsApp Number (Proof അയക്കാൻ)</label>
-          <input type="text" id="admWhatsapp" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white" placeholder="919XXXXXXXXX">
+          <label class="block text-[11px] font-bold text-slate-400 mb-1 uppercase">WhatsApp Number (Proof സ്വീകരിക്കാൻ)</label>
+          <input type="text" id="admWhatsapp" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white" placeholder="919XXXXXXXXX">
         </div>
         <div>
           <label class="block text-[11px] font-bold text-slate-400 mb-1 uppercase">QR Code Image Link</label>
-          <input type="text" id="admQrUrl" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white" placeholder="https://...">
+          <input type="text" id="admQrUrl" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white" placeholder="https://...">
+        </div>
+        <div class="sm:col-span-3 flex justify-end">
+          <button onclick="saveAdminPaymentSettings()" class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/30 font-bold rounded-xl text-xs transition cursor-pointer">
+            UPI വിവരങ്ങൾ സേവ് ചെയ്യുക 💾
+          </button>
         </div>
       </div>
 
-      <!-- പ്ലാനുകൾ മാറ്റാനുള്ള ബോക്സുകൾ -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2">
-          <span class="text-xs font-bold text-emerald-400">📦 Plan 1 (ചെറിയ പ്ലാൻ)</span>
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="text-[10px] text-slate-500">തുക (₹)</label>
-              <input type="number" id="admPlan1Price" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white" value="50">
-            </div>
-            <div>
-              <label class="text-[10px] text-slate-500">ദിവസങ്ങൾ</label>
-              <input type="number" id="admPlan1Days" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white" value="30">
-            </div>
+      <!-- 🌟 പുതിയ കോഴ്സ് പ്ലാൻ ചേർക്കാനുള്ള ഫോം -->
+      <div class="bg-slate-950 border-2 border-cyan-500/40 p-4 sm:p-5 rounded-3xl space-y-3">
+        <h4 class="text-xs sm:text-sm font-bold text-cyan-400 flex items-center space-x-1.5">
+          <span>➕</span><span>പുതിയ കോഴ്സ് പ്ലാൻ ചേർക്കുക (Add Custom Course Plan)</span>
+        </h4>
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
+          <div>
+            <label class="block text-[11px] text-slate-300 font-bold mb-1">കോഴ്സ് തിരഞ്ഞെടുക്കുക / ടൈപ്പ് ചെയ്യുക *</label>
+            <input type="text" id="newPlanName" list="defaultCoursePresets" placeholder="ഉദാ: LDC 2026, SCERT" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white">
+            <datalist id="defaultCoursePresets">
+              <option value="SCERT Special"></option>
+              <option value="LGS Complete"></option>
+              <option value="LDC Complete"></option>
+              <option value="DEGREE Level"></option>
+              <option value="LDC + LGS Combo"></option>
+              <option value="LDC + DEGREE Combo"></option>
+              <option value="ALL EXAMS PASS"></option>
+            </datalist>
+          </div>
+          <div>
+            <label class="block text-[11px] text-slate-300 font-bold mb-1">പ്ലാൻ ഐഡി (Unique ID) *</label>
+            <input type="text" id="newPlanId" placeholder="ഉദാ: ldc, scert, lgs" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-cyan-300 font-mono">
+          </div>
+          <div>
+            <label class="block text-[11px] text-slate-300 font-bold mb-1">ഫീസ് തുക (₹) *</label>
+            <input type="number" id="newPlanPrice" placeholder="ഉദാ: 149" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-emerald-400 font-bold font-mono">
+          </div>
+          <div>
+            <label class="block text-[11px] text-slate-300 font-bold mb-1">വാലിഡിറ്റി (ദിവസങ്ങളിൽ) *</label>
+            <input type="number" id="newPlanDays" placeholder="ഉദാ: 60" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-amber-300 font-bold font-mono">
           </div>
         </div>
-
-        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2">
-          <span class="text-xs font-bold text-cyan-400">🚀 Plan 2 (വലിയ പ്ലാൻ)</span>
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="text-[10px] text-slate-500">തുക (₹)</label>
-              <input type="number" id="admPlan2Price" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white" value="200">
-            </div>
-            <div>
-              <label class="text-[10px] text-slate-500">ദിവസങ്ങൾ</label>
-              <input type="number" id="admPlan2Days" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white" value="200">
-            </div>
-          </div>
+        <div class="flex justify-end pt-1">
+          <button onclick="addNewCoursePlan()" class="px-5 py-2.5 bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 text-slate-950 font-black rounded-xl text-xs transition shadow cursor-pointer">
+            ➕ ഈ പ്ലാൻ ചേർക്കുക
+          </button>
         </div>
       </div>
 
-      <div class="flex justify-end">
-        <button onclick="saveAdminPaymentSettings()" class="px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 text-slate-950 font-black rounded-xl text-xs shadow cursor-pointer">
-          സെറ്റിംഗ്സ് സേവ് ചെയ്യുക 💾
-        </button>
+      <!-- നിലവിലുള്ള കോഴ്സ് പ്ലാനുകളുടെ ലിസ്റ്റ് -->
+      <div class="space-y-3">
+        <h4 class="text-xs sm:text-sm font-bold text-white uppercase tracking-wider flex items-center space-x-2">
+          <span>📚</span><span>നിലവിലുള്ള കോഴ്സ് പ്ലാനുകൾ (Active Courses)</span>
+        </h4>
+        <div id="coursePlansListContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+          <p class="text-xs text-slate-500 col-span-3 text-center py-4">കോഴ്സുകൾ ലോഡ് ചെയ്യുന്നു...</p>
+        </div>
       </div>
 
       <!-- ================= 🎓 STUDENT VALIDITY DESK ================= -->
       <div class="pt-6 border-t border-slate-800 space-y-4">
         <div>
           <h4 class="text-sm font-bold text-white uppercase tracking-wider flex items-center space-x-2">
-            <span>🎓</span><span>വിദ്യാർത്ഥി വാലിഡിറ്റി ഡെസ്ക് (Student Validity Desk)</span>
+            <span>🎓</span><span>വിദ്യാർത്ഥി കോഴ്സ് അലോട്ട്മെന്റ് ഡെസ്ക് (Student Course Desk)</span>
           </h4>
-          <p class="text-xs text-slate-400 mt-0.5">ഫീസ് അടച്ച വിദ്യാർത്ഥികൾക്ക് ഇവിടെനിന്ന് നേരിട്ട് വാലിഡിറ്റി അൺലോക്ക് ചെയ്യാം.</p>
+          <p class="text-xs text-slate-400 mt-0.5">ഫീസ് അടച്ച വിദ്യാർത്ഥിക്ക് കോഴ്സും വാലിഡിറ്റിയും ഇവിടെനിന്ന് സെറ്റ് ചെയ്തു നൽകാം.</p>
         </div>
         
         <div class="flex flex-col sm:flex-row gap-2.5">
@@ -444,31 +461,38 @@
           </button>
         </div>
 
-        <!-- കുട്ടിയുടെ വിവരങ്ങളും അൺലോക്ക് ബട്ടണുകളും -->
+        <!-- കുട്ടിയുടെ വിവരങ്ങളും കോഴ്സ് അസൈൻ ചെയ്യാനുള്ള ഭാഗവും -->
         <div id="studentValidityResult" class="hidden bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-4 shadow-inner">
           <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2">
             <div>
               <span class="text-[10px] text-slate-500 uppercase font-mono block">വിദ്യാർത്ഥി</span>
               <h5 id="studResultName" class="text-sm font-bold text-white mt-0.5"></h5>
+              <span id="studActiveCourseBadge" class="text-[10px] font-mono text-cyan-400 block mt-0.5"></span>
             </div>
             <div>
               <span id="studResultExpiry" class="px-3 py-1 rounded-xl text-xs font-bold inline-block"></span>
             </div>
           </div>
-          <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-slate-800/80">
-            <button onclick="addStudentValidityDays(30)" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition shadow cursor-pointer">
-              +30 Days (₹50)
+          
+          <div class="flex flex-wrap items-center gap-3 pt-3 border-t border-slate-800/80">
+            <div class="flex items-center space-x-2">
+              <span class="text-xs text-slate-400 font-bold">കോഴ്സ് നൽകുക:</span>
+              <select id="assignCourseSelect" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-emerald-400 font-bold focus:outline-none">
+                <!-- ഡൈനാമിക് കോഴ്സുകൾ ഇവിടെ വരും -->
+              </select>
+              <button onclick="assignSelectedCourseToStudent()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition shadow cursor-pointer">
+                അൺലോക്ക് ചെയ്യുക 🚀
+              </button>
+            </div>
+
+            <button onclick="resetStudentDeviceLock()" class="px-4 py-2 bg-rose-600/80 hover:bg-rose-500 text-white rounded-xl text-xs font-bold transition shadow cursor-pointer">
+              🔄 Reset Device
             </button>
-            <button onclick="addStudentValidityDays(200)" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-xl text-xs font-bold transition shadow cursor-pointer">
-              +200 Days (₹200)
-            </button>
-            <button onclick="resetStudentDeviceLock()" class="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-bold transition shadow cursor-pointer">
-  🔄 Reset Device
-</button>
+
             <div class="flex items-center space-x-1.5 bg-slate-900 p-1 rounded-xl border border-slate-700">
               <input type="date" id="studCustomDate" class="bg-transparent px-2 py-1 text-xs text-white focus:outline-none">
               <button onclick="setStudentCustomDate()" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-bold transition cursor-pointer">
-                സെറ്റ് ചെയ്യുക
+                കസ്റ്റം തീയതി
               </button>
             </div>
           </div>
@@ -1053,12 +1077,14 @@
     const ONESIGNAL_APP_ID = "39db2070-7998-49fc-b624-28b368a1674a";
     const ONESIGNAL_REST_API_KEY = atob("b3NfdjJfYXBwX2hobnNhNGR6dGJlN3pucmVmY3p3cmlsaGprbGx0N3RjemprZTR1bnozbmZkaG4zMm80bHJ1NXl3b2N2dm83a2MzdWZ2bHZtYnQ0bG9kbDJvamN2c21udXd2NHE3bmg3c2tjYXJ5aXk=");
 
+    // 🌟 1. സംശയം ചോദിച്ച വിദ്യാർത്ഥിക്ക് മാത്രം ബാക്ക്ഗ്രൗണ്ട് പുഷ് അയക്കുന്നു (Updated v16 Endpoint)
     async function sendOneSignalPushToUser(phone, title, message) {
       const cleanPhone = String(phone).replace(/\D/g, '').slice(-10);
       try {
-        const response = await fetch("https://onesignal.com/api/v1/notifications", {
+        const response = await fetch("https://api.onesignal.com/notifications?c=push", {
           method: "POST",
           headers: {
+            "Accept": "application/json",
             "Content-Type": "application/json; charset=utf-8",
             "Authorization": `Key ${ONESIGNAL_REST_API_KEY}`
           },
@@ -1067,8 +1093,8 @@
             include_aliases: { external_id: [cleanPhone] },
             target_channel: "push",
             priority: 10,
-            headings: { en: title, ml: title },
-            contents: { en: message, ml: message },
+            headings: { en: title },
+            contents: { en: message },
             url: "https://subhash-kumar00.github.io/PSC-EXAMS/"
           })
         });
@@ -1077,20 +1103,23 @@
       }
     }
 
+    // 🌟 2. പുതിയ പരീക്ഷ വരുമ്പോൾ മുഴുവൻ വിദ്യാർത്ഥികൾക്കും ഒരുമിച്ച് പുഷ് അയക്കുന്നു
     async function sendOneSignalBroadcastPush(title, message) {
       try {
-        await fetch("https://onesignal.com/api/v1/notifications", {
+        await fetch("https://api.onesignal.com/notifications?c=push", {
           method: "POST",
           headers: {
+            "Accept": "application/json",
             "Content-Type": "application/json; charset=utf-8",
             "Authorization": `Key ${ONESIGNAL_REST_API_KEY}`
           },
           body: JSON.stringify({
             app_id: ONESIGNAL_APP_ID,
             included_segments: ["Total Subscriptions"],
+            target_channel: "push",
             priority: 10,
-            headings: { en: title, ml: title },
-            contents: { en: message, ml: message },
+            headings: { en: title },
+            contents: { en: message },
             url: "https://subhash-kumar00.github.io/PSC-EXAMS/"
           })
         });
@@ -1123,6 +1152,20 @@
     let currentGlobalTrialStatus = true;
     let activeSearchedPhone = null;
 
+    // 🌟 ഗ്ലോബൽ കോഴ്സ് പ്ലാനുകൾ സൂക്ഷിക്കുന്ന ഒബ്ജക്റ്റ്
+    let allCoursePlansCache = {};
+
+    // 🌟 ഡിഫോൾട്ടായി വേണ്ട 7 പ്രധാന കോഴ്സ് പ്ലാനുകൾ (SCERT, LGS, LDC, DEGREE, LDC+LGS, LDC+DEGREE, ALL EXAMS)
+    const DEFAULT_COURSES = {
+      "scert": { name: "SCERT Special", price: 99, days: 60, id: "scert" },
+      "lgs": { name: "LGS Complete", price: 149, days: 90, id: "lgs" },
+      "ldc": { name: "LDC Complete", price: 199, days: 120, id: "ldc" },
+      "degree": { name: "DEGREE Level", price: 249, days: 150, id: "degree" },
+      "ldc_lgs": { name: "LDC + LGS Combo", price: 299, days: 180, id: "ldc_lgs" },
+      "ldc_degree": { name: "LDC + DEGREE Combo", price: 349, days: 180, id: "ldc_degree" },
+      "all": { name: "ALL EXAMS PASS", price: 499, days: 365, id: "all" }
+    };
+
     document.getElementById('adminPinInput').addEventListener('keyup', (e) => {
       if (e.key === 'Enter') verifyPin();
     });
@@ -1132,7 +1175,7 @@
     });
 
     function cleanTitle(str) {
-      return String(str || '').replace(/[\s\-_,.:;()\/\\|\[\]+&]+/g, '').toLowerCase();
+      return String(str || '').replace(/[\s\-_,.:;()\/\|\[\]+&]+/g, '').toLowerCase();
     }
 
     function convertGoogleDocToPdfLink(inputId) {
@@ -1303,7 +1346,7 @@
       }
     }
 
-    // 🌟 സബ്സ്ക്രിപ്ഷൻ വിവരങ്ങൾ കൈകാര്യം ചെയ്യുന്നു
+    // 🌟 1. സബ്സ്ക്രിപ്ഷൻ വിവരങ്ങളും കോഴ്സുകളും ഫയർബേസിൽ നിന്ന് ലോഡ് ചെയ്യുന്നു
     async function loadSubscriptionConfig() {
       try {
         const res = await fetch(`${FIREBASE_DB_URL}/portal_config.json`);
@@ -1316,16 +1359,19 @@
         document.getElementById('admWhatsapp').value = cfg.whatsapp_number || "";
         document.getElementById('admQrUrl').value = cfg.qr_image_url || "";
 
-        if (cfg.plans) {
-          if (cfg.plans.plan_1) {
-            document.getElementById('admPlan1Price').value = cfg.plans.plan_1.price || 50;
-            document.getElementById('admPlan1Days').value = cfg.plans.plan_1.days || 30;
-          }
-          if (cfg.plans.plan_2) {
-            document.getElementById('admPlan2Price').value = cfg.plans.plan_2.price || 200;
-            document.getElementById('admPlan2Days').value = cfg.plans.plan_2.days || 200;
-          }
+        // ഫയർബേസിൽ കോഴ്സ് പ്ലാനുകൾ ഉണ്ടെങ്കിൽ അത് എടുക്കുന്നു, ഇല്ലെങ്കിൽ ഡിഫോൾട്ട് കോഴ്സുകൾ ആദ്യമായി സേവ് ചെയ്യുന്നു
+        if (cfg.course_plans && Object.keys(cfg.course_plans).length > 0) {
+          allCoursePlansCache = cfg.course_plans;
+        } else {
+          allCoursePlansCache = DEFAULT_COURSES;
+          fetch(`${FIREBASE_DB_URL}/portal_config/course_plans.json`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(DEFAULT_COURSES)
+          });
         }
+
+        renderCoursePlansList();
       } catch(e) {
         console.log("Config load error:", e);
       }
@@ -1353,23 +1399,125 @@
       alert(currentGlobalTrialStatus ? "എല്ലാവർക്കും പരീക്ഷകൾ സൗജന്യമാക്കി (Global Trial Active)!" : "സബ്സ്ക്രിപ്ഷൻ മോഡിലേക്ക് മാറ്റി (Paid Mode Active)!");
     }
 
+    // 🌟 2. കോഴ്സ് പ്ലാനുകൾ കാർഡുകളായി പ്രദർശിപ്പിക്കുന്നു (എഡിറ്റ് & ഡിലീറ്റ് ഓപ്ഷനുകളോടെ)
+    function renderCoursePlansList() {
+      const container = document.getElementById('coursePlansListContainer');
+      const selectDropdown = document.getElementById('assignCourseSelect');
+      container.innerHTML = '';
+      selectDropdown.innerHTML = '';
+
+      const keys = Object.keys(allCoursePlansCache);
+      if (keys.length === 0) {
+        container.innerHTML = '<p class="text-xs text-slate-500 col-span-3 text-center py-4">കോഴ്സ് പ്ലാനുകൾ ലഭ്യമല്ല.</p>';
+        return;
+      }
+
+      keys.forEach(k => {
+        const p = allCoursePlansCache[k];
+        
+        // കാർഡ് നിർമ്മാണം
+        const card = document.createElement('div');
+        card.className = "bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2 relative shadow";
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-black text-amber-400 uppercase tracking-wide truncate max-w-[180px]">${p.name}</span>
+            <button onclick="deleteCoursePlan('${k}')" class="text-rose-400 hover:text-rose-300 text-xs font-bold p-1" title="ഡിലീറ്റ് ചെയ്യുക">✕</button>
+          </div>
+          <div class="flex items-center space-x-2 text-xs font-mono">
+            <span class="text-slate-400 text-[11px]">ID: <strong class="text-cyan-400">${p.id || k}</strong></span>
+          </div>
+          <div class="grid grid-cols-2 gap-2 pt-1 border-t border-slate-900">
+            <div>
+              <label class="text-[10px] text-slate-500 block font-semibold">ഫീസ് (₹)</label>
+              <input type="number" id="price_${k}" value="${p.price}" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-emerald-400 font-bold font-mono">
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-500 block font-semibold">വാലിഡിറ്റി (Days)</label>
+              <input type="number" id="days_${k}" value="${p.days}" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-amber-300 font-bold font-mono">
+            </div>
+          </div>
+          <button onclick="updateSingleCoursePlan('${k}')" class="w-full mt-2 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-[11px] font-bold transition cursor-pointer">
+            മാറ്റങ്ങൾ സേവ് ചെയ്യുക 💾
+          </button>
+        `;
+        container.appendChild(card);
+
+        // സ്റ്റുഡന്റ് വാലിഡിറ്റി ഡെസ്കിലെ ഡ്രോപ്ഡൗണിലേക്ക് ചേർക്കുന്നു
+        const opt = document.createElement('option');
+        opt.value = k;
+        opt.textContent = `${p.name} (₹${p.price} - ${p.days} Days)`;
+        selectDropdown.appendChild(opt);
+      });
+    }
+
+    // 🌟 3. പുതിയ കോഴ്സ് പ്ലാൻ ചേർക്കുന്നു
+    async function addNewCoursePlan() {
+      const name = document.getElementById('newPlanName').value.trim();
+      let id = document.getElementById('newPlanId').value.trim().toLowerCase().replace(/[\s\-_]+/g, '_');
+      const price = Number(document.getElementById('newPlanPrice').value);
+      const days = Number(document.getElementById('newPlanDays').value);
+
+      if (!name || isNaN(price) || isNaN(days) || price <= 0 || days <= 0) {
+        return alert("ദയവായി സാധുവായ കോഴ്സിന്റെ പേര്, ഫീസ്, ദിവസങ്ങൾ എന്നിവ നൽകുക!");
+      }
+      if (!id) id = name.toLowerCase().replace(/[\s\-_]+/g, '_');
+
+      allCoursePlansCache[id] = { name, id, price, days };
+
+      await fetch(`${FIREBASE_DB_URL}/portal_config/course_plans/${id}.json`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(allCoursePlansCache[id])
+      });
+
+      document.getElementById('newPlanName').value = '';
+      document.getElementById('newPlanId').value = '';
+      document.getElementById('newPlanPrice').value = '';
+      document.getElementById('newPlanDays').value = '';
+
+      alert(`✅ "${name}" കോഴ്സ് പ്ലാൻ വിജയകരമായി ചേർത്തു!`);
+      renderCoursePlansList();
+    }
+
+    // 🌟 4. നിലവിലുള്ള പ്ലാനിലെ ഫീസോ വാലിഡിറ്റിയോ എഡിറ്റ് ചെയ്യുന്നു
+    async function updateSingleCoursePlan(key) {
+      const pInput = document.getElementById(`price_${key}`);
+      const dInput = document.getElementById(`days_${key}`);
+      const newPrice = Number(pInput.value);
+      const newDays = Number(dInput.value);
+
+      if (!allCoursePlansCache[key]) return;
+      allCoursePlansCache[key].price = newPrice;
+      allCoursePlansCache[key].days = newDays;
+
+      await fetch(`${FIREBASE_DB_URL}/portal_config/course_plans/${key}.json`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ price: newPrice, days: newDays })
+      });
+
+      alert(`✅ "${allCoursePlansCache[key].name}" പ്ലാൻ അപ്ഡേറ്റ് ചെയ്തു!`);
+    }
+
+    // 🌟 5. കോഴ്സ് പ്ലാൻ ഡിലീറ്റ് ചെയ്യുന്നു
+    async function deleteCoursePlan(key) {
+      if (!confirm(`"${allCoursePlansCache[key]?.name}" കോഴ്സ് നീക്കം ചെയ്യണമെന്ന് ഉറപ്പാണോ?`)) return;
+
+      delete allCoursePlansCache[key];
+      await fetch(`${FIREBASE_DB_URL}/portal_config/course_plans/${key}.json`, {
+        method: 'DELETE'
+      });
+
+      renderCoursePlansList();
+      alert("കോഴ്സ് പ്ലാൻ നീക്കം ചെയ്തു!");
+    }
+
+    // 🌟 6. UPI & QR സെറ്റിംഗ്സ് സേവ് ചെയ്യുന്നു
     async function saveAdminPaymentSettings() {
       const data = {
         upi_id: document.getElementById('admUpiId').value.trim(),
         whatsapp_number: document.getElementById('admWhatsapp').value.trim(),
-        qr_image_url: document.getElementById('admQrUrl').value.trim(),
-        plans: {
-          plan_1: {
-            title: `${document.getElementById('admPlan1Days').value} Days Access`,
-            price: Number(document.getElementById('admPlan1Price').value),
-            days: Number(document.getElementById('admPlan1Days').value)
-          },
-          plan_2: {
-            title: `${document.getElementById('admPlan2Days').value} Days Access`,
-            price: Number(document.getElementById('admPlan2Price').value),
-            days: Number(document.getElementById('admPlan2Days').value)
-          }
-        }
+        qr_image_url: document.getElementById('admQrUrl').value.trim()
       };
 
       await fetch(`${FIREBASE_DB_URL}/portal_config.json`, {
@@ -1377,12 +1525,14 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
-      alert("സബ്സ്ക്രിപ്ഷൻ വിവരങ്ങൾ വിജയകരമായി സേവ് ചെയ്തു!");
+      alert("UPI വിവരങ്ങൾ വിജയകരമായി സേവ് ചെയ്തു!");
     }
 
+    // 🌟 7. വിദ്യാർത്ഥിയുടെ വിവരങ്ങളും വാലിഡിറ്റിയും പരിശോധിക്കുന്നു
     async function checkStudentValidity() {
-      const phone = document.getElementById('searchStudentPhone').value.trim();
-      if (!phone) return alert("ദയവായി ഫോൺ നമ്പർ നൽകുക!");
+      const phoneInput = document.getElementById('searchStudentPhone').value.trim();
+      const phone = extractPhone({ phone: phoneInput });
+      if (!phone || phone.length < 10) return alert("ദയവായി 10 അക്ക മൊബൈൽ നമ്പർ നൽകുക!");
       activeSearchedPhone = phone;
 
       const res = await fetch(`${FIREBASE_DB_URL}/users/${phone}.json`);
@@ -1391,6 +1541,7 @@
       const box = document.getElementById('studentValidityResult');
       const nameEl = document.getElementById('studResultName');
       const expEl = document.getElementById('studResultExpiry');
+      const courseBadge = document.getElementById('studActiveCourseBadge');
 
       if (!user) {
         alert("ഈ നമ്പറിൽ രജിസ്റ്റർ ചെയ്ത വിദ്യാർത്ഥിയെ കണ്ടെത്തിയില്ല!");
@@ -1402,7 +1553,11 @@
       nameEl.textContent = `${user.Official_Name || user.Name || 'Student'} (${phone})`;
 
       const today = new Date().toISOString().split('T')[0];
-      const expiry = user.valid_until || "ഇതുവരെ വാലിഡിറ്റി നൽകിയിട്ടില്ല";
+      const expiry = user.valid_until || "വാലിഡിറ്റി നൽകിയിട്ടില്ല";
+      const courseId = user.purchased_course || "all";
+      const courseMeta = allCoursePlansCache[courseId]?.name || courseId.toUpperCase();
+
+      courseBadge.textContent = `നിലവിലെ കോഴ്സ്: ${courseMeta}`;
 
       if (user.valid_until && user.valid_until >= today) {
         expEl.textContent = `വാലിഡിറ്റി: ${expiry} വരെ (Active)`;
@@ -1412,20 +1567,15 @@
         expEl.className = "px-3 py-1 rounded-xl text-xs font-bold bg-rose-950 text-rose-400 border border-rose-800";
       }
     }
-    // അഡ്മിൻ പാനലിൽ നിന്ന് കുട്ടിയുടെ ഡിവൈസ് ലോക്ക് മാറ്റുന്നു
-async function resetStudentDeviceLock() {
-  if (!activeSearchedPhone) return alert("ദയവായി വിദ്യാർത്ഥിയുടെ നമ്പർ പരിശോധിക്കുക!");
-  if (!confirm(`${activeSearchedPhone} എന്ന വിദ്യാർത്ഥിയുടെ രജിസ്റ്റർ ചെയ്ത ഡിവൈസുകൾ റീസെറ്റ് ചെയ്യണമെന്നുറപ്പാണോ?`)) return;
 
-  await fetch(`${FIREBASE_DB_URL}/users/${activeSearchedPhone}/bound_devices.json`, {
-    method: 'DELETE'
-  });
+    // 🌟 8. തിരഞ്ഞെടുക്കുന്ന കോഴ്സും വാലിഡിറ്റിയും വിദ്യാർത്ഥിക്ക് അസൈൻ ചെയ്യുന്നു
+    async function assignSelectedCourseToStudent() {
+      if (!activeSearchedPhone) return alert("ദയവായി വിദ്യാർത്ഥിയുടെ നമ്പർ പരിശോധിക്കുക!");
+      const selectedKey = document.getElementById('assignCourseSelect').value;
+      const plan = allCoursePlansCache[selectedKey];
+      if (!plan) return alert("കോഴ്സ് പ്ലാൻ കണ്ടെത്താൻ സാധിച്ചില്ല!");
 
-  alert("ഡിവൈസ് ലോക്ക് വിജയകരമായി റീസെറ്റ് ചെയ്തു! കുട്ടിക്ക് പുതിയ ഫോണിലോ കമ്പ്യൂട്ടറിലോ ലോഗിൻ ചെയ്യാം.");
-}
-
-    async function addStudentValidityDays(daysToAdd) {
-      if (!activeSearchedPhone) return;
+      const daysToAdd = plan.days || 30;
       const res = await fetch(`${FIREBASE_DB_URL}/users/${activeSearchedPhone}.json`);
       const user = await res.json() || {};
 
@@ -1440,13 +1590,18 @@ async function resetStudentDeviceLock() {
       await fetch(`${FIREBASE_DB_URL}/users/${activeSearchedPhone}.json`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ valid_until: newDateStr, is_premium: true })
+        body: JSON.stringify({
+          valid_until: newDateStr,
+          is_premium: true,
+          purchased_course: selectedKey
+        })
       });
 
-      alert(`വിജയകരം! ${activeSearchedPhone} എന്ന നമ്പറിലേക്ക് ${newDateStr} വരെ വാലിഡിറ്റി നീട്ടി നൽകി.`);
+      alert(`🎉 വിജയം! ${activeSearchedPhone} എന്ന വിദ്യാർത്ഥിക്ക് "${plan.name}" കോഴ്സും ${newDateStr} വരെയുള്ള വാലിഡിറ്റിയും നൽകി!`);
       checkStudentValidity();
     }
 
+    // 🌟 9. കസ്റ്റം തീയതി സെറ്റ് ചെയ്യുന്നു
     async function setStudentCustomDate() {
       const customDate = document.getElementById('studCustomDate').value;
       if (!customDate || !activeSearchedPhone) return alert("ദയവായി ഒരു തീയതി തിരഞ്ഞെടുക്കുക!");
@@ -1459,6 +1614,18 @@ async function resetStudentDeviceLock() {
 
       alert(`വിജയകരം! വാലിഡിറ്റി ${customDate} വരെ സെറ്റ് ചെയ്തു.`);
       checkStudentValidity();
+    }
+
+    // 🌟 10. ഡിവൈസ് ലോക്ക് റീസെറ്റ് ചെയ്യുന്നു
+    async function resetStudentDeviceLock() {
+      if (!activeSearchedPhone) return alert("ദയവായി വിദ്യാർത്ഥിയുടെ നമ്പർ പരിശോധിക്കുക!");
+      if (!confirm(`${activeSearchedPhone} എന്ന വിദ്യാർത്ഥിയുടെ രജിസ്റ്റർ ചെയ്ത ഡിവൈസുകൾ റീസെറ്റ് ചെയ്യണമെന്നുറപ്പാണോ?`)) return;
+
+      await fetch(`${FIREBASE_DB_URL}/users/${activeSearchedPhone}/bound_devices.json`, {
+        method: 'DELETE'
+      });
+
+      alert("ഡിവൈസ് ലോക്ക് വിജയകരമായി റീസെറ്റ് ചെയ്തു! കുട്ടിക്ക് പുതിയ ഫോണിലോ കമ്പ്യൂട്ടറിലോ ലോഗിൻ ചെയ്യാം.");
     }
 
     // ANALYTICS & INSIGHTS
@@ -2440,8 +2607,8 @@ async function resetStudentDeviceLock() {
     }
 
     // DASHBOARD DATA
-    // ✅ പരിഹരിച്ച DASHBOARD DATA ഫംഗ്ഷൻ (യഥാർത്ഥ ഹിസ്റ്ററിയിൽ നിന്ന് കൗണ്ട് എടുക്കുന്നു)
-   async function loadDashboardData() {
+    // ✅ പരിഹരിച്ച DASHBOARD DATA ഫംഗ്ഷൻ (യഥാർത്ഥ ഹിസ്റ്ററിയിൽ നിന്ന് കൗണ്ട് എടുക്കുന്നു, എണ്ണം കുറയില്ല)
+    async function loadDashboardData() {
       try {
         const [usersRes, liveRanksRes, ranksRes] = await Promise.all([
           fetch(`${FIREBASE_DB_URL}/users.json`).then(r => r.json()).catch(() => null),
@@ -2511,6 +2678,7 @@ async function resetStudentDeviceLock() {
         console.log("Dashboard fetch error:", err);
       }
     }
+
     function renderSummaryTable(list) {
       const tbody = document.getElementById('summaryTableBody');
       tbody.innerHTML = "";
@@ -2868,3 +3036,4 @@ async function resetStudentDeviceLock() {
   </script>
 </body>
 </html>
+
