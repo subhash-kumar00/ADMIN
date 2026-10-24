@@ -104,24 +104,7 @@
               <span>പ്രധാന കോഴ്സുകൾ (Tick Courses) *</span>
               <span class="text-[10px] text-slate-400 font-normal">ആവശ്യമുള്ളവയിൽ ടിക്ക് ചെയ്യുക</span>
             </label>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-950 p-2 rounded-xl border border-cyan-500/40">
-              <label class="flex items-center space-x-1.5 p-1 rounded-lg hover:bg-slate-900 cursor-pointer text-xs">
-                <input type="checkbox" name="editCourseCheckbox" value="SCERT" class="rounded accent-cyan-500 w-4 h-4 cursor-pointer">
-                <span class="text-amber-300 font-bold">📖 SCERT</span>
-              </label>
-              <label class="flex items-center space-x-1.5 p-1 rounded-lg hover:bg-slate-900 cursor-pointer text-xs">
-                <input type="checkbox" name="editCourseCheckbox" value="LDC" class="rounded accent-cyan-500 w-4 h-4 cursor-pointer">
-                <span class="text-emerald-400 font-bold">🏛️ LDC</span>
-              </label>
-              <label class="flex items-center space-x-1.5 p-1 rounded-lg hover:bg-slate-900 cursor-pointer text-xs">
-                <input type="checkbox" name="editCourseCheckbox" value="LGS" class="rounded accent-cyan-500 w-4 h-4 cursor-pointer">
-                <span class="text-cyan-400 font-bold">🛡️ LGS</span>
-              </label>
-              <label class="flex items-center space-x-1.5 p-1 rounded-lg hover:bg-slate-900 cursor-pointer text-xs">
-                <input type="checkbox" name="editCourseCheckbox" value="DEGREE" class="rounded accent-cyan-500 w-4 h-4 cursor-pointer">
-                <span class="text-purple-400 font-bold">🎓 Degree</span>
-              </label>
-            </div>
+            <div id="editExamCourseCheckboxes" class="flex flex-wrap gap-2 bg-slate-950 p-2.5 rounded-xl border border-cyan-500/40"></div>
           </div>
           <div>
             <label class="block text-[11px] text-amber-400 font-bold mb-1">ആക്സസ് ടൈപ്പ് *</label>
@@ -677,7 +660,52 @@
           </div>
         </div>
       </div>
+<!-- 🌟 പുതിയ പ്രധാന ഫോൾഡറുകൾ (FREE, SCERT etc.) ആഡ് ചെയ്യാനുള്ള ബോക്സ് -->
+      <div class="bg-slate-950 border border-emerald-500/40 p-4 sm:p-5 rounded-3xl space-y-3.5 shadow-xl">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+          <div class="flex items-center space-x-2">
+            <span class="text-base">🗂️</span>
+            <div>
+              <h4 class="text-xs sm:text-sm font-bold text-white">പ്രധാന പരീക്ഷാ ഫോൾഡറുകൾ (Main Folders)</h4>
+              <p class="text-[10px] text-slate-400">FREE, SCERT, LDC കൂടാതെ ഇഷ്ടമുള്ള ഏത് ഫോൾഡറും ഇവിടെ ഉണ്ടാക്കാം.</p>
+            </div>
+          </div>
+          <button onclick="toggleMainFolderManager()" class="text-xs text-emerald-400 font-bold hover:underline cursor-pointer">
+            <span id="btnToggleFolderMgr">➕ പുതിയ ഫോൾഡർ ചേർക്കുക</span>
+          </button>
+        </div>
 
+        <!-- പുതിയ ഫോൾഡർ ചേർക്കാനുള്ള ഫോം -->
+        <div id="newFolderAddArea" class="hidden bg-slate-900/80 p-3.5 rounded-2xl border border-slate-800 space-y-3">
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-2.5 text-xs">
+            <div>
+              <label class="block text-[10px] text-slate-300 font-bold mb-1">ഫോൾഡർ കോഡ് (Code) *</label>
+              <input type="text" id="newFolderIdInput" placeholder="ഉദാ: FREE, LP_UP" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-emerald-400 font-mono font-bold uppercase focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-300 font-bold mb-1">ഡിസ്പ്ലേ പേര് (Title) *</label>
+              <input type="text" id="newFolderTitleInput" placeholder="ഉദാ: സൗജന്യ പരീക്ഷകൾ (FREE)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-300 font-bold mb-1">ഐക്കൺ (Emoji Icon)</label>
+              <input type="text" id="newFolderIconInput" placeholder="ഉദാ: 🟢, 🎁, 📚" value="🟢" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white text-center focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-300 font-bold mb-1">വിവരണം (Subtitle)</label>
+              <input type="text" id="newFolderSubInput" placeholder="ഉദാ: All Free Model Exams" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-300 focus:outline-none">
+            </div>
+          </div>
+          <div class="flex justify-end">
+            <button onclick="saveNewMainFolderToFirebase()" class="px-5 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-xl text-xs transition cursor-pointer shadow">
+              💾 ഈ ഫോൾഡർ സേവ് ചെയ്യുക
+            </button>
+          </div>
+        </div>
+
+        <!-- ഉണ്ടാക്കിയ ഫോൾഡറുകൾ കാണിക്കുന്ന സ്ഥലം -->
+        <div id="activeMainFoldersPills" class="flex flex-wrap gap-2 pt-1"></div>
+      </div>
+      
       <!-- ഓൾ-ഇൻ-വൺ എക്സാം & ചോദ്യങ്ങൾ അപ്‌ലോഡർ -->
       <div class="bg-slate-950 border-2 border-cyan-500/40 p-4 sm:p-6 rounded-3xl space-y-4 shadow-xl">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -706,24 +734,7 @@
                 <span>2. ഏതെല്ലാം പ്രധാന കോഴ്സുകളിൽ വേണം? *</span>
                 <span class="text-[10px] text-slate-400 font-normal">ആവശ്യമുള്ളവയിൽ ടിക്ക് ചെയ്യുക</span>
               </label>
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-900 p-2 rounded-xl border border-emerald-500/50">
-                <label class="flex items-center space-x-1.5 p-1 rounded-lg hover:bg-slate-950 cursor-pointer text-xs">
-                  <input type="checkbox" name="newCourseCheckbox" value="SCERT" class="rounded accent-emerald-500 w-4 h-4 cursor-pointer">
-                  <span class="text-amber-300 font-bold">📖 SCERT</span>
-                </label>
-                <label class="flex items-center space-x-1.5 p-1 rounded-lg hover:bg-slate-950 cursor-pointer text-xs">
-                  <input type="checkbox" name="newCourseCheckbox" value="LDC" checked class="rounded accent-emerald-500 w-4 h-4 cursor-pointer">
-                  <span class="text-emerald-400 font-bold">🏛️ LDC</span>
-                </label>
-                <label class="flex items-center space-x-1.5 p-1 rounded-lg hover:bg-slate-950 cursor-pointer text-xs">
-                  <input type="checkbox" name="newCourseCheckbox" value="LGS" checked class="rounded accent-emerald-500 w-4 h-4 cursor-pointer">
-                  <span class="text-cyan-400 font-bold">🛡️ LGS</span>
-                </label>
-                <label class="flex items-center space-x-1.5 p-1 rounded-lg hover:bg-slate-950 cursor-pointer text-xs">
-                  <input type="checkbox" name="newCourseCheckbox" value="DEGREE" class="rounded accent-emerald-500 w-4 h-4 cursor-pointer">
-                  <span class="text-purple-400 font-bold">🎓 Degree</span>
-                </label>
-              </div>
+              <div id="newExamCourseCheckboxes" class="flex flex-wrap gap-2 bg-slate-900 p-2.5 rounded-xl border border-emerald-500/50"></div>
             </div>
 
             <div>
@@ -1270,7 +1281,17 @@
 
     document.getElementById('pdfLogoStudent').src = GITHUB_LOGO_URL;
     document.getElementById('pdfLogoRank').src = GITHUB_LOGO_URL;
+// 🌟 സിസ്റ്റത്തിലെ ഡിഫോൾട്ട് ഫോൾഡറുകൾ (FREE ഉൾപ്പെടെ)
+    const DEFAULT_SYSTEM_FOLDERS = [
+      { id: 'SCERT', title: 'SCERT Special', icon: '📖', subtitle: 'പാഠപുസ്തക ചോദ്യങ്ങൾ' },
+      { id: 'LDC', title: 'LDC (എൽ.ഡി.സി)', icon: '🏛️', subtitle: 'Lower Division Clerk' },
+      { id: 'LGS', title: 'LGS (എൽ.ജി.എസ്)', icon: '🛡️', subtitle: 'Last Grade Servants' },
+      { id: 'DEGREE', title: 'Degree Level', icon: '🎓', subtitle: 'Degree Prelims & Mains' },
+      { id: 'FREE', title: 'സൗജന്യ പരീക്ഷകൾ (FREE)', icon: '🟢', subtitle: 'Free Model Exams' }
+    ];
 
+    let allConfiguredMainFolders = [...DEFAULT_SYSTEM_FOLDERS];
+    
     let allCandidatesCache = [];
     let currentStudentData = null;
     let currentSelectedExamData = null;
@@ -1443,6 +1464,7 @@
         loadReportedQuestions();
         loadStudentChatsAdmin(false);
         loadSubscriptionConfig();
+        loadMainExamFoldersConfig();
 
         setInterval(() => { loadStudentChatsAdmin(false); }, 12000);
       } else {
@@ -2079,7 +2101,128 @@
     function sortExamsNewestFirst(exams) {
       return Array.isArray(exams) ? exams.slice().reverse() : [];
     }
+function toggleMainFolderManager() {
+      const area = document.getElementById('newFolderAddArea');
+      area.classList.toggle('hidden');
+    }
 
+    // 🌟 ഫയർബേസിൽ നിന്ന് ഫോൾഡറുകൾ ലോഡ് ചെയ്യുന്നു
+    async function loadMainExamFoldersConfig() {
+      try {
+        const res = await fetch(`${FIREBASE_DB_URL}/portal_config/main_folders.json`);
+        const data = await res.json();
+        if (data && Array.isArray(data) && data.length > 0) {
+          allConfiguredMainFolders = data;
+        } else {
+          allConfiguredMainFolders = DEFAULT_SYSTEM_FOLDERS;
+          fetch(`${FIREBASE_DB_URL}/portal_config/main_folders.json`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(DEFAULT_SYSTEM_FOLDERS)
+          });
+        }
+        renderMainFolderPills();
+        renderExamCourseCheckboxes('newExamCourseCheckboxes', 'newCourseCheckbox', ['LDC', 'LGS']);
+        updateTableFilterDropdown();
+      } catch(e) {
+        console.error("Error loading folders:", e);
+      }
+    }
+
+    // 🌟 ഫോൾഡർ ടാഗുകൾ കാണിക്കുന്നു (ഡിലീറ്റ് ബട്ടൺ സഹിതം)
+    function renderMainFolderPills() {
+      const container = document.getElementById('activeMainFoldersPills');
+      if (!container) return;
+      container.innerHTML = '';
+
+      allConfiguredMainFolders.forEach((f, idx) => {
+        const pill = document.createElement('div');
+        pill.className = "flex items-center space-x-1.5 bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-xs font-bold text-white shadow";
+        pill.innerHTML = `
+          <span>${f.icon || '📁'}</span>
+          <span>${f.title}</span>
+          <span class="text-[10px] text-cyan-400 font-mono">(${f.id})</span>
+          ${f.id !== 'LDC' && f.id !== 'SCERT' ? `<button onclick="deleteMainFolder(${idx})" class="text-rose-400 hover:text-rose-300 ml-1 text-xs font-bold cursor-pointer">✕</button>` : ''}
+        `;
+        container.appendChild(pill);
+      });
+    }
+
+    // 🌟 ചെക്ക്ബോക്സുകൾ ഡൈനാമിക് ആയി ഉണ്ടാക്കുന്നു
+    function renderExamCourseCheckboxes(containerId, inputName, selectedList = []) {
+      const box = document.getElementById(containerId);
+      if (!box) return;
+      box.innerHTML = '';
+
+      allConfiguredMainFolders.forEach(f => {
+        const isChecked = selectedList.includes(f.id) || selectedList.some(s => String(s).toUpperCase() === f.id.toUpperCase());
+        const label = document.createElement('label');
+        label.className = "flex items-center space-x-1.5 p-1.5 rounded-lg bg-slate-950 border border-slate-800 hover:border-slate-700 cursor-pointer text-xs";
+        label.innerHTML = `
+          <input type="checkbox" name="${inputName}" value="${f.id}" ${isChecked ? 'checked' : ''} class="rounded accent-emerald-500 w-4 h-4 cursor-pointer">
+          <span class="text-slate-200 font-bold">${f.icon || '📁'} ${f.id}</span>
+        `;
+        box.appendChild(label);
+      });
+    }
+
+    // 🌟 ടേബിൾ ഫിൽട്ടറിലേക്ക് പുതിയ ഫോൾഡറുകൾ നൽകുന്നു
+    function updateTableFilterDropdown() {
+      const select = document.getElementById('filterMainFolderSelect');
+      if (!select) return;
+      select.innerHTML = '<option value="ALL_FILTER">എല്ലാ ഫോൾഡറുകളും</option>';
+      allConfiguredMainFolders.forEach(f => {
+        const opt = document.createElement('option');
+        opt.value = f.id;
+        opt.textContent = `${f.icon || '📁'} ${f.title} മാത്രം`;
+        select.appendChild(opt);
+      });
+    }
+
+    // 🌟 പുതിയ ഫോൾഡർ സേവ് ചെയ്യുന്നു
+    async function saveNewMainFolderToFirebase() {
+      const id = document.getElementById('newFolderIdInput').value.trim().toUpperCase().replace(/[\s\-_]+/g, '_');
+      const title = document.getElementById('newFolderTitleInput').value.trim();
+      const icon = document.getElementById('newFolderIconInput').value.trim() || '📁';
+      const sub = document.getElementById('newFolderSubInput').value.trim();
+
+      if (!id || !title) return alert("ദയവായി ഫോൾഡർ കോഡും പേരും നൽകുക!");
+
+      if (allConfiguredMainFolders.some(f => f.id === id)) {
+        return alert("ഈ കോഡിൽ ഇതിനകം ഒരു ഫോൾഡർ നിലവിലുണ്ട്!");
+      }
+
+      allConfiguredMainFolders.push({ id, title, icon, subtitle: sub });
+
+      await fetch(`${FIREBASE_DB_URL}/portal_config/main_folders.json`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(allConfiguredMainFolders)
+      });
+
+      document.getElementById('newFolderIdInput').value = '';
+      document.getElementById('newFolderTitleInput').value = '';
+      document.getElementById('newFolderSubInput').value = '';
+      toggleMainFolderManager();
+
+      alert(`✅ "${title}" (${id}) ഫോൾഡർ വിജയകരമായി ചേർത്തു!`);
+      loadMainExamFoldersConfig();
+    }
+
+    // 🌟 ഫോൾഡർ ഡിലീറ്റ് ചെയ്യുന്നു
+    async function deleteMainFolder(idx) {
+      const target = allConfiguredMainFolders[idx];
+      if (!confirm(`"${target.title}" ഫോൾഡർ നീക്കം ചെയ്യണമെന്ന് ഉറപ്പാണോ?`)) return;
+
+      allConfiguredMainFolders.splice(idx, 1);
+      await fetch(`${FIREBASE_DB_URL}/portal_config/main_folders.json`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(allConfiguredMainFolders)
+      });
+
+      loadMainExamFoldersConfig();
+    }
     function toggleNewExamForm() {
       const form = document.getElementById('addNewExamForm');
       form.classList.toggle('hidden');
@@ -2330,19 +2473,15 @@
             </div>
           </td>
           <td class="p-2.5 text-center whitespace-nowrap">
-            <div class="flex flex-wrap gap-1 justify-center max-w-[190px]" id="rowFolders_${cleanCtrlKey}">
-              <label class="cursor-pointer text-[10px] px-1.5 py-0.5 rounded border transition select-none ${currentMainFolder.includes('SCERT') ? 'bg-amber-950/80 text-amber-300 border-amber-500/60 font-bold' : 'bg-slate-950 text-slate-500 border-slate-800'}" onclick="toggleRowFolderPill(this)">
-                <input type="checkbox" value="SCERT" ${currentMainFolder.includes('SCERT') ? 'checked' : ''} class="hidden">📖 SCERT
-              </label>
-              <label class="cursor-pointer text-[10px] px-1.5 py-0.5 rounded border transition select-none ${currentMainFolder.includes('LDC') ? 'bg-emerald-950/80 text-emerald-300 border-emerald-500/60 font-bold' : 'bg-slate-950 text-slate-500 border-slate-800'}" onclick="toggleRowFolderPill(this)">
-                <input type="checkbox" value="LDC" ${currentMainFolder.includes('LDC') ? 'checked' : ''} class="hidden">🏛️ LDC
-              </label>
-              <label class="cursor-pointer text-[10px] px-1.5 py-0.5 rounded border transition select-none ${currentMainFolder.includes('LGS') ? 'bg-cyan-950/80 text-cyan-300 border-cyan-500/60 font-bold' : 'bg-slate-950 text-slate-500 border-slate-800'}" onclick="toggleRowFolderPill(this)">
-                <input type="checkbox" value="LGS" ${currentMainFolder.includes('LGS') ? 'checked' : ''} class="hidden">🛡️ LGS
-              </label>
-              <label class="cursor-pointer text-[10px] px-1.5 py-0.5 rounded border transition select-none ${currentMainFolder.includes('DEGREE') ? 'bg-purple-950/80 text-purple-300 border-purple-500/60 font-bold' : 'bg-slate-950 text-slate-500 border-slate-800'}" onclick="toggleRowFolderPill(this)">
-                <input type="checkbox" value="DEGREE" ${currentMainFolder.includes('DEGREE') ? 'checked' : ''} class="hidden">🎓 Degree
-              </label>
+            <div class="flex flex-wrap gap-1 justify-center max-w-[210px]" id="rowFolders_${cleanCtrlKey}">
+              ${allConfiguredMainFolders.map(f => {
+                const isChecked = currentMainFolder.includes(f.id);
+                return `
+                  <label class="cursor-pointer text-[10px] px-1.5 py-0.5 rounded border transition select-none ${isChecked ? 'bg-emerald-950/80 text-emerald-300 border-emerald-500/60 font-bold' : 'bg-slate-950 text-slate-500 border-slate-800'}" onclick="toggleRowFolderPill(this)">
+                    <input type="checkbox" value="${f.id}" ${isChecked ? 'checked' : ''} class="hidden">${f.icon || '📁'} ${f.id}
+                  </label>
+                `;
+              }).join('')}
             </div>
           </td>
           <td class="p-3 text-center whitespace-nowrap">
@@ -2390,10 +2529,8 @@
       document.getElementById('editModalHeaderTitle').innerText = `"${ex.TITLE}" - എഡിറ്റ് ചെയ്യുക`;
 
       document.getElementById('editExTitle').value = ex.TITLE || '';
-      const currentFolderStr = String(ex.MAIN_FOLDER || ex.mainFolder || 'LDC').toUpperCase();
-      document.querySelectorAll('input[name="editCourseCheckbox"]').forEach(cb => {
-        cb.checked = currentFolderStr.includes(cb.value);
-      });
+      const currentFoldersArr = String(ex.MAIN_FOLDER || ex.mainFolder || 'LDC').split(',').map(s => s.trim());
+renderExamCourseCheckboxes('editExamCourseCheckboxes', 'editCourseCheckbox', currentFoldersArr);
       document.getElementById('editExAccessType').value = ex.access_type || 'FREE';
       document.getElementById('editExKey').value = ex.KEY || ex.key || '';
       document.getElementById('editExCategory').value = ex.CATEGORY || ex.category || '';
