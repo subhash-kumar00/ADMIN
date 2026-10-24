@@ -99,15 +99,29 @@
             <label class="block text-[11px] text-slate-300 font-bold mb-1">പരീക്ഷയുടെ പേര് (TITLE) *</label>
             <input type="text" id="editExTitle" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-cyan-500">
           </div>
-          <div>
-            <label class="block text-[11px] text-emerald-400 font-bold mb-1">പ്രധാന ഫോൾഡർ *</label>
-            <select id="editExMainFolder" class="w-full bg-slate-950 border border-emerald-500/40 rounded-xl px-3 py-2 text-emerald-300 font-bold focus:outline-none focus:border-emerald-500">
-              <option value="LDC">🏛️ LDC (എൽ.ഡി.സി)</option>
-              <option value="LGS">🛡️ LGS (എൽ.ജി.എസ്)</option>
-              <option value="DEGREE">🎓 Degree Level (ഡിഗ്രി)</option>
-              <option value="LDC, LGS">🏛️+🛡️ LDC & LGS (രണ്ടിലും)</option>
-              <option value="ALL">🌟 എല്ലാം (All Combined)</option>
-            </select>
+          <div class="sm:col-span-2">
+            <label class="block text-[11px] text-emerald-400 font-bold mb-1.5 flex items-center justify-between">
+              <span>പ്രധാന കോഴ്സുകൾ (Tick Courses) *</span>
+              <span class="text-[10px] text-slate-400 font-normal">ആവശ്യമുള്ളവയിൽ മാത്രം ടിക്ക് ചെയ്യുക</span>
+            </label>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-950 p-2 rounded-xl border border-cyan-500/40">
+              <label class="flex items-center space-x-1.5 p-1 rounded-lg hover:bg-slate-900 cursor-pointer text-xs">
+                <input type="checkbox" name="editCourseCheckbox" value="SCERT" class="rounded accent-cyan-500 w-4 h-4 cursor-pointer">
+                <span class="text-amber-300 font-bold">📖 SCERT</span>
+              </label>
+              <label class="flex items-center space-x-1.5 p-1 rounded-lg hover:bg-slate-900 cursor-pointer text-xs">
+                <input type="checkbox" name="editCourseCheckbox" value="LDC" class="rounded accent-cyan-500 w-4 h-4 cursor-pointer">
+                <span class="text-emerald-400 font-bold">🏛️ LDC</span>
+              </label>
+              <label class="flex items-center space-x-1.5 p-1 rounded-lg hover:bg-slate-900 cursor-pointer text-xs">
+                <input type="checkbox" name="editCourseCheckbox" value="LGS" class="rounded accent-cyan-500 w-4 h-4 cursor-pointer">
+                <span class="text-cyan-400 font-bold">🛡️ LGS</span>
+              </label>
+              <label class="flex items-center space-x-1.5 p-1 rounded-lg hover:bg-slate-900 cursor-pointer text-xs">
+                <input type="checkbox" name="editCourseCheckbox" value="DEGREE" class="rounded accent-cyan-500 w-4 h-4 cursor-pointer">
+                <span class="text-purple-400 font-bold">🎓 Degree</span>
+              </label>
+            </div>
           </div>
           <div>
             <label class="block text-[11px] text-amber-400 font-bold mb-1">ആക്സസ് ടൈപ്പ് *</label>
@@ -396,15 +410,21 @@
         </div>
       </div>
 
-      <!-- 🌟 പുതിയ കോഴ്സ് പ്ലാൻ ചേർക്കാനുള്ള ഫോം -->
-      <div class="bg-slate-950 border-2 border-cyan-500/40 p-4 sm:p-5 rounded-3xl space-y-3">
-        <h4 class="text-xs sm:text-sm font-bold text-cyan-400 flex items-center space-x-1.5">
-          <span>➕</span><span>പുതിയ കോഴ്സ് പ്ലാൻ ചേർക്കുക (Add Custom Course Plan)</span>
-        </h4>
-        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
-          <div>
-            <label class="block text-[11px] text-slate-300 font-bold mb-1">കോഴ്സ് തിരഞ്ഞെടുക്കുക / ടൈപ്പ് ചെയ്യുക *</label>
-            <input type="text" id="newPlanName" list="defaultCoursePresets" placeholder="ഉദാ: LDC 2026, SCERT" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white">
+      <!-- 🌟 പുതിയ കോഴ്സ് പ്ലാൻ / പ്രീ-ബുക്കിംഗ് ചേർക്കാനുള്ള ഫോം -->
+      <div class="bg-slate-950 border-2 border-cyan-500/40 p-4 sm:p-5 rounded-3xl space-y-3.5 shadow-xl">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-2">
+          <h4 class="text-xs sm:text-sm font-bold text-cyan-400 flex items-center space-x-1.5">
+            <span>➕</span><span>പുതിയ കോഴ്സ് പ്ലാൻ / പ്രീ-ബുക്കിംഗ് ചേർക്കുക</span>
+          </h4>
+          <span class="text-[10px] text-amber-300 bg-amber-950/70 border border-amber-500/30 px-2 py-0.5 rounded-full font-mono">
+            ⚡ Pre-booking & Regular Courses
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 text-xs">
+          <div class="lg:col-span-2">
+            <label class="block text-[11px] text-slate-300 font-bold mb-1">കോഴ്സ് പേര് *</label>
+            <input type="text" id="newPlanName" list="defaultCoursePresets" placeholder="ഉദാ: LDC 2027 ലക്ഷ്യ ബാച്ച്, SCERT" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-cyan-500">
             <datalist id="defaultCoursePresets">
               <option value="SCERT Special"></option>
               <option value="LGS Complete"></option>
@@ -413,23 +433,48 @@
               <option value="LDC + LGS Combo"></option>
               <option value="LDC + DEGREE Combo"></option>
               <option value="ALL EXAMS PASS"></option>
+              <option value="LDC 2027 PRE-BOOKING"></option>
+              <option value="LGS 2027 PRE-BOOKING"></option>
             </datalist>
           </div>
+
           <div>
-            <label class="block text-[11px] text-slate-300 font-bold mb-1">പ്ലാൻ ഐഡി (Unique ID) *</label>
-            <input type="text" id="newPlanId" placeholder="ഉദാ: ldc, scert, lgs" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-cyan-300 font-mono">
+            <label class="block text-[11px] text-slate-300 font-bold mb-1">പ്ലാൻ ഐഡി *</label>
+            <input type="text" id="newPlanId" placeholder="ഉദാ: ldc_2027, scert" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-cyan-300 font-mono focus:outline-none focus:border-cyan-500">
           </div>
+
           <div>
             <label class="block text-[11px] text-slate-300 font-bold mb-1">ഫീസ് തുക (₹) *</label>
-            <input type="number" id="newPlanPrice" placeholder="ഉദാ: 149" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-emerald-400 font-bold font-mono">
+            <input type="number" id="newPlanPrice" placeholder="ഉദാ: 149" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-emerald-400 font-bold font-mono focus:outline-none focus:border-emerald-500">
           </div>
+
           <div>
-            <label class="block text-[11px] text-slate-300 font-bold mb-1">വാലിഡിറ്റി (ദിവസങ്ങളിൽ) *</label>
-            <input type="number" id="newPlanDays" placeholder="ഉദാ: 60" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-amber-300 font-bold font-mono">
+            <label class="block text-[11px] text-slate-300 font-bold mb-1">വാലിഡിറ്റി (Days) *</label>
+            <input type="number" id="newPlanDays" placeholder="ഉദാ: 90" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-amber-300 font-bold font-mono focus:outline-none focus:border-amber-500">
+          </div>
+
+          <div>
+            <label class="block text-[11px] text-amber-400 font-bold mb-1">പ്ലാൻ തരം *</label>
+            <select id="newPlanType" onchange="togglePrebookDateInput()" class="w-full bg-slate-900 border border-amber-500/40 rounded-xl px-2.5 py-2 text-amber-300 font-bold focus:outline-none">
+              <option value="REGULAR">സാധാരണ കോഴ്സ്</option>
+              <option value="PREBOOK">⚡ പ്രീ-ബുക്കിംഗ് (Pre-book)</option>
+            </select>
           </div>
         </div>
+
+        <div id="prebookDetailsArea" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-900/80 p-3 rounded-2xl border border-amber-500/30 text-xs">
+          <div>
+            <label class="block text-[11px] text-amber-300 font-bold mb-1">ബാച്ച് ആരംഭിക്കുന്ന തീയതി (Launch Date)</label>
+            <input type="date" id="newPlanLaunchDate" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white">
+          </div>
+          <div>
+            <label class="block text-[11px] text-slate-300 font-bold mb-1">പ്രീ-ബുക്കിംഗ് ഓഫർ വിവരണം (Optional)</label>
+            <input type="text" id="newPlanTagline" placeholder="ഉദാ: ആദ്യം ബുക്ക് ചെയ്യുന്ന 100 പേർക്ക് മാത്രം!" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-amber-200">
+          </div>
+        </div>
+
         <div class="flex justify-end pt-1">
-          <button onclick="addNewCoursePlan()" class="px-5 py-2.5 bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 text-slate-950 font-black rounded-xl text-xs transition shadow cursor-pointer">
+          <button onclick="addNewCoursePlan()" class="px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 text-slate-950 font-black rounded-xl text-xs transition shadow-lg cursor-pointer">
             ➕ ഈ പ്ലാൻ ചേർക്കുക
           </button>
         </div>
@@ -580,15 +625,29 @@
               <input type="text" id="newExTitle" oninput="autoFillExamKey()" required placeholder="ഉദാ: മോഡൽ എക്സാം - 51" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-emerald-500">
             </div>
 
-            <div>
-              <label class="block text-[11px] text-emerald-400 font-bold mb-1">2. പ്രധാന ഫോൾഡർ *</label>
-              <select id="newExMainFolder" class="w-full bg-slate-900 border border-emerald-500/50 rounded-xl px-3 py-2.5 text-emerald-300 font-bold focus:outline-none focus:border-emerald-500 cursor-pointer">
-                <option value="LDC">🏛️ LDC (എൽ.ഡി.സി)</option>
-                <option value="LGS">🛡️ LGS (എൽ.ജി.എസ്)</option>
-                <option value="DEGREE">🎓 Degree Level (ഡിഗ്രി)</option>
-                <option value="LDC, LGS">🏛️+🛡️ LDC & LGS (രണ്ടിലും)</option>
-                <option value="ALL">🌟 എല്ലാം (LDC, LGS & Degree)</option>
-              </select>
+            <div class="sm:col-span-2">
+              <label class="block text-[11px] text-emerald-400 font-bold mb-1.5 flex items-center justify-between">
+                <span>2. ഏതെല്ലാം കോഴ്സുകളിൽ വേണം? (Tick Courses) *</span>
+                <span class="text-[10px] text-slate-400 font-normal">ആവശ്യമുള്ളവയിൽ മാത്രം ടിക്ക് ചെയ്യുക</span>
+              </label>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-900 p-2 rounded-xl border border-emerald-500/50">
+                <label class="flex items-center space-x-1.5 p-1 rounded-lg hover:bg-slate-950 cursor-pointer text-xs">
+                  <input type="checkbox" name="newCourseCheckbox" value="SCERT" class="rounded accent-emerald-500 w-4 h-4 cursor-pointer">
+                  <span class="text-amber-300 font-bold">📖 SCERT</span>
+                </label>
+                <label class="flex items-center space-x-1.5 p-1 rounded-lg hover:bg-slate-950 cursor-pointer text-xs">
+                  <input type="checkbox" name="newCourseCheckbox" value="LDC" checked class="rounded accent-emerald-500 w-4 h-4 cursor-pointer">
+                  <span class="text-emerald-400 font-bold">🏛️ LDC</span>
+                </label>
+                <label class="flex items-center space-x-1.5 p-1 rounded-lg hover:bg-slate-950 cursor-pointer text-xs">
+                  <input type="checkbox" name="newCourseCheckbox" value="LGS" checked class="rounded accent-emerald-500 w-4 h-4 cursor-pointer">
+                  <span class="text-cyan-400 font-bold">🛡️ LGS</span>
+                </label>
+                <label class="flex items-center space-x-1.5 p-1 rounded-lg hover:bg-slate-950 cursor-pointer text-xs">
+                  <input type="checkbox" name="newCourseCheckbox" value="DEGREE" class="rounded accent-emerald-500 w-4 h-4 cursor-pointer">
+                  <span class="text-purple-400 font-bold">🎓 Degree</span>
+                </label>
+              </div>
             </div>
 
             <!-- 🌟 പുതിയ Access Type ഫീൽഡ് -->
@@ -685,6 +744,7 @@
           <div class="flex items-center space-x-2">
             <select id="filterMainFolderSelect" onchange="filterPublishExams()" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-emerald-400 font-bold focus:outline-none focus:border-emerald-500 cursor-pointer">
               <option value="ALL_FILTER">എല്ലാ ഫോൾഡറുകളും</option>
+              <option value="SCERT">📖 SCERT മാത്രം</option>
               <option value="LDC">🏛️ LDC മാത്രം</option>
               <option value="LGS">🛡️ LGS മാത്രം</option>
               <option value="DEGREE">🎓 Degree മാത്രം</option>
@@ -1399,7 +1459,17 @@
       alert(currentGlobalTrialStatus ? "എല്ലാവർക്കും പരീക്ഷകൾ സൗജന്യമാക്കി (Global Trial Active)!" : "സബ്സ്ക്രിപ്ഷൻ മോഡിലേക്ക് മാറ്റി (Paid Mode Active)!");
     }
 
-    // 🌟 2. കോഴ്സ് പ്ലാനുകൾ കാർഡുകളായി പ്രദർശിപ്പിക്കുന്നു (എഡിറ്റ് & ഡിലീറ്റ് ഓപ്ഷനുകളോടെ)
+    function togglePrebookDateInput() {
+      const type = document.getElementById('newPlanType').value;
+      const area = document.getElementById('prebookDetailsArea');
+      if (type === 'PREBOOK') {
+        area.classList.remove('hidden');
+      } else {
+        area.classList.add('hidden');
+      }
+    }
+
+    // 🌟 2. കോഴ്സ് പ്ലാനുകൾ കാർഡുകളായി പ്രദർശിപ്പിക്കുന്നു (പ്രീ-ബുക്കിംഗ് ബാഡ്ജുകളോടെ)
     function renderCoursePlansList() {
       const container = document.getElementById('coursePlansListContainer');
       const selectDropdown = document.getElementById('assignCourseSelect');
@@ -1414,19 +1484,39 @@
 
       keys.forEach(k => {
         const p = allCoursePlansCache[k];
+        const isPrebook = p.is_prebook === true;
         
-        // കാർഡ് നിർമ്മാണം
         const card = document.createElement('div');
-        card.className = "bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2 relative shadow";
+        const borderClass = isPrebook ? 'border-2 border-amber-500/70 bg-slate-950/90' : 'border border-slate-800 bg-slate-950';
+        card.className = `${borderClass} p-4 rounded-2xl space-y-2.5 relative shadow-lg`;
+
+        const badgeHtml = isPrebook
+          ? `<span class="bg-gradient-to-r from-amber-500 to-rose-500 text-slate-950 text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider">⚡ PRE-BOOKING</span>`
+          : `<span class="bg-slate-800 text-slate-300 text-[9px] font-bold px-2 py-0.5 rounded uppercase">REGULAR</span>`;
+
+        const launchInfo = isPrebook && p.launch_date
+          ? `<div class="text-[10px] text-amber-300 font-mono bg-amber-950/50 p-1.5 rounded-lg border border-amber-500/30 flex items-center justify-between">
+              <span>📅 ആരംഭം:</span>
+              <strong class="text-white">${p.launch_date}</strong>
+             </div>`
+          : '';
+
         card.innerHTML = `
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-black text-amber-400 uppercase tracking-wide truncate max-w-[180px]">${p.name}</span>
-            <button onclick="deleteCoursePlan('${k}')" class="text-rose-400 hover:text-rose-300 text-xs font-bold p-1" title="ഡിലീറ്റ് ചെയ്യുക">✕</button>
+          <div class="flex items-start justify-between gap-1.5">
+            <div>
+              ${badgeHtml}
+              <h5 class="text-xs font-black text-white mt-1 leading-snug">${p.name}</h5>
+            </div>
+            <button onclick="deleteCoursePlan('${k}')" class="text-rose-400 hover:text-rose-300 text-xs font-bold p-1 bg-slate-900 rounded-lg" title="ഡിലീറ്റ് ചെയ്യുക">✕</button>
           </div>
-          <div class="flex items-center space-x-2 text-xs font-mono">
-            <span class="text-slate-400 text-[11px]">ID: <strong class="text-cyan-400">${p.id || k}</strong></span>
+
+          <div class="flex items-center space-x-2 text-[11px] font-mono text-slate-400">
+            <span>ID: <strong class="text-cyan-400">${p.id || k}</strong></span>
           </div>
-          <div class="grid grid-cols-2 gap-2 pt-1 border-t border-slate-900">
+
+          ${launchInfo}
+
+          <div class="grid grid-cols-2 gap-2 pt-1 border-t border-slate-800/80">
             <div>
               <label class="text-[10px] text-slate-500 block font-semibold">ഫീസ് (₹)</label>
               <input type="number" id="price_${k}" value="${p.price}" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-emerald-400 font-bold font-mono">
@@ -1436,33 +1526,51 @@
               <input type="number" id="days_${k}" value="${p.days}" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-amber-300 font-bold font-mono">
             </div>
           </div>
-          <button onclick="updateSingleCoursePlan('${k}')" class="w-full mt-2 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-[11px] font-bold transition cursor-pointer">
-            മാറ്റങ്ങൾ സേവ് ചെയ്യുക 💾
-          </button>
+
+          <div class="flex items-center justify-between gap-2 pt-1">
+            <button onclick="toggleCoursePrebook('${k}')" class="flex-1 py-1 px-2 ${isPrebook ? 'bg-amber-950 text-amber-300 border border-amber-500/40' : 'bg-slate-900 text-slate-400 border border-slate-800'} rounded-lg text-[10px] font-bold cursor-pointer">
+              ${isPrebook ? '⚡ പ്രീ-ബുക്ക് Off ആക്കുക' : '⚡ പ്രീ-ബുക്ക് ആക്കുക'}
+            </button>
+            <button onclick="updateSingleCoursePlan('${k}')" class="py-1 px-3 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-[11px] font-bold cursor-pointer">
+              💾
+            </button>
+          </div>
         `;
         container.appendChild(card);
 
-        // സ്റ്റുഡന്റ് വാലിഡിറ്റി ഡെസ്കിലെ ഡ്രോപ്ഡൗണിലേക്ക് ചേർക്കുന്നു
+        // സ്റ്റുഡന്റ് വാലിഡിറ്റി ഡ്രോപ്ഡൗണിലേക്ക് ചേർക്കുന്നു
         const opt = document.createElement('option');
         opt.value = k;
-        opt.textContent = `${p.name} (₹${p.price} - ${p.days} Days)`;
+        opt.textContent = `${p.name} (₹${p.price} - ${p.days} Days)${isPrebook ? ' [Pre-book]' : ''}`;
         selectDropdown.appendChild(opt);
       });
     }
 
-    // 🌟 3. പുതിയ കോഴ്സ് പ്ലാൻ ചേർക്കുന്നു
+    // 🌟 3. പുതിയ കോഴ്സ് പ്ലാൻ ചേർക്കുന്നു (Pre-booking സഹിതം)
     async function addNewCoursePlan() {
       const name = document.getElementById('newPlanName').value.trim();
       let id = document.getElementById('newPlanId').value.trim().toLowerCase().replace(/[\s\-_]+/g, '_');
       const price = Number(document.getElementById('newPlanPrice').value);
       const days = Number(document.getElementById('newPlanDays').value);
+      const planType = document.getElementById('newPlanType').value;
+      const isPrebook = planType === 'PREBOOK';
+      const launchDate = document.getElementById('newPlanLaunchDate') ? document.getElementById('newPlanLaunchDate').value : '';
+      const tagline = document.getElementById('newPlanTagline') ? document.getElementById('newPlanTagline').value.trim() : '';
 
       if (!name || isNaN(price) || isNaN(days) || price <= 0 || days <= 0) {
         return alert("ദയവായി സാധുവായ കോഴ്സിന്റെ പേര്, ഫീസ്, ദിവസങ്ങൾ എന്നിവ നൽകുക!");
       }
       if (!id) id = name.toLowerCase().replace(/[\s\-_]+/g, '_');
 
-      allCoursePlansCache[id] = { name, id, price, days };
+      allCoursePlansCache[id] = {
+        name,
+        id,
+        price,
+        days,
+        is_prebook: isPrebook,
+        launch_date: launchDate,
+        tagline: tagline
+      };
 
       await fetch(`${FIREBASE_DB_URL}/portal_config/course_plans/${id}.json`, {
         method: 'PUT',
@@ -1474,8 +1582,10 @@
       document.getElementById('newPlanId').value = '';
       document.getElementById('newPlanPrice').value = '';
       document.getElementById('newPlanDays').value = '';
+      if (document.getElementById('newPlanLaunchDate')) document.getElementById('newPlanLaunchDate').value = '';
+      if (document.getElementById('newPlanTagline')) document.getElementById('newPlanTagline').value = '';
 
-      alert(`✅ "${name}" കോഴ്സ് പ്ലാൻ വിജയകരമായി ചേർത്തു!`);
+      alert(`✅ "${name}" കോഴ്സ് പ്ലാൻ വിജയകരമായി ചേർത്തു! ${isPrebook ? '(Pre-booking Active)' : ''}`);
       renderCoursePlansList();
     }
 
@@ -1497,6 +1607,29 @@
       });
 
       alert(`✅ "${allCoursePlansCache[key].name}" പ്ലാൻ അപ്ഡേറ്റ് ചെയ്തു!`);
+    }
+
+    // 🌟 4B. പ്രീ-ബുക്കിംഗ് സ്റ്റാറ്റസ് ഓൺ / ഓഫ് ചെയ്യുന്നു
+    async function toggleCoursePrebook(key) {
+      if (!allCoursePlansCache[key]) return;
+      const current = allCoursePlansCache[key].is_prebook === true;
+      const nextState = !current;
+      allCoursePlansCache[key].is_prebook = nextState;
+
+      let launchDate = allCoursePlansCache[key].launch_date || '';
+      if (nextState && !launchDate) {
+        launchDate = prompt("ബാച്ച് ആരംഭിക്കുന്ന തീയതി നൽകുക (YYYY-MM-DD):", new Date(Date.now() + 20*86400000).toISOString().split('T')[0]) || '';
+        allCoursePlansCache[key].launch_date = launchDate;
+      }
+
+      await fetch(`${FIREBASE_DB_URL}/portal_config/course_plans/${key}.json`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ is_prebook: nextState, launch_date: launchDate })
+      });
+
+      renderCoursePlansList();
+      alert(`✅ "${allCoursePlansCache[key].name}" പ്രീ-ബുക്കിംഗ് ${nextState ? 'ഓൺ ആക്കി' : 'ഓഫ് ആക്കി'}!`);
     }
 
     // 🌟 5. കോഴ്സ് പ്ലാൻ ഡിലീറ്റ് ചെയ്യുന്നു
@@ -1840,7 +1973,12 @@
     async function createNewExamInFirebase(e) {
       e.preventDefault();
       const title = document.getElementById('newExTitle').value.trim();
-      const mainFolder = document.getElementById('newExMainFolder').value;
+      const checkedBoxes = Array.from(document.querySelectorAll('input[name="newCourseCheckbox"]:checked')).map(cb => cb.value);
+      if (checkedBoxes.length === 0) {
+        alert("ദയവായി കുറഞ്ഞത് ഒരു കോഴ്സെങ്കിലും ടിക്ക് ചെയ്യുക!");
+        return;
+      }
+      const mainFolder = checkedBoxes.join(', ');
       const accessType = document.getElementById('newExAccessType').value;
       const category = document.getElementById('newExCategory').value.trim();
       const fileUrl = document.getElementById('newExFileUrl').value.trim();
@@ -2058,14 +2196,21 @@
               <span class="text-[10px] text-cyan-400 font-mono bg-slate-950 px-1.5 py-0.5 rounded border border-slate-800 whitespace-nowrap">🔑 ${examKey}</span>
             </div>
           </td>
-          <td class="p-3 text-center whitespace-nowrap">
-            <select id="folder_${cleanCtrlKey}" class="bg-slate-950 border border-emerald-500/40 rounded-lg px-2 py-1.5 text-xs text-emerald-300 font-bold focus:outline-none focus:border-emerald-400 cursor-pointer">
-              <option value="LDC" ${currentMainFolder === 'LDC' ? 'selected' : ''}>🏛️ LDC</option>
-              <option value="LGS" ${currentMainFolder === 'LGS' ? 'selected' : ''}>🛡️ LGS</option>
-              <option value="DEGREE" ${currentMainFolder === 'DEGREE' ? 'selected' : ''}>🎓 Degree</option>
-              <option value="LDC, LGS" ${currentMainFolder === 'LDC, LGS' ? 'selected' : ''}>🏛️+🛡️ Both</option>
-              <option value="ALL" ${currentMainFolder === 'ALL' ? 'selected' : ''}>🌟 All</option>
-            </select>
+          <td class="p-2.5 text-center whitespace-nowrap">
+            <div class="flex flex-wrap gap-1 justify-center max-w-[190px]" id="rowFolders_${cleanCtrlKey}">
+              <label class="cursor-pointer text-[10px] px-1.5 py-0.5 rounded border transition select-none ${currentMainFolder.includes('SCERT') ? 'bg-amber-950/80 text-amber-300 border-amber-500/60 font-bold' : 'bg-slate-950 text-slate-500 border-slate-800'}" onclick="toggleRowFolderPill(this)">
+                <input type="checkbox" value="SCERT" ${currentMainFolder.includes('SCERT') ? 'checked' : ''} class="hidden">📖 SCERT
+              </label>
+              <label class="cursor-pointer text-[10px] px-1.5 py-0.5 rounded border transition select-none ${currentMainFolder.includes('LDC') ? 'bg-emerald-950/80 text-emerald-300 border-emerald-500/60 font-bold' : 'bg-slate-950 text-slate-500 border-slate-800'}" onclick="toggleRowFolderPill(this)">
+                <input type="checkbox" value="LDC" ${currentMainFolder.includes('LDC') ? 'checked' : ''} class="hidden">🏛️ LDC
+              </label>
+              <label class="cursor-pointer text-[10px] px-1.5 py-0.5 rounded border transition select-none ${currentMainFolder.includes('LGS') ? 'bg-cyan-950/80 text-cyan-300 border-cyan-500/60 font-bold' : 'bg-slate-950 text-slate-500 border-slate-800'}" onclick="toggleRowFolderPill(this)">
+                <input type="checkbox" value="LGS" ${currentMainFolder.includes('LGS') ? 'checked' : ''} class="hidden">🛡️ LGS
+              </label>
+              <label class="cursor-pointer text-[10px] px-1.5 py-0.5 rounded border transition select-none ${currentMainFolder.includes('DEGREE') ? 'bg-purple-950/80 text-purple-300 border-purple-500/60 font-bold' : 'bg-slate-950 text-slate-500 border-slate-800'}" onclick="toggleRowFolderPill(this)">
+                <input type="checkbox" value="DEGREE" ${currentMainFolder.includes('DEGREE') ? 'checked' : ''} class="hidden">🎓 Degree
+              </label>
+            </div>
           </td>
           <!-- 🌟 Access Type (FREE / PAID) Toggle -->
           <td class="p-3 text-center whitespace-nowrap">
@@ -2113,7 +2258,10 @@
       document.getElementById('editModalHeaderTitle').innerText = `"${ex.TITLE}" - എഡിറ്റ് ചെയ്യുക`;
 
       document.getElementById('editExTitle').value = ex.TITLE || '';
-      document.getElementById('editExMainFolder').value = ex.MAIN_FOLDER || 'LDC';
+      const currentFolderStr = String(ex.MAIN_FOLDER || ex.mainFolder || 'LDC').toUpperCase();
+      document.querySelectorAll('input[name="editCourseCheckbox"]').forEach(cb => {
+        cb.checked = currentFolderStr.includes(cb.value);
+      });
       document.getElementById('editExAccessType').value = ex.access_type || 'FREE';
       document.getElementById('editExKey').value = ex.KEY || ex.key || '';
       document.getElementById('editExFileUrl').value = ex.FILEURL || ex.fileUrl || 'quiz.html';
@@ -2156,7 +2304,12 @@
       if (dbIndex === undefined || dbIndex === null || !rawExamsArrayFromDb[dbIndex]) return;
 
       const title = document.getElementById('editExTitle').value.trim();
-      const mainFolder = document.getElementById('editExMainFolder').value;
+      const checkedBoxes = Array.from(document.querySelectorAll('input[name="editCourseCheckbox"]:checked')).map(cb => cb.value);
+      if (checkedBoxes.length === 0) {
+        alert("ദയവായി കുറഞ്ഞത് ഒരു കോഴ്സെങ്കിലും ടിക്ക് ചെയ്യുക!");
+        return;
+      }
+      const mainFolder = checkedBoxes.join(', ');
       const accessType = document.getElementById('editExAccessType').value;
       const fileUrl = document.getElementById('editExFileUrl').value.trim();
       const pdfUrl = document.getElementById('editExPdfUrl').value.trim();
@@ -2252,9 +2405,34 @@
       }
     }
 
+
+    function toggleRowFolderPill(labelEl) {
+      const cb = labelEl.querySelector('input[type="checkbox"]');
+      if (!cb) return;
+      cb.checked = !cb.checked;
+      const val = cb.value;
+      const colorMap = {
+        'SCERT': ['bg-amber-950/80', 'text-amber-300', 'border-amber-500/60', 'font-bold'],
+        'LDC': ['bg-emerald-950/80', 'text-emerald-300', 'border-emerald-500/60', 'font-bold'],
+        'LGS': ['bg-cyan-950/80', 'text-cyan-300', 'border-cyan-500/60', 'font-bold'],
+        'DEGREE': ['bg-purple-950/80', 'text-purple-300', 'border-purple-500/60', 'font-bold']
+      };
+      const activeClasses = colorMap[val] || ['bg-emerald-950/80', 'text-emerald-300', 'border-emerald-500/60', 'font-bold'];
+      const inactiveClasses = ['bg-slate-950', 'text-slate-500', 'border-slate-800'];
+
+      if (cb.checked) {
+        labelEl.classList.remove(...inactiveClasses);
+        labelEl.classList.add(...activeClasses);
+      } else {
+        labelEl.classList.remove(...activeClasses);
+        labelEl.classList.add(...inactiveClasses);
+      }
+    }
+
     async function saveExamControl(key, dbIndex) {
       const st = document.getElementById(`status_${key}`).value;
-      const mf = document.getElementById(`folder_${key}`).value;
+      const mfBoxes = Array.from(document.querySelectorAll(`#rowFolders_${key} input[type="checkbox"]:checked`)).map(cb => cb.value);
+      const mf = mfBoxes.length ? mfBoxes.join(', ') : 'LDC';
       const acc = document.getElementById(`access_${key}`).value;
       const pdf = document.getElementById(`pdf_${key}`).value.trim();
       const dt = document.getElementById(`date_${key}`).value.trim();
