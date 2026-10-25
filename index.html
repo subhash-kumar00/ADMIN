@@ -3506,6 +3506,28 @@ renderExamCourseCheckboxes('editExamCourseCheckboxes', 'editCourseCheckbox', cur
     function closeReportModal() {
       document.getElementById('reportedQuestionsModal').classList.add('hidden');
     }
+    let deferredAdminPrompt = null;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredAdminPrompt = e;
+    const pwaBtn = document.getElementById('pwaAdminInstallBtn');
+    if (pwaBtn) {
+      pwaBtn.classList.remove('hidden');
+      pwaBtn.onclick = async () => {
+        pwaBtn.classList.add('hidden');
+        if (deferredAdminPrompt) {
+          deferredAdminPrompt.prompt();
+          await deferredAdminPrompt.userChoice;
+          deferredAdminPrompt = null;
+        }
+      };
+    }
+  });
   </script>
+  <!-- 🌟 PWA ആപ്പ് ഇൻസ്റ്റാൾ ബട്ടൺ -->
+  <button id="pwaAdminInstallBtn" class="hidden fixed bottom-6 left-6 z-50 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 text-slate-950 font-black px-4 py-3 rounded-2xl shadow-[0_8px_25px_rgba(16,185,129,0.5)] flex items-center space-x-2 text-xs border border-emerald-300 animate-bounce cursor-pointer">
+    <span class="text-base">📲</span>
+    <span>അഡ്മിൻ ആപ്പ് ഇൻസ്റ്റാൾ ചെയ്യുക</span>
+  </button>
 </body>
 </html>
