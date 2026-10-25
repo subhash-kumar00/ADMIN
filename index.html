@@ -63,6 +63,22 @@
       width: 780px;
     }
   </style>
+  <!-- OneSignal SDK for Admin Notifications -->
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+  <script>
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(async function(OneSignal) {
+      await OneSignal.init({
+        appId: "39db2070-7998-49fc-b624-28b368a1674a",
+        serviceWorkerPath: "/PSC-EXAMS/OneSignalSDKWorker.js",
+        serviceWorkerParam: { scope: "/PSC-EXAMS/" },
+        allowLocalhostAsSecureOrigin: true
+      });
+    });
+  </script>
+<meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="SK Admin">
+  <link rel="apple-touch-icon" href="logo.png">
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between">
 
@@ -1446,15 +1462,23 @@
       return (val !== undefined && val !== null && val !== '') ? val : '-';
     }
 
-    function verifyPin() {
+   function verifyPin() {
       const entered = document.getElementById('adminPinInput').value.trim();
       if (entered === ADMIN_SECRET_PIN) {
         document.getElementById('pinLockModal').classList.add('hidden');
         localStorage.removeItem('sk_firebase_q_node');
 
-        const savedCommonUrl = localStorage.getItem('sk_common_exam_url');
-        if (savedCommonUrl) {
-          document.getElementById('newExFileUrl').value = savedCommonUrl;
+        // 🌟 PIN ശരിയാണെങ്കിൽ മാത്രം OneSignal-ൽ അഡ്മിനെ ലോഗിൻ ചെയ്യിക്കുന്നു
+        if (window.OneSignalDeferred) {
+          window.OneSignalDeferred.push(async function(OneSignal) {
+            try {
+              await OneSignal.login("ADMIN_SK_PSC");
+              await OneSignal.Notifications.requestPermission();
+              await OneSignal.User.PushSubscription.optIn();
+            } catch(e) {
+              console.error("Admin OneSignal error:", e);
+            }
+          });
         }
 
         loadAnalyticsData();
