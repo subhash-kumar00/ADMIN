@@ -1,7 +1,7 @@
 {
   "name": "SK PSC Admin Panel",
   "short_name": "SK Admin",
-  "start_url": "./admin.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#020617",
   "theme_color": "#020617",
