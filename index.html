@@ -680,6 +680,68 @@
           </div>
         </div>
       </div>
+      <!-- 🌟 വളരെ ലളിതമായ ഡെയ്ലി ക്വിസ് മാനേജർ (Simple Daily Quiz Creator) -->
+      <div class="bg-slate-950 border-2 border-emerald-500/50 p-4 sm:p-6 rounded-3xl space-y-4 shadow-xl">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+          <div class="flex items-center space-x-2.5">
+            <span class="w-10 h-10 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl font-bold border border-emerald-500/40">⚡</span>
+            <div>
+              <h4 class="text-sm sm:text-base font-bold text-white flex items-center space-x-2">
+                <span>ഇന്നത്തെ ഡെയ്ലി ക്വിസ് (Daily Quiz)</span>
+                <span id="simpleDqStatus" class="text-[9px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full font-mono border border-slate-700">ചെക്ക് ചെയ്യുന്നു...</span>
+              </h4>
+              <p class="text-[11px] text-slate-400">ചോദ്യങ്ങളും ഉത്തരങ്ങളും ഇവിടെ നേരിട്ട് പേസ്റ്റ് ചെയ്ത് സമയം നിശ്ചയിക്കാം.</p>
+            </div>
+          </div>
+          <button type="button" onclick="disableSimpleDailyQuiz()" class="px-3.5 py-1.5 bg-rose-950/60 border border-rose-500/40 hover:bg-rose-900 text-rose-300 font-bold rounded-xl text-xs transition cursor-pointer">
+            ❌ ക്വിസ് ഓഫ് ചെയ്യുക (Hide)
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+          <div>
+            <label class="block text-[11px] text-slate-300 font-bold mb-1">ക്വിസ് തലക്കെട്ട് (Title)</label>
+            <input type="text" id="simpleDqTitle" value="ഇന്നത്തെ ഡെയ്ലി ക്വിസ്" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-bold focus:outline-none focus:border-emerald-500">
+          </div>
+          <div>
+            <label class="block text-[11px] text-amber-300 font-bold mb-1">പരീക്ഷാ സമയം (Time Limit മാറ്റാം)</label>
+            <input type="text" id="simpleDqTime" value="10 മിനിറ്റ്" placeholder="ഉദാ: 5 മിനിറ്റ്, 15 മിനിറ്റ്" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-amber-300 font-bold focus:outline-none focus:border-amber-500">
+          </div>
+          <div>
+            <label class="block text-[11px] text-slate-300 font-bold mb-1">തീയതി</label>
+            <input type="date" id="simpleDqDate" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-cyan-300 font-mono focus:outline-none">
+          </div>
+        </div>
+
+        <!-- ചോദ്യങ്ങൾ പേസ്റ്റ് ചെയ്യുന്ന ബോക്സ് -->
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <label class="text-[11px] text-emerald-400 font-bold flex items-center space-x-1">
+              <span>📝</span>
+              <span>ചോദ്യങ്ങൾ, ഓപ്ഷനുകൾ, ഉത്തരം, വിശദീകരണം (ഇവിടെ പേസ്റ്റ് ചെയ്യുക):</span>
+            </label>
+            <span id="simpleDqCountBadge" class="text-[10px] text-cyan-400 font-mono font-bold bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
+              0 ചോദ്യങ്ങൾ
+            </span>
+          </div>
+
+          <textarea id="simpleDqQuestionsInput" rows="8" oninput="updateSimpleDqCount()" placeholder='[
+  {
+    "q": "ഇന്ത്യൻ ഭരണഘടനയുടെ ആമുഖം തയ്യാറാക്കിയത് ആര്?",
+    "options": ["ജവഹർലാൽ നെഹ്റു", "ബി.ആർ. അംബേദ്കർ", "രാജേന്ദ്ര പ്രസാദ്", "കെ.എം. മുൻഷി"],
+    "ans": 0,
+    "exp": "1946 ഡിസംബർ 13-ന് നെഹ്റു അവതരിപ്പിച്ച ലക്ഷ്യപ്രമേയമാണ് പിന്നീട് ആമുഖമായത്."
+  }
+]' class="w-full bg-slate-900 border border-slate-800 rounded-2xl p-3.5 text-xs text-emerald-300 font-mono focus:outline-none focus:border-emerald-500 custom-scroll leading-relaxed"></textarea>
+        </div>
+
+        <div class="flex justify-end pt-1 border-t border-slate-800/80">
+          <button type="button" onclick="publishSimpleDailyQuiz()" id="btnPublishSimpleDq" class="px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 text-slate-950 font-black rounded-xl text-xs sm:text-sm transition shadow-lg flex items-center space-x-1.5 cursor-pointer">
+            <span>🚀</span>
+            <span>ഹോം പേജിൽ ലൈവ് ആക്കുക (Publish)</span>
+          </button>
+        </div>
+      </div>
 <!-- 🌟 പുതിയ പ്രധാന ഫോൾഡറുകൾ (FREE, SCERT etc.) ആഡ് ചെയ്യാനുള്ള ബോക്സ് -->
       <div class="bg-slate-950 border border-emerald-500/40 p-4 sm:p-5 rounded-3xl space-y-3.5 shadow-xl">
         <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
@@ -1493,6 +1555,9 @@
         loadStudentChatsAdmin(false);
         loadSubscriptionConfig();
         loadMainExamFoldersConfig();
+
+        // 👇 ഈ വരി ഇവിടെ കൃത്യമായി നൽകുക 👇
+        checkCurrentSimpleDailyQuiz();
 
         setInterval(() => { loadStudentChatsAdmin(false); }, 12000);
       } else {
@@ -3547,6 +3612,131 @@ renderExamCourseCheckboxes('editExamCourseCheckboxes', 'editCourseCheckbox', cur
       };
     }
   });
+    // ================= ⚡ എളുപ്പമുള്ള ഡെയ്ലി ക്വിസ് ഫംഗ്ഷനുകൾ =================
+
+    // പേസ്റ്റ് ചെയ്യുമ്പോൾ ചോദ്യങ്ങളുടെ എണ്ണം തനിയെ കണക്കാക്കാൻ
+    function updateSimpleDqCount() {
+      const raw = document.getElementById('simpleDqQuestionsInput').value.trim();
+      const badge = document.getElementById('simpleDqCountBadge');
+      if (!raw) {
+        badge.innerText = "0 ചോദ്യങ്ങൾ";
+        return 0;
+      }
+      try {
+        const parsed = JSON.parse(raw);
+        const arr = Array.isArray(parsed) ? parsed : (parsed.questions || []);
+        badge.innerText = `${arr.length} ചോദ്യങ്ങൾ കണ്ടെത്തി ✅`;
+        badge.className = "text-[10px] text-emerald-400 font-mono font-bold bg-slate-900 px-2 py-0.5 rounded border border-emerald-500/40";
+        return arr.length;
+      } catch (e) {
+        badge.innerText = "⚠️ JSON ഫോർമാറ്റ് പരിശോധിക്കുക";
+        badge.className = "text-[10px] text-rose-400 font-mono font-bold bg-slate-900 px-2 py-0.5 rounded border border-rose-500/40";
+        return -1;
+      }
+    }
+
+    // ഫയർബേസിൽ നിന്ന് നിലവിലെ ക്വിസ് വിവരങ്ങൾ ലോഡ് ചെയ്യാൻ
+    async function checkCurrentSimpleDailyQuiz() {
+      try {
+        const dateInput = document.getElementById('simpleDqDate');
+        if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
+
+        const res = await fetch(`${FIREBASE_DB_URL}/portal_config/daily_quiz.json`);
+        const dq = await res.json();
+        const badge = document.getElementById('simpleDqStatus');
+
+        if (dq && dq.active !== false) {
+          badge.innerText = `● LIVE (${dq.questions || 0} Qs • ${dq.time || ''})`;
+          badge.className = "text-[9px] bg-emerald-950 text-emerald-400 font-bold font-mono px-2 py-0.5 rounded-full border border-emerald-500/50";
+          if (dq.title) document.getElementById('simpleDqTitle').value = dq.title;
+          if (dq.time) document.getElementById('simpleDqTime').value = dq.time;
+          if (dq.date) document.getElementById('simpleDqDate').value = dq.date;
+        } else {
+          badge.innerText = "○ OFF (ഹോം പേജിൽ ഇല്ല)";
+          badge.className = "text-[9px] bg-rose-950 text-rose-400 font-bold font-mono px-2 py-0.5 rounded-full border border-rose-500/50";
+        }
+      } catch (e) {}
+    }
+
+    // ക്വിസ് പബ്ലിഷ് ചെയ്യുന്ന പ്രധാന ഫങ്ഷൻ
+    async function publishSimpleDailyQuiz() {
+      const title = document.getElementById('simpleDqTitle').value.trim() || "ഇന്നത്തെ ഡെയ്ലി ക്വിസ്";
+      const time = document.getElementById('simpleDqTime').value.trim() || "10 മിനിറ്റ്";
+      const date = document.getElementById('simpleDqDate').value || new Date().toISOString().split('T')[0];
+      const rawQuestions = document.getElementById('simpleDqQuestionsInput').value.trim();
+
+      if (!rawQuestions) {
+        return alert("ദയവായി ചോദ്യങ്ങൾ ബോക്സിൽ പേസ്റ്റ് ചെയ്യുക!");
+      }
+
+      let parsedQuestions = null;
+      try {
+        parsedQuestions = JSON.parse(rawQuestions);
+        if (!Array.isArray(parsedQuestions) && parsedQuestions.questions) {
+          parsedQuestions = parsedQuestions.questions;
+        }
+      } catch (err) {
+        return alert("ചോദ്യങ്ങളുടെ ഫോർമാറ്റിൽ തെറ്റുണ്ട്! JSON പരിശോധിക്കുക.");
+      }
+
+      const qCount = Array.isArray(parsedQuestions) ? parsedQuestions.length : 0;
+      if (qCount === 0) return alert("ചോദ്യങ്ങൾ ഒന്നും കണ്ടെത്തിയില്ല!");
+
+      const btn = document.getElementById('btnPublishSimpleDq');
+      btn.innerText = "പ്രസിദ്ധീകരിക്കുന്നു...";
+      btn.disabled = true;
+
+      const dailyConfig = {
+        active: true,
+        title: title,
+        subtitle: "ദിവസേനയുള്ള പ്രത്യേക പരിശീലന പരീക്ഷ",
+        date: date,
+        questions: qCount,
+        time: time,
+        examKey: "daily_quiz",
+        examUrl: `quiz.html?key=daily_quiz&title=${encodeURIComponent(title)}&time=${encodeURIComponent(time)}`
+      };
+
+      try {
+        // 1. ചോദ്യങ്ങൾ quiz_contents/daily_quiz-ലേക്ക് സേവ് ചെയ്യുന്നു
+        await fetch(`${FIREBASE_DB_URL}/quiz_contents/daily_quiz.json`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(parsedQuestions)
+        });
+
+        // 2. കൺഫിഗിലേക്ക് വിവരങ്ങൾ നൽകുന്നു
+        await fetch(`${FIREBASE_DB_URL}/portal_config/daily_quiz.json`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(dailyConfig)
+        });
+
+        alert(`🎉 വിജയം! ${qCount} ചോദ്യങ്ങളും (${time}) അടങ്ങിയ ഡെയ്ലി ക്വിസ് ഹോം പേജിൽ ലൈവ് ആയി!`);
+        checkCurrentSimpleDailyQuiz();
+      } catch (err) {
+        alert("എറർ സംഭവിച്ചു: " + err.message);
+      } finally {
+        btn.innerHTML = `<span>🚀</span><span>ഹോം പേജിൽ ലൈവ് ആക്കുക (Publish)</span>`;
+        btn.disabled = false;
+      }
+    }
+
+    // ക്വിസ് ഓഫ് ചെയ്യുന്നു
+    async function disableSimpleDailyQuiz() {
+      if (!confirm("ഡെയ്ലി ക്വിസ് ഹോം പേജിൽ നിന്ന് ഒഴിവാക്കണമെന്നുറപ്പാണോ?")) return;
+      try {
+        await fetch(`${FIREBASE_DB_URL}/portal_config/daily_quiz/active.json`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(false)
+        });
+        alert("ഡെയ്ലി ക്വിസ് ഓഫ് ചെയ്തു!");
+        checkCurrentSimpleDailyQuiz();
+      } catch (e) {
+        alert("എറർ: " + e.message);
+      }
+    }
   </script>
   <!-- 🌟 PWA ആപ്പ് ഇൻസ്റ്റാൾ ബട്ടൺ -->
   <button id="pwaAdminInstallBtn" class="hidden fixed bottom-6 left-6 z-50 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 text-slate-950 font-black px-4 py-3 rounded-2xl shadow-[0_8px_25px_rgba(16,185,129,0.5)] flex items-center space-x-2 text-xs border border-emerald-300 animate-bounce cursor-pointer">
