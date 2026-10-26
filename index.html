@@ -3658,9 +3658,9 @@ renderExamCourseCheckboxes('editExamCourseCheckboxes', 'editCourseCheckbox', cur
       } catch (e) {}
     }
 
-    // ക്വിസ് പബ്ലിഷ് ചെയ്യുന്ന പ്രധാന ഫങ്ഷൻ
+   // 🌟 ക്വിസ് പബ്ലിഷ് ചെയ്യുകയും "ഡെയ്ലി ക്വിസ്" ഫോൾഡറിലേക്ക് ഓട്ടോ-ആർക്കൈവ് ചെയ്യുകയും ചെയ്യുന്നു
     async function publishSimpleDailyQuiz() {
-      const title = document.getElementById('simpleDqTitle').value.trim() || "ഇന്നത്തെ ഡെയ്ലി ക്വിസ്";
+      const title = document.getElementById('simpleDqTitle').value.trim() || "ഡെയ്ലി ക്വിസ്";
       const time = document.getElementById('simpleDqTime').value.trim() || "10 മിനിറ്റ്";
       const date = document.getElementById('simpleDqDate').value || new Date().toISOString().split('T')[0];
       const rawQuestions = document.getElementById('simpleDqQuestionsInput').value.trim();
@@ -3686,6 +3686,9 @@ renderExamCourseCheckboxes('editExamCourseCheckboxes', 'editCourseCheckbox', cur
       btn.innerText = "പ്രസിദ്ധീകരിക്കുന്നു...";
       btn.disabled = true;
 
+      // 🌟 തീയതി അടിസ്ഥാനമാക്കി യുണീക്ക് കീ ഉണ്ടാക്കുന്നു (ഉദാ: daily_quiz_2026_10_27)
+      const dateKey = `daily_quiz_${date.replace(/-/g, '_')}`;
+
       const dailyConfig = {
         active: true,
         title: title,
@@ -3693,26 +3696,59 @@ renderExamCourseCheckboxes('editExamCourseCheckboxes', 'editCourseCheckbox', cur
         date: date,
         questions: qCount,
         time: time,
-        examKey: "daily_quiz",
-        examUrl: `quiz.html?key=daily_quiz&title=${encodeURIComponent(title)}&time=${encodeURIComponent(time)}`
+        examKey: dateKey
+      };
+
+      // 🌟 താഴെയുള്ള "ഡെയ്ലി ക്വിസ്" ഫോൾഡറിലേക്ക് ആഡ് ചെയ്യാനുള്ള എൻട്രി
+      const archiveExamEntry = {
+        TITLE: `${title} - ${date}`,
+        CATEGORY: "ഡെയ്ലി ക്വിസ്",
+        SUB_FOLDER: "",
+        MAIN_FOLDER: "ALL_EXAMS",
+        access_type: "FREE",
+        FILEURL: "quiz.html",
+        TOPICS: "ദിവസേനയുള്ള കറന്റ് അഫയേഴ്സ് & മോഡൽ ചോദ്യങ്ങൾ",
+        QUESTIONS: qCount,
+        TIME: time,
+        BADGE: "DAILY",
+        KEY: dateKey
       };
 
       try {
-        // 1. ചോദ്യങ്ങൾ quiz_contents/daily_quiz-ലേക്ക് സേവ് ചെയ്യുന്നു
-        await fetch(`${FIREBASE_DB_URL}/quiz_contents/daily_quiz.json`, {
+        // 1. ചോദ്യങ്ങൾ ആ തീയതിയുടെ യുണീക്ക് ഫയലിലേക്ക് സേവ് ചെയ്യുന്നു
+        await fetch(`${FIREBASE_DB_URL}/quiz_contents/${dateKey}.json`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(parsedQuestions)
         });
 
-        // 2. കൺഫിഗിലേക്ക് വിവരങ്ങൾ നൽകുന്നു
+        // 2. ഇന്നത്തെ ലൈവ് ബാനറിലേക്ക് അപ്‌ഡേറ്റ് ചെയ്യുന്നു
         await fetch(`${FIREBASE_DB_URL}/portal_config/daily_quiz.json`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(dailyConfig)
         });
 
-        alert(`🎉 വിജയം! ${qCount} ചോദ്യങ്ങളും (${time}) അടങ്ങിയ ഡെയ്ലി ക്വിസ് ഹോം പേജിൽ ലൈവ് ആയി!`);
+        // 3. പരീക്ഷകളുടെ മെയിൻ ലിസ്റ്റിലേക്ക് (exams.json) ഈ ക്വിസ് ആഡ് ചെയ്യുന്നു (ഫോൾഡറായി വരാൻ)
+        const examsRes = await fetch(`${FIREBASE_DB_URL}/exams.json`);
+        let currentExams = await examsRes.json() || [];
+        if (!Array.isArray(currentExams)) currentExams = Object.values(currentExams);
+
+        // നിലവിൽ ഇതേ ദിവസത്തെ പരീക്ഷ ഉണ്ടെങ്കിൽ അപ്ഡേറ്റ് ചെയ്യും, ഇല്ലെങ്കിൽ പുതിയതായി ചേർക്കും
+        const existingIdx = currentExams.findIndex(e => e && (e.KEY === dateKey || e.key === dateKey));
+        if (existingIdx !== -1) {
+          currentExams[existingIdx] = archiveExamEntry;
+        } else {
+          currentExams.push(archiveExamEntry);
+        }
+
+        await fetch(`${FIREBASE_DB_URL}/exams.json`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(currentExams)
+        });
+
+        alert(`🎉 വിജയം! ${qCount} ചോദ്യങ്ങൾ ഇന്നത്തെ ഡെയ്ലി ക്വിസ് ആയും, "ഡെയ്ലി ക്വിസ്" ഫോൾഡറിലും സേവ് ചെയ്തു!`);
         checkCurrentSimpleDailyQuiz();
       } catch (err) {
         alert("എറർ സംഭവിച്ചു: " + err.message);
