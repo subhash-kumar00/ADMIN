@@ -609,6 +609,9 @@
             <button onclick="resetStudentDeviceLock()" class="px-4 py-2 bg-rose-600/80 hover:bg-rose-500 text-white rounded-xl text-xs font-bold transition shadow cursor-pointer">
               🔄 Reset Device
             </button>
+            <button onclick="resetStudentPinNumber()" class="px-4 py-2 bg-amber-600/80 hover:bg-amber-500 text-white rounded-xl text-xs font-bold transition shadow cursor-pointer">
+  🔑 Reset PIN
+</button>
 
             <div class="flex items-center space-x-1.5 bg-slate-900 p-1 rounded-xl border border-slate-700">
               <input type="date" id="studCustomDate" class="bg-transparent px-2 py-1 text-xs text-white focus:outline-none">
@@ -1922,6 +1925,27 @@
       });
 
       alert("ഡിവൈസ് ലോക്ക് വിജയകരമായി റീസെറ്റ് ചെയ്തു! കുട്ടിക്ക് പുതിയ ഫോണിലോ കമ്പ്യൂട്ടറിലോ ലോഗിൻ ചെയ്യാം.");
+    }
+    async function resetStudentPinNumber() {
+      if (!activeSearchedPhone) return alert("ദയവായി വിദ്യാർത്ഥിയുടെ നമ്പർ പരിശോധിക്കുക!");
+      
+      const newPin = prompt(`${activeSearchedPhone} എന്ന വിദ്യാർത്ഥിക്ക് നൽകേണ്ട പുതിയ 4 അക്ക PIN നൽകുക:\n(ശൂന്യമായി ഇട്ടാൽ കുട്ടി ലോഗിൻ ചെയ്യുമ്പോൾ സ്വന്തമായി പിൻ ഉണ്ടാക്കാം)`);
+      
+      if (newPin === null) return; // Cancel അടിച്ചാൽ ഒഴിവാക്കുന്നു
+      
+      if (newPin.trim() === "") {
+        await fetch(`${FIREBASE_DB_URL}/users/${activeSearchedPhone}/PIN.json`, { method: 'DELETE' });
+        alert("✅ PIN നീക്കം ചെയ്തു! വിദ്യാർത്ഥിക്ക് ഇനി സ്വന്തമായി പുതിയ PIN നൽകി ലോഗിൻ ചെയ്യാം.");
+      } else if (/^\d{4}$/.test(newPin.trim())) {
+        await fetch(`${FIREBASE_DB_URL}/users/${activeSearchedPhone}/PIN.json`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newPin.trim())
+        });
+        alert(`✅ പുതിയ PIN (${newPin.trim()}) വിജയകരമായി സെറ്റ് ചെയ്തു!`);
+      } else {
+        alert("ദയവായി സാധുവായ 4 അക്ക നമ്പർ മാത്രം നൽകുക!");
+      }
     }
 
     // ANALYTICS & INSIGHTS
