@@ -1139,6 +1139,14 @@
         <div class="flex flex-wrap items-center gap-2.5">
           <input type="text" id="quickFilterInput" oninput="applySummaryFilterAndSort()" placeholder="പേരോ നമ്പറോ ടൈപ്പ് ചെയ്യുക..." class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 w-48 sm:w-56">
           
+          <!-- 🌟 പുതിയ സബ്സ്ക്രിപ്ഷൻ ഫിൽട്ടർ ഡ്രോപ്പ്ഡൗൺ -->
+          <select id="summaryPlanFilterSelect" onchange="applySummaryFilterAndSort()" class="bg-slate-950 border border-amber-500/50 text-xs text-amber-400 font-bold rounded-xl px-3 py-1.5 focus:outline-none focus:border-amber-400 cursor-pointer">
+            <option value="ALL">എല്ലാ വിദ്യാർത്ഥികളും</option>
+            <option value="ACTIVE_SUB">⭐ സബ്സ്ക്രൈബ് ചെയ്തവർ (Active)</option>
+            <option value="EXPIRED_SUB">⏳ കാലാവധി കഴിഞ്ഞവർ (Expired)</option>
+            <option value="FREE_PLAN">സൗജന്യ അംഗങ്ങൾ (Free Plan)</option>
+          </select>
+
           <select id="summarySortSelect" onchange="applySummaryFilterAndSort()" class="bg-slate-950 border border-slate-800 text-xs text-emerald-400 font-bold rounded-xl px-3 py-1.5 focus:outline-none focus:border-emerald-500 cursor-pointer">
             <option value="exams_desc">എക്സാം എണ്ണം (High ➔ Low)</option>
             <option value="exams_asc">എക്സാം എണ്ണം (Low ➔ High)</option>
@@ -1154,13 +1162,16 @@
         <table class="w-full text-left text-xs text-slate-300">
           <thead class="bg-slate-950 text-slate-400 uppercase text-[10px] border-b border-slate-800">
             <tr>
+      
               <th class="p-3">#</th>
               <th class="p-3">പേര്</th>
               <th class="p-3">മൊബൈൽ</th>
+              <th class="p-3 text-center">കോഴ്സ് & വാലിഡിറ്റി</th>
               <th class="p-3 text-center">ആകെ പരീക്ഷകൾ</th>
               <th class="p-3 text-center">ശരാശരി മാർക്ക്</th>
               <th class="p-3 text-center">ആക്ഷൻ</th>
             </tr>
+            
           </thead>
           <tbody id="summaryTableBody" class="divide-y divide-slate-800/60">
             <tr><td colspan="6" class="p-4 text-center text-slate-500">ഡാറ്റകൾ ലോഡ് ചെയ്യുന്നു...</td></tr>
@@ -3245,19 +3256,51 @@ renderExamCourseCheckboxes('editExamCourseCheckboxes', 'editCourseCheckbox', cur
       const tbody = document.getElementById('summaryTableBody');
       tbody.innerHTML = "";
       if (!list || list.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-slate-500 font-bold">വിദ്യാർത്ഥികളെ കണ്ടെത്താൻ സാധിച്ചില്ല.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" class="p-4 text-center text-slate-500 font-bold">വിദ്യാർത്ഥികളെ കണ്ടെത്താൻ സാധിച്ചില്ല.</td></tr>';
         return;
       }
+
+      const todayStr = new Date().toISOString().split('T')[0];
+
       list.forEach((item, index) => {
         const tr = document.createElement('tr');
-        tr.className = "hover:bg-slate-800/40 transition";
+        tr.className = "hover:bg-slate-800/40 transition border-b border-slate-800/50";
+
+        // കോഴ്സിന്റെ പേരും കാലാവധിയും കണ്ടെത്തുന്നു
+        const cId = item.purchased_course || 'all';
+        const cMeta = (allCoursePlansCache && allCoursePlansCache[cId]) ? allCoursePlansCache[cId].name : cId.toUpperCase();
+        
+        let subBadge = '';
+        if (item.valid_until && item.valid_until >= todayStr) {
+          subBadge = `
+            <div class="space-y-0.5">
+              <span class="inline-block bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 px-2 py-0.5 rounded text-[10px] font-bold">
+                ⭐ ${cMeta}
+              </span>
+              <span class="block text-[9px] font-mono text-emerald-400 font-bold">${item.valid_until} വരെ</span>
+            </div>
+          `;
+        } else if (item.valid_until) {
+          subBadge = `
+            <div class="space-y-0.5">
+              <span class="inline-block bg-rose-950/80 text-rose-300 border border-rose-500/40 px-2 py-0.5 rounded text-[10px] font-bold">
+                ⏳ ${cMeta} (Expired)
+              </span>
+              <span class="block text-[9px] font-mono text-slate-500">${item.valid_until}</span>
+            </div>
+          `;
+        } else {
+          subBadge = `<span class="inline-block bg-slate-950 text-slate-500 border border-slate-800 px-2 py-0.5 rounded text-[10px]">Free Plan</span>`;
+        }
+
         tr.innerHTML = `
           <td class="p-3 font-mono text-slate-500">${index + 1}</td>
           <td class="p-3 font-bold text-white">${item.name || extractName(item)}</td>
-          <td class="p-3 font-mono text-slate-400">${item.phone || extractPhone(item) || '-'}</td>
+          <td class="p-3 font-mono text-slate-400 text-xs">${item.phone || extractPhone(item) || '-'}</td>
+          <td class="p-3 text-center whitespace-nowrap">${subBadge}</td>
           <td class="p-3 text-center font-bold text-emerald-400 font-mono">${Number(item.totalExams || 0)}</td>
           <td class="p-3 text-center font-bold text-cyan-400 font-mono">${Number(item.avgScore || 0).toFixed(1)}</td>
-          <td class="p-3 text-center">
+          <td class="p-3 text-center whitespace-nowrap">
             <button onclick="quickSelectStudent('${item.phone || item.name}')" class="px-3 py-1 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-lg border border-emerald-500/30 transition cursor-pointer">ഹിസ്റ്ററി</button>
           </td>
         `;
@@ -3265,23 +3308,30 @@ renderExamCourseCheckboxes('editExamCourseCheckboxes', 'editCourseCheckbox', cur
       });
     }
 
-    function quickSelectStudent(query) {
-      switchTab('studentWise');
-      document.getElementById('studentSearchInput').value = query;
-      searchStudentDetails();
-    }
-
     function applySummaryFilterAndSort() {
       const rawQ = document.getElementById('quickFilterInput').value.trim();
       const q = rawQ.toLowerCase();
       const numQ = rawQ.replace(/\D/g, '');
       const sortType = document.getElementById('summarySortSelect').value;
+      const planFilter = document.getElementById('summaryPlanFilterSelect') ? document.getElementById('summaryPlanFilterSelect').value : 'ALL';
+      const todayStr = new Date().toISOString().split('T')[0];
 
       let list = allCandidatesCache.filter(c => {
-        if (!q) return true;
+        // 1. പേരോ നമ്പറോ വെച്ചുള്ള തിരച്ചിൽ
         const name = String(c.name || '').toLowerCase();
         const phone = String(c.phone || '');
-        return name.includes(q) || (numQ.length > 0 && phone.includes(numQ));
+        const matchSearch = !q || name.includes(q) || (numQ.length > 0 && phone.includes(numQ));
+        if (!matchSearch) return false;
+
+        // 2. സബ്സ്ക്രിപ്ഷൻ സ്റ്റാറ്റസ് ഫിൽട്ടർ
+        const hasExpiry = c.valid_until && String(c.valid_until).trim() !== '';
+        const isActive = hasExpiry && c.valid_until >= todayStr;
+
+        if (planFilter === 'ACTIVE_SUB') return isActive;
+        if (planFilter === 'EXPIRED_SUB') return hasExpiry && !isActive;
+        if (planFilter === 'FREE_PLAN') return !hasExpiry;
+
+        return true;
       });
 
       list.sort((a, b) => {
@@ -3292,9 +3342,12 @@ renderExamCourseCheckboxes('editExamCourseCheckboxes', 'editCourseCheckbox', cur
           case 'exams_asc': return testsA - testsB;
           case 'avg_desc': return avgB - avgA;
           case 'avg_asc': return avgA - avgB;
+          case 'name_asc': return (a.name || '').localeCompare(b.name || '');
+          case 'name_desc': return (b.name || '').localeCompare(a.name || '');
           default: return testsB - testsA;
         }
       });
+
       renderSummaryTable(list);
     }
 
