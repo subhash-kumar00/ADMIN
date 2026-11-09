@@ -363,11 +363,18 @@
         <span>💳</span>
         <span>കോഴ്സ് സബ്സ്ക്രിപ്ഷൻ & വാലിഡിറ്റി</span>
       </button>
+
+      <button onclick="switchTab('liveDesk')" id="tabBtnLive" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-rose-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap cursor-pointer">
+        <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span>
+        <span>🔴 ലൈവ് ക്ലാസ് & പോൾ</span>
+      </button>
+
       <button onclick="switchTab('studentChatDesk')" id="tabBtnChat" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap cursor-pointer relative">
         <span>💬</span>
         <span>സ്റ്റുഡന്റ് ഡൗട്ട് ചാറ്റ്</span>
         <span id="tabChatDot" class="hidden w-2 h-2 rounded-full bg-rose-500 absolute top-1.5 right-1.5 animate-ping"></span>
       </button>
+
       <button onclick="switchTab('examWise')" id="tabBtnExam" class="px-4 py-2 rounded-xl font-bold bg-slate-900 text-slate-400 hover:text-white transition flex items-center space-x-1.5 border border-slate-800 whitespace-nowrap cursor-pointer">
         <span>🏆</span>
         <span>റാങ്ക് ലിസ്റ്റ്</span>
@@ -680,6 +687,8 @@
           </div>
         </div>
       </div>
+     
+      
       <!-- 🌟 വളരെ ലളിതമായ ഡെയ്ലി ക്വിസ് മാനേജർ (Simple Daily Quiz Creator) -->
       <div class="bg-slate-950 border-2 border-emerald-500/50 p-4 sm:p-6 rounded-3xl space-y-4 shadow-xl">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
@@ -951,7 +960,122 @@
       </div>
 
     </div>
+<!-- 🔴 LIVE CLASS & INTERACTIVE POLL CONTROLLER -->
+<div id="sectionLiveDesk" class="hidden bg-slate-900 border border-rose-500/30 rounded-3xl p-5 sm:p-7 space-y-6 shadow-2xl">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-3">
+    <div>
+      <h3 class="text-base sm:text-lg font-black text-white flex items-center space-x-2">
+        <span class="w-3 h-3 rounded-full bg-rose-500 animate-ping"></span>
+        <span>തത്സമയ ലൈവ് ക്ലാസ് & പോൾ മാനേജർ</span>
+      </h3>
+      <p class="text-xs text-slate-400 mt-0.5">ക്ലാസ് ആരംഭിക്കാനും കുട്ടികൾക്ക് തത്സമയം ചോദ്യങ്ങൾ പോൾ ചെയ്യാനും ഇവിടെ ഉപയോഗിക്കാം.</p>
+    </div>
+    
+    <div id="adminLiveStatusBadge" class="px-3.5 py-1.5 rounded-xl text-xs font-black bg-slate-950 text-slate-400 border border-slate-800 font-mono">
+      നിലവിൽ ലൈവ് ഇല്ല (OFFLINE)
+    </div>
+  </div>
 
+  <!-- 1. ലൈവ് റൂം കൺട്രോളർ (FREE / PAID ഓപ്ഷൻ സഹിതം) -->
+  <div class="bg-slate-950 border border-slate-800 p-4 sm:p-5 rounded-2xl space-y-4">
+    <h4 class="text-xs sm:text-sm font-bold text-white flex items-center space-x-2">
+      <span>📹</span><span>ലൈവ് റൂം ക്രമീകരണങ്ങൾ</span>
+    </h4>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+      <div>
+        <label class="block text-slate-300 font-bold mb-1">ക്ലാസിന്റെ പേര് (Title) *</label>
+        <input type="text" id="admLiveTitle" placeholder="ഉദാ: LDC 2027 സ്പെഷ്യൽ ലൈവ് മെന്ററിംഗ്" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white">
+      </div>
+      <div>
+        <label class="block text-amber-400 font-bold mb-1">പ്രവേശനം (Access Type) *</label>
+        <select id="admLiveAccessType" class="w-full bg-slate-900 border border-amber-500/40 rounded-xl px-3 py-2 text-amber-300 font-bold">
+          <option value="FREE">🟢 FREE (എല്ലാ വിദ്യാർത്ഥികൾക്കും)</option>
+          <option value="PAID">🔒 PAID (ഫീസ് അടച്ചവർക്ക് മാത്രം)</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-cyan-300 font-bold mb-1">കോഴ്സ് വിഭാഗം (Course)</label>
+        <select id="admLiveCourse" class="w-full bg-slate-900 border border-cyan-500/40 rounded-xl px-3 py-2 text-cyan-300 font-bold">
+          <option value="ALL">എല്ലാ കോഴ്സുകളും (All)</option>
+          <option value="LDC">LDC ബാച്ച്</option>
+          <option value="LGS">LGS ബാച്ച്</option>
+          <option value="SCERT">SCERT ബാച്ച്</option>
+          <option value="DEGREE">Degree ബാച്ച്</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-slate-400 font-bold mb-1">റൂം ഐഡി (Room ID)</label>
+        <input type="text" id="admLiveRoomId" value="SK_PSC_LIVE_ROOM" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono font-bold">
+      </div>
+    </div>
+
+    <div class="flex items-center justify-end gap-3 pt-2 border-t border-slate-800">
+      <button onclick="endLiveSessionAdmin()" id="btnStopLive" class="hidden px-5 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-black rounded-xl text-xs transition cursor-pointer">
+        🛑 ലൈവ് അവസാനിപ്പിക്കുക
+      </button>
+      <button onclick="startLiveSessionAdmin()" id="btnStartLive" class="px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 text-slate-950 font-black rounded-xl text-xs transition shadow-lg cursor-pointer">
+        🔴 ലൈവ് ആരംഭിക്കുക (Go Live)
+      </button>
+    </div>
+  </div>
+
+ <!-- 2. ⚡ INSTANT QUICK POLL (A, B, C, D മാത്രം) -->
+  <div class="bg-slate-950 border-2 border-cyan-500/50 p-5 rounded-3xl space-y-4 shadow-xl">
+    <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+      <div class="flex items-center space-x-2">
+        <span class="text-xl">⚡</span>
+        <h4 class="text-sm font-bold text-white">ഇൻസ്റ്റന്റ് ക്വിക്ക് പോൾ (A, B, C, D Poll)</h4>
+      </div>
+      <span class="text-[10px] text-cyan-400 font-mono">സ്ക്രീൻ ഷെയർ ചെയ്യുമ്പോൾ ഉപയോഗിക്കാൻ</span>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+      <div>
+        <label class="block text-emerald-400 font-bold mb-1.5 text-xs">1. സ്ക്രീനിലെ ചോദ്യത്തിന്റെ ശരിയുത്തരം ഏതാണ്? *</label>
+        <div class="grid grid-cols-4 gap-2">
+          <label class="flex items-center justify-center p-2.5 rounded-xl border border-slate-700 bg-slate-900 cursor-pointer hover:border-emerald-500">
+            <input type="radio" name="quickCorrectAns" value="0" checked class="hidden peer">
+            <span class="font-black text-sm text-slate-300 peer-checked:text-emerald-400">A</span>
+          </label>
+          <label class="flex items-center justify-center p-2.5 rounded-xl border border-slate-700 bg-slate-900 cursor-pointer hover:border-emerald-500">
+            <input type="radio" name="quickCorrectAns" value="1" class="hidden peer">
+            <span class="font-black text-sm text-slate-300 peer-checked:text-emerald-400">B</span>
+          </label>
+          <label class="flex items-center justify-center p-2.5 rounded-xl border border-slate-700 bg-slate-900 cursor-pointer hover:border-emerald-500">
+            <input type="radio" name="quickCorrectAns" value="2" class="hidden peer">
+            <span class="font-black text-sm text-slate-300 peer-checked:text-emerald-400">C</span>
+          </label>
+          <label class="flex items-center justify-center p-2.5 rounded-xl border border-slate-700 bg-slate-900 cursor-pointer hover:border-emerald-500">
+            <input type="radio" name="quickCorrectAns" value="3" class="hidden peer">
+            <span class="font-black text-sm text-slate-300 peer-checked:text-emerald-400">D</span>
+          </label>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-amber-300 font-bold mb-1.5 text-xs">2. സമയം (Timer) *</label>
+        <select id="quickPollTimer" class="w-full bg-slate-900 border border-amber-500/40 rounded-xl px-3 py-2.5 text-amber-300 font-bold text-xs focus:outline-none">
+          <option value="15">15 Seconds (വേഗത്തിൽ)</option>
+          <option value="30" selected>30 Seconds (ഡിഫോൾട്ട്)</option>
+          <option value="45">45 Seconds</option>
+          <option value="60">60 Seconds (1 മിനിറ്റ്)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between pt-2 border-t border-slate-800">
+      <button onclick="clearActivePollAdmin()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-rose-400 rounded-xl text-xs font-bold cursor-pointer">
+        പോൾ ഒഴിവാക്കുക ✕
+      </button>
+      <button onclick="launchQuickAbcdPoll()" class="px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 text-slate-950 font-black rounded-xl text-xs shadow-lg cursor-pointer flex items-center space-x-1.5">
+        <span>🚀</span>
+        <span>A, B, C, D പോൾ ആരംഭിക്കുക</span>
+      </button>
+    </div>
+  </div>
+  </div>
+    
     <!-- 2. STUDENT DOUBT CHAT DESK -->
     <div id="sectionStudentChatDesk" class="hidden bg-slate-900 border border-emerald-500/30 rounded-3xl p-5 sm:p-7 space-y-5 shadow-2xl">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
@@ -1568,7 +1692,8 @@
         loadMainExamFoldersConfig();
 
         // 👇 ഈ വരി ഇവിടെ കൃത്യമായി നൽകുക 👇
-        checkCurrentSimpleDailyQuiz();
+       checkCurrentSimpleDailyQuiz();
+checkLiveStatusAdmin(); // 👈 ഈ വരി കൂടെ ചേർക്കുക
 
         setInterval(() => { loadStudentChatsAdmin(false); }, 12000);
       } else {
@@ -1577,9 +1702,10 @@
       }
     }
 
-    function switchTab(tab) {
-      ['sectionAnalyticsDashboard', 'sectionPublishManager', 'sectionSubscriptionDesk', 'sectionStudentChatDesk', 'sectionExamWise', 'sectionStudentWise', 'sectionSummaryWise'].forEach(id => {
-        document.getElementById(id).classList.add('hidden');
+   function switchTab(tab) {
+      ['sectionAnalyticsDashboard', 'sectionPublishManager', 'sectionSubscriptionDesk', 'sectionStudentChatDesk', 'sectionExamWise', 'sectionStudentWise', 'sectionSummaryWise', 'sectionLiveDesk'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
       });
 
       const btnMap = {
@@ -1589,7 +1715,8 @@
         studentChatDesk: 'tabBtnChat',
         examWise: 'tabBtnExam',
         studentWise: 'tabBtnStudent',
-        summaryWise: 'tabBtnSummary'
+        summaryWise: 'tabBtnSummary',
+        liveDesk: 'tabBtnLive'
       };
 
       Object.values(btnMap).forEach(btnId => {
@@ -1600,6 +1727,7 @@
       if (tab === 'analyticsDashboard') document.getElementById('sectionAnalyticsDashboard').classList.remove('hidden');
       if (tab === 'publishManager') document.getElementById('sectionPublishManager').classList.remove('hidden');
       if (tab === 'subscriptionDesk') document.getElementById('sectionSubscriptionDesk').classList.remove('hidden');
+      if (tab === 'liveDesk') document.getElementById('sectionLiveDesk').classList.remove('hidden');
       if (tab === 'studentChatDesk') { document.getElementById('sectionStudentChatDesk').classList.remove('hidden'); loadStudentChatsAdmin(true); }
       if (tab === 'examWise') document.getElementById('sectionExamWise').classList.remove('hidden');
       if (tab === 'studentWise') document.getElementById('sectionStudentWise').classList.remove('hidden');
@@ -3307,6 +3435,11 @@ renderExamCourseCheckboxes('editExamCourseCheckboxes', 'editCourseCheckbox', cur
         tbody.appendChild(tr);
       });
     }
+    function quickSelectStudent(query) {
+      switchTab('studentWise');
+      document.getElementById('studentSearchInput').value = query;
+      searchStudentDetails();
+    }
 
     function applySummaryFilterAndSort() {
       const rawQ = document.getElementById('quickFilterInput').value.trim();
@@ -3826,6 +3959,94 @@ renderExamCourseCheckboxes('editExamCourseCheckboxes', 'editCourseCheckbox', cur
         alert("എറർ: " + e.message);
       }
     }
+      async function startLiveSessionAdmin() {
+  const title = document.getElementById('admLiveTitle').value.trim() || 'SK PSC Live Class';
+  const access = document.getElementById('admLiveAccessType').value;
+  const course = document.getElementById('admLiveCourse').value;
+  const room = document.getElementById('admLiveRoomId').value.trim() || 'SK_PSC_LIVE_ROOM';
+
+  const payload = {
+    isLive: true,
+    title: title,
+    access_type: access,
+    target_course: course,
+    roomId: room,
+    startedAt: Date.now()
+  };
+
+  await fetch(`${FIREBASE_DB_URL}/live_session.json`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+
+  sendOneSignalBroadcastPush(
+    "🔴 ലൈവ് ക്ലാസ് ആരംഭിച്ചു!",
+    `"${title}" ഇപ്പോൾ ലൈവായി നടക്കുന്നു (${access === 'FREE' ? 'സൗജന്യ പ്രവേശനം' : 'പ്രീമിയം'}). ഉടൻ പങ്കെടുക്കൂ!`
+  );
+
+  alert(`✅ ലൈവ് ക്ലാസ് ആരംഭിച്ചു! (${access})`);
+  checkLiveStatusAdmin();
+}
+
+async function endLiveSessionAdmin() {
+  if (!confirm("ലൈവ് ക്ലാസ് അവസാനിപ്പിക്കണമെന്നുറപ്പാണോ?")) return;
+  await fetch(`${FIREBASE_DB_URL}/live_session.json`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ isLive: false, activePoll: null })
+  });
+  alert("ലൈവ് ക്ലാസ് അവസാനിപ്പിച്ചു!");
+  checkLiveStatusAdmin();
+}
+
+async function launchQuickAbcdPoll() {
+      const selectedAns = document.querySelector('input[name="quickCorrectAns"]:checked')?.value || 0;
+      const duration = Number(document.getElementById('quickPollTimer').value) || 30;
+
+      const pollPayload = {
+        type: "ABCD",
+        correctAnswer: Number(selectedAns),
+        duration: duration,
+        startedAt: Date.now(),
+        votes: { 0: 0, 1: 0, 2: 0, 3: 0 }
+      };
+
+      await fetch(`${FIREBASE_DB_URL}/live_session/activePoll.json`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(pollPayload)
+      });
+
+      alert("🚀 A, B, C, D പോൾ കുട്ടികളുടെ സ്ക്രീനിലേക്ക് അയച്ചു!");
+    }
+
+    async function clearActivePollAdmin() {
+      await fetch(`${FIREBASE_DB_URL}/live_session/activePoll.json`, { method: 'DELETE' });
+      alert("പോൾ നീക്കം ചെയ്തു!");
+    }
+
+async function checkLiveStatusAdmin() {
+  try {
+    const res = await fetch(`${FIREBASE_DB_URL}/live_session.json`);
+    const data = await res.json() || {};
+    const badge = document.getElementById('adminLiveStatusBadge');
+    const btnStart = document.getElementById('btnStartLive');
+    const btnStop = document.getElementById('btnStopLive');
+
+    if (data.isLive === true) {
+      badge.textContent = `🔴 LIVE ON (${data.access_type || 'FREE'})`;
+      badge.className = "px-3.5 py-1.5 rounded-xl text-xs font-black bg-rose-500/20 text-rose-400 border border-rose-500/40 animate-pulse";
+      btnStart.classList.add('hidden');
+      btnStop.classList.remove('hidden');
+    } else {
+      badge.textContent = "നിലവിൽ ലൈവ് ഇല്ല (OFFLINE)";
+      badge.className = "px-3.5 py-1.5 rounded-xl text-xs font-black bg-slate-950 text-slate-400 border border-slate-800 font-mono";
+      btnStart.classList.remove('hidden');
+      btnStop.classList.add('hidden');
+    }
+  } catch(e) {}
+}
   </script>
   <!-- 🌟 PWA ആപ്പ് ഇൻസ്റ്റാൾ ബട്ടൺ -->
   <button id="pwaAdminInstallBtn" class="hidden fixed bottom-6 left-6 z-50 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 text-slate-950 font-black px-4 py-3 rounded-2xl shadow-[0_8px_25px_rgba(16,185,129,0.5)] flex items-center space-x-2 text-xs border border-emerald-300 animate-bounce cursor-pointer">
