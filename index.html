@@ -1020,19 +1020,23 @@
     </div>
   </div>
 
- <!-- 2. ⚡ INSTANT QUICK POLL (A, B, C, D മാത്രം) -->
+ <!-- 2. ⚡ INSTANT QUICK POLL (10s, ടീച്ചർ പ്രവേശനം & റാങ്ക് പോപ്പ്-അപ്പ് സഹിതം) -->
   <div class="bg-slate-950 border-2 border-cyan-500/50 p-5 rounded-3xl space-y-4 shadow-xl">
     <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
       <div class="flex items-center space-x-2">
         <span class="text-xl">⚡</span>
         <h4 class="text-sm font-bold text-white">ഇൻസ്റ്റന്റ് ക്വിക്ക് പോൾ (A, B, C, D Poll)</h4>
       </div>
-      <span class="text-[10px] text-cyan-400 font-mono">സ്ക്രീൻ ഷെയർ ചെയ്യുമ്പോൾ ഉപയോഗിക്കാൻ</span>
+      <!-- 🌟 ടീച്ചറായി നേരിട്ട് ക്ലാസിൽ പ്രവേശിക്കാനുള്ള ബട്ടൺ -->
+      <a href="https://subhash-kumar00.github.io/PSC-EXAMS/live.html?role=admin" target="_blank" class="px-3.5 py-1.5 bg-gradient-to-r from-cyan-500 to-teal-500 text-slate-950 font-black rounded-xl text-xs shadow flex items-center space-x-1 cursor-pointer">
+        <span>👨‍🏫</span>
+        <span>ടീച്ചറായി ലൈവ് ക്ലാസ് തുറക്കുക</span>
+      </a>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
       <div>
-        <label class="block text-emerald-400 font-bold mb-1.5 text-xs">1. സ്ക്രീനിലെ ചോദ്യത്തിന്റെ ശരിയുത്തരം ഏതാണ്? *</label>
+        <label class="block text-emerald-400 font-bold mb-1.5 text-xs">1. ശരിയുത്തരം ഏതാണ്? *</label>
         <div class="grid grid-cols-4 gap-2">
           <label class="flex items-center justify-center p-2.5 rounded-xl border border-slate-700 bg-slate-900 cursor-pointer hover:border-emerald-500">
             <input type="radio" name="quickCorrectAns" value="0" checked class="hidden peer">
@@ -1056,25 +1060,33 @@
       <div>
         <label class="block text-amber-300 font-bold mb-1.5 text-xs">2. സമയം (Timer) *</label>
         <select id="quickPollTimer" class="w-full bg-slate-900 border border-amber-500/40 rounded-xl px-3 py-2.5 text-amber-300 font-bold text-xs focus:outline-none">
-          <option value="15">15 Seconds (വേഗത്തിൽ)</option>
-          <option value="30" selected>30 Seconds (ഡിഫോൾട്ട്)</option>
+          <option value="10" selected>⚡ 10 Seconds (വളരെ വേഗത്തിൽ)</option>
+          <option value="15">15 Seconds</option>
+          <option value="30">30 Seconds</option>
           <option value="45">45 Seconds</option>
-          <option value="60">60 Seconds (1 മിനിറ്റ്)</option>
+          <option value="60">60 Seconds</option>
         </select>
       </div>
     </div>
 
-    <div class="flex items-center justify-between pt-2 border-t border-slate-800">
-      <button onclick="clearActivePollAdmin()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-rose-400 rounded-xl text-xs font-bold cursor-pointer">
-        പോൾ ഒഴിവാക്കുക ✕
-      </button>
+    <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800">
+      <div class="flex items-center space-x-2">
+        <button onclick="clearActivePollAdmin()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-rose-400 rounded-xl text-xs font-bold cursor-pointer">
+          പോൾ റദ്ദാക്കുക ✕
+        </button>
+        <!-- 🌟 പോൾ റാങ്ക് ലിസ്റ്റ് കുട്ടികളുടെ സ്ക്രീനിലേക്ക് പോപ്പ്-അപ്പ് ചെയ്യാനുള്ള ബട്ടൺ -->
+        <button onclick="toggleStudentRankModalAdmin()" id="btnToggleRankModal" class="px-3.5 py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 rounded-xl text-xs font-bold cursor-pointer">
+          🏆 റാങ്ക് ലിസ്റ്റ് പോപ്പ്-അപ്പ് ചെയ്യുക
+        </button>
+      </div>
+
       <button onclick="launchQuickAbcdPoll()" class="px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 text-slate-950 font-black rounded-xl text-xs shadow-lg cursor-pointer flex items-center space-x-1.5">
         <span>🚀</span>
         <span>A, B, C, D പോൾ ആരംഭിക്കുക</span>
       </button>
     </div>
   </div>
-  </div>
+</div>
     
     <!-- 2. STUDENT DOUBT CHAT DESK -->
     <div id="sectionStudentChatDesk" class="hidden bg-slate-900 border border-emerald-500/30 rounded-3xl p-5 sm:p-7 space-y-5 shadow-2xl">
@@ -4000,16 +4012,19 @@ async function endLiveSessionAdmin() {
   checkLiveStatusAdmin();
 }
 
-async function launchQuickAbcdPoll() {
-      const selectedAns = document.querySelector('input[name="quickCorrectAns"]:checked')?.value || 0;
-      const duration = Number(document.getElementById('quickPollTimer').value) || 30;
+
+    let isRankModalActiveAdmin = false;
+
+    async function launchQuickAbcdPoll() {
+      const selectedAns = Number(document.querySelector('input[name="quickCorrectAns"]:checked')?.value || 0);
+      const duration = Number(document.getElementById('quickPollTimer').value) || 10;
 
       const pollPayload = {
         type: "ABCD",
-        correctAnswer: Number(selectedAns),
+        correctAnswer: selectedAns,
         duration: duration,
         startedAt: Date.now(),
-        votes: { 0: 0, 1: 0, 2: 0, 3: 0 }
+        votes: { 0: {}, 1: {}, 2: {}, 3: {} }
       };
 
       await fetch(`${FIREBASE_DB_URL}/live_session/activePoll.json`, {
@@ -4018,7 +4033,53 @@ async function launchQuickAbcdPoll() {
         body: JSON.stringify(pollPayload)
       });
 
-      alert("🚀 A, B, C, D പോൾ കുട്ടികളുടെ സ്ക്രീനിലേക്ക് അയച്ചു!");
+      alert(`🚀 ${duration} സെക്കൻഡ് പോൾ കുട്ടികളുടെ സ്ക്രീനിലേക്ക് അയച്ചു!`);
+
+      // സമയം കഴിയുമ്പോൾ പോൾ സ്കോറുകൾ ലീഡർബോർഡിലേക്ക് ഓട്ടോമാറ്റിക് ആയി കൂട്ടിച്ചേർക്കുന്നു
+      setTimeout(async () => {
+        try {
+          const res = await fetch(`${FIREBASE_DB_URL}/live_session/activePoll/votes/${selectedAns}.json`);
+          const correctVotes = await res.json() || {};
+          const boardRes = await fetch(`${FIREBASE_DB_URL}/live_session/pollLeaderboard.json`);
+          let leaderboard = await boardRes.json() || {};
+
+          Object.entries(correctVotes).forEach(([phone, voter]) => {
+            if (!leaderboard[phone]) {
+              leaderboard[phone] = { name: voter.name, score: 1 };
+            } else {
+              leaderboard[phone].score = (leaderboard[phone].score || 0) + 1;
+            }
+          });
+
+          await fetch(`${FIREBASE_DB_URL}/live_session/pollLeaderboard.json`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(leaderboard)
+          });
+        } catch(e) {}
+      }, (duration + 2) * 1000);
+    }
+
+
+    async function toggleStudentRankModalAdmin() {
+      isRankModalActiveAdmin = !isRankModalActiveAdmin;
+      const btn = document.getElementById('btnToggleRankModal');
+
+      await fetch(`${FIREBASE_DB_URL}/live_session/showRankModal.json`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(isRankModalActiveAdmin)
+      });
+
+      if (isRankModalActiveAdmin) {
+        btn.textContent = "✕ റാങ്ക് ലിസ്റ്റ് ക്ലോസ് ചെയ്യുക";
+        btn.className = "px-3.5 py-2 bg-rose-600 text-white font-bold rounded-xl text-xs cursor-pointer";
+        alert("🏆 പോൾ റാങ്ക് ലിസ്റ്റ് കുട്ടികളുടെ സ്ക്രീനിലേക്ക് അയച്ചു!");
+      } else {
+        btn.textContent = "🏆 റാങ്ക് ലിസ്റ്റ് പോപ്പ്-അപ്പ് ചെയ്യുക";
+        btn.className = "px-3.5 py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 rounded-xl text-xs font-bold cursor-pointer";
+        alert("റാങ്ക് ലിസ്റ്റ് പിൻവലിച്ചു.");
+      }
     }
 
     async function clearActivePollAdmin() {
