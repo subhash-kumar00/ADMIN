@@ -3971,23 +3971,27 @@ renderExamCourseCheckboxes('editExamCourseCheckboxes', 'editCourseCheckbox', cur
         alert("എറർ: " + e.message);
       }
     }
-      async function startLiveSessionAdmin() {
+    async function startLiveSessionAdmin() {
   const title = document.getElementById('admLiveTitle').value.trim() || 'SK PSC Live Class';
   const access = document.getElementById('admLiveAccessType').value;
   const course = document.getElementById('admLiveCourse').value;
   const room = document.getElementById('admLiveRoomId').value.trim() || 'SK_PSC_LIVE_ROOM';
 
+  // പുതിയ ലൈവ് തുടങ്ങുമ്പോൾ പഴയ പോൾ റാങ്ക് ലിസ്റ്റ് റീസെറ്റ് ചെയ്യുന്നു
   const payload = {
     isLive: true,
     title: title,
     access_type: access,
     target_course: course,
     roomId: room,
-    startedAt: Date.now()
+    startedAt: Date.now(),
+    activePoll: null,
+    showRankModal: false,
+    pollLeaderboard: null
   };
 
   await fetch(`${FIREBASE_DB_URL}/live_session.json`, {
-    method: 'PATCH',
+    method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
   });
@@ -4000,6 +4004,27 @@ renderExamCourseCheckboxes('editExamCourseCheckboxes', 'editCourseCheckbox', cur
   alert(`✅ ലൈവ് ക്ലാസ് ആരംഭിച്ചു! (${access})`);
   checkLiveStatusAdmin();
 }
+
+async function launchQuickAbcdPoll() {
+  const selectedAns = Number(document.querySelector('input[name="quickCorrectAns"]:checked')?.value || 0);
+  const duration = Number(document.getElementById('quickPollTimer').value) || 10;
+
+  const pollPayload = {
+    type: "ABCD",
+    correctAnswer: selectedAns,
+    duration: duration,
+    startedAt: Date.now(),
+    votes: { 0: {}, 1: {}, 2: {}, 3: {} }
+  };
+
+  await fetch(`${FIREBASE_DB_URL}/live_session/activePoll.json`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(pollPayload)
+  });
+
+  alert(`🚀 ${duration} സെക്കൻഡ് പോൾ കുട്ടികളുടെ സ്ക്രീനിലേക്ക് അയച്ചു!`);
+}  
 
 async function endLiveSessionAdmin() {
   if (!confirm("ലൈവ് ക്ലാസ് അവസാനിപ്പിക്കണമെന്നുറപ്പാണോ?")) return;
@@ -4015,50 +4040,7 @@ async function endLiveSessionAdmin() {
 
     let isRankModalActiveAdmin = false;
 
-    async function launchQuickAbcdPoll() {
-      const selectedAns = Number(document.querySelector('input[name="quickCorrectAns"]:checked')?.value || 0);
-      const duration = Number(document.getElementById('quickPollTimer').value) || 10;
-
-      const pollPayload = {
-        type: "ABCD",
-        correctAnswer: selectedAns,
-        duration: duration,
-        startedAt: Date.now(),
-        votes: { 0: {}, 1: {}, 2: {}, 3: {} }
-      };
-
-      await fetch(`${FIREBASE_DB_URL}/live_session/activePoll.json`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(pollPayload)
-      });
-
-      alert(`🚀 ${duration} സെക്കൻഡ് പോൾ കുട്ടികളുടെ സ്ക്രീനിലേക്ക് അയച്ചു!`);
-
-      // സമയം കഴിയുമ്പോൾ പോൾ സ്കോറുകൾ ലീഡർബോർഡിലേക്ക് ഓട്ടോമാറ്റിക് ആയി കൂട്ടിച്ചേർക്കുന്നു
-      setTimeout(async () => {
-        try {
-          const res = await fetch(`${FIREBASE_DB_URL}/live_session/activePoll/votes/${selectedAns}.json`);
-          const correctVotes = await res.json() || {};
-          const boardRes = await fetch(`${FIREBASE_DB_URL}/live_session/pollLeaderboard.json`);
-          let leaderboard = await boardRes.json() || {};
-
-          Object.entries(correctVotes).forEach(([phone, voter]) => {
-            if (!leaderboard[phone]) {
-              leaderboard[phone] = { name: voter.name, score: 1 };
-            } else {
-              leaderboard[phone].score = (leaderboard[phone].score || 0) + 1;
-            }
-          });
-
-          await fetch(`${FIREBASE_DB_URL}/live_session/pollLeaderboard.json`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(leaderboard)
-          });
-        } catch(e) {}
-      }, (duration + 2) * 1000);
-    }
+    
 
 
     async function toggleStudentRankModalAdmin() {
