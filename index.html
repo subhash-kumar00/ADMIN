@@ -1005,8 +1005,8 @@
         </select>
       </div>
       <div>
-        <label class="block text-slate-400 font-bold mb-1">റൂം ഐഡി (Room ID)</label>
-        <input type="text" id="admLiveRoomId" value="SK_PSC_LIVE_ROOM" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono font-bold">
+        <label class="block text-slate-400 font-bold mb-1">100ms Room ID</label>
+        <input type="text" id="admLiveRoomId" value="6af21ef65bc92d2dd03e31c2" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono font-bold">
       </div>
     </div>
 
@@ -3975,34 +3975,54 @@ renderExamCourseCheckboxes('editExamCourseCheckboxes', 'editCourseCheckbox', cur
   const title = document.getElementById('admLiveTitle').value.trim() || 'SK PSC Live Class';
   const access = document.getElementById('admLiveAccessType').value;
   const course = document.getElementById('admLiveCourse').value;
-  const room = document.getElementById('admLiveRoomId').value.trim() || 'SK_PSC_LIVE_ROOM';
+  const room = document.getElementById('admLiveRoomId').value.trim();
 
-  // പുതിയ ലൈവ് തുടങ്ങുമ്പോൾ പഴയ പോൾ റാങ്ക് ലിസ്റ്റ് റീസെറ്റ് ചെയ്യുന്നു
-  const payload = {
-    isLive: true,
-    title: title,
-    access_type: access,
-    target_course: course,
-    roomId: room,
-    startedAt: Date.now(),
-    activePoll: null,
-    showRankModal: false,
-    pollLeaderboard: null
-  };
+  if (!room) {
+    alert("100ms Room ID നൽകുക.");
+    return;
+  }
 
-  await fetch(`${FIREBASE_DB_URL}/live_session.json`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  });
+  const btn = document.getElementById('btnStartLive');
+  if (btn) { btn.disabled = true; btn.textContent = "Starting..."; }
 
-  sendOneSignalBroadcastPush(
-    "🔴 ലൈവ് ക്ലാസ് ആരംഭിച്ചു!",
-    `"${title}" ഇപ്പോൾ ലൈവായി നടക്കുന്നു (${access === 'FREE' ? 'സൗജന്യ പ്രവേശനം' : 'പ്രീമിയം'}). ഉടൻ പങ്കെടുക്കൂ!`
-  );
+  try {
+    // 100ms room-ന്റെ വിവരങ്ങളും നിലവിലെ live/poll state-ഉം Firebase-ൽ സൂക്ഷിക്കുന്നു.
+    const payload = {
+      isLive: true,
+      provider: "100ms",
+      title: title,
+      access_type: access,
+      target_course: course,
+      roomId: room,
+      hmsRoomId: room,
+      hmsTemplateId: "6af21ef68485531b71b7b9a5",
+      hmsSubdomain: "maya-livestream-053",
+      startedAt: Date.now(),
+      activePoll: null,
+      showRankModal: false,
+      pollLeaderboard: null
+    };
 
-  alert(`✅ ലൈവ് ക്ലാസ് ആരംഭിച്ചു! (${access})`);
-  checkLiveStatusAdmin();
+    const response = await fetch(`${FIREBASE_DB_URL}/live_session.json`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (!response.ok) throw new Error(`Firebase HTTP ${response.status}`);
+
+    sendOneSignalBroadcastPush(
+      "🔴 ലൈവ് ക്ലാസ് ആരംഭിച്ചു!",
+      `"${title}" ഇപ്പോൾ ലൈവായി നടക്കുന്നു (${access === 'FREE' ? 'സൗജന്യ പ്രവേശനം' : 'പ്രീമിയം'}). ഉടൻ പങ്കെടുക്കൂ!`
+    );
+
+    alert(`✅ ലൈവ് ക്ലാസ് ആരംഭിച്ചു! (${access})\nവിദ്യാർത്ഥികൾക്ക് ഹോം പേജിൽ JOIN LIVE കാണാൻ സാധിക്കും.`);
+    checkLiveStatusAdmin();
+  } catch (error) {
+    console.error("Live start failed:", error);
+    alert("ലൈവ് ആരംഭിക്കാൻ കഴിഞ്ഞില്ല: " + error.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = "🔴 ലൈവ് ആരംഭിക്കുക (Go Live)"; }
+  }
 }
 
 async function launchQuickAbcdPoll() {
